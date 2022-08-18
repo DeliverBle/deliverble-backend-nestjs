@@ -1,7 +1,7 @@
 {
   "name": "nestjs-board-app",
   "version": "0.0.1",
-  "description": "<p align=\"center\">   <a href=\"http://nestjs.com/\" target=\"blank\"><img src=\"https://nestjs.com/img/logo-small.svg\" width=\"200\" alt=\"Nest Logo\" /></a> </p>",
+  "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -21,20 +21,22 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^8.4.7",
-    "@nestjs/core": "^7.5.5",
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^8.0.0",
-    "@nestjs/passport": "^8.0.0",
-    "@nestjs/platform-express": "^7.5.5",
-    "@nestjs/typeorm": "^7.1.5",
+    "@nestjs/passport": "^8.2.2",
+    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/typeorm": "^8.0.1",
     "@types/passport-jwt": "^3.0.6",
+    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "config": "^3.3.6",
     "mysql2": "^2.3.3",
-    "passport": "^0.6.0",
+    "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "passport-kakao": "^1.0.1",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -45,10 +47,11 @@
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
-    "@nestjs/testing": "^7.5.5",
+    "@nestjs/testing": "^8.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^26.0.24",
     "@types/node": "^16.0.0",
+    "@types/passport-kakao": "^1.0.0",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
@@ -80,15 +83,5 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/horsehair/nestjs-practice.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/horsehair/nestjs-practice/issues"
-  },
-  "homepage": "https://github.com/horsehair/nestjs-practice#readme"
+  }
 }
