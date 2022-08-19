@@ -1,6 +1,7 @@
-import { BadRequestException, Body, Controller, Get, Header, HttpCode, HttpStatus, Logger, Post, Query, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Header, HttpCode, HttpService, HttpStatus, Logger, Post, Query, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import passport from 'passport';
+import { lastValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
 require("dotenv").config();
 
@@ -12,6 +13,7 @@ const logger = new Logger('auth.controller');
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
+    private http: HttpService;
 
     @Get('/kakao')
     @Header('Content-Type', 'text/html')
@@ -109,13 +111,43 @@ export class AuthController {
         return HttpStatus.OK;
     }
 
-    @Get('kakao/redirect')
+    @Get('kakao/callback')
     @HttpCode(200)
     @UseGuards(AuthGuard('kakao'))
-    async kakaoLoginCallback(@Req() req: any): Promise<{ accessToken: string }> {
-        logger.debug(req);
-        logger.debug(req.user);
-        return this.authService.kakaoLogin(req.user);
+    // async kakaoLoginCallback(@Query() qs, @Req() req: any): Promise<{ accessToken: string }> {
+    async kakaoLoginCallback(@Query() qs, @Req() req: any): Promise<any> {
+        logger.debug('query string >>>>', qs);
+        logger.debug('query string code >>>>', qs.code);
+        logger.debug('request >>>>', req);
+        logger.debug('req.user >>>>', req.user);
+        
+        const _headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+          };
+        const code = qs.code;
+        const _hostName = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientId}&redirect_uri=${kakaoCallbackURL}&code=${code}`
+        logger.debug('url >>>>', _hostName);
+
+        // await this.authService.login(url, headers);
+        // const response = await lastValueFrom(
+        //   this.http.post(url, '', { headers })
+        // );
+        // logger.debug('response at controller', response);
+        // return this.authService.kakaoLogin(qs.code);
+        // return 0;
+        this.authService
+        .login(_hostName, _headers)
+        .then((e) => {
+        // console.log(e);
+        console.log(`TOKEN : ${e.data['access_token']}`);
+        this.authService.setToken(e.data['access_token']);
+        this.kakaoUserInfo(e.data);
+        return 0;
+        })
+        .catch((err)=> {
+        console.log(err);
+        return 0;
+        });
     }
 
     @Post('/login')
@@ -126,7 +158,7 @@ export class AuthController {
         if (!code || !domain) {
             throw new BadRequestException('카카오 정보가 없습니다.');
         }
-        const kakao = await this.authService.kakaoLogin({ code, domain });
+        const kakao = await this.authService.kakaoLogin(code);
 
         console.log(`kakaoUserInfo : ${JSON.stringify(kakao)}`);
         if (!kakao.id) {

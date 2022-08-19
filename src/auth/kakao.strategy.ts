@@ -7,19 +7,19 @@ const kakaoClientId = process.env.KAKAO_CLIENT_ID;
 const kakaoCallbackURL = process.env.KAKAO_CALLBACK_URL;
 const logger = new Logger('kakao.strategy');
 
-export class KakaoStrategy extends PassportStrategy(Strategy) {
+export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     constructor() {
         super({
             clientID: kakaoClientId,
             callbackURL: kakaoCallbackURL,
-        });
+        }); 
     }
 
     async validate(accessToken, refreshToken, profile, done) {
         const profileJson = profile._json;
-        logger.debug(profileJson);
+        logger.debug('profileJson >>>>', profileJson);
         const kakao_account = profileJson.kakao_account;
-        logger.debug(kakao_account);
+        logger.debug('kakao_account >>>>', kakao_account);
         const payload = {
             // name: kakao_account.profile.nickname,
             kakaoId: profileJson.id,
@@ -28,6 +28,9 @@ export class KakaoStrategy extends PassportStrategy(Strategy) {
                     ? kakao_account.email
                     : null,
         };
+        logger.debug('payload >>>>', payload);
+        logger.debug('accessToken >>>>', accessToken);
+        logger.debug('refreshToken >>>>', refreshToken);
         done(null, payload);
     }
 }
