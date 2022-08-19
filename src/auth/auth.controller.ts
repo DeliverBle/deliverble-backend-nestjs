@@ -104,6 +104,13 @@ export class AuthController {
     }
 
 
+
+
+    /**
+     * 
+     * 이하 passport 사용한 로직
+     */
+
     @Get('/kakao/test')
     @HttpCode(200)
     @UseGuards(AuthGuard('kakao'))
@@ -111,7 +118,7 @@ export class AuthController {
         return HttpStatus.OK;
     }
 
-    @Get('kakao/callback')
+    @Get('kakao/callback1')
     @HttpCode(200)
     @UseGuards(AuthGuard('kakao'))
     // async kakaoLoginCallback(@Query() qs, @Req() req: any): Promise<{ accessToken: string }> {
