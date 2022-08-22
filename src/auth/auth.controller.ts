@@ -15,6 +15,9 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
     private http: HttpService;
 
+		/**
+		 * 인가 코드 받아오는 로직 (프론트)
+		 */
     @Get('/kakao')
     @Header('Content-Type', 'text/html')
     @HttpCode(200)
@@ -45,6 +48,50 @@ export class AuthController {
         const url = `${_hostName}/oauth/authorize?client_id=${_restApiKey}&redirect_uri=${_redirectUrl}&response_type=code`;
         return res.redirect(url);
     }
+
+		/**
+		 * 새로 로직 작성 중
+		 */
+		@Get('/kakaoLogin')
+    @Header('Content-Type', 'text/html')
+		async kakaoLoginGetToken(@Query() qs, @Res() res): Promise<void> {
+			
+			const code = qs.code;
+			const _hostName = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientId}&redirect_uri=${kakaoCallbackURL}&code=${code}`;
+			const _headers = {
+				headers: {
+				'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+				},
+			};
+			try {
+				const response = await this.authService.getTokenFromKakao(code, _hostName, _headers);
+				logger.debug('data >>>>', response.data);
+				logger.debug('access token >>>>', response.data.access_token);
+			} catch (error) {
+				logger.error(error);
+				res.send(error);
+			}
+			// this.authService
+			// .getTokenFromKakao(code, _hostName, _headers)
+			// .then((e) => {
+			// // console.log(e);
+			// console.log(`TOKEN : ${e.data['access_token']}`);
+			// return res.send(`
+			// 		<div>
+			// 		<h2>축하합니다!</h2>
+			// 		<p>카카오 로그인 성공하였습니다!</p>
+			// 		<a href="/auth/kakaoLogin">메인으로</a>
+			// 		</div>
+			// `);
+			// })
+			// .catch((err)=> {
+			// console.log(err);
+			// return res.send('error');
+			// });
+		}
+
+
+
     @Get('/kakaoLoginLogicRedirect')
     @Header('Content-Type', 'text/html')
     kakaoLoginLogicRedirect(@Query() qs, @Res() res):void {

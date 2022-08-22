@@ -11,6 +11,43 @@ const logger = new Logger('auth.service');
 
 @Injectable()
 export class AuthService {
+  
+
+	async getTokenFromKakao(code: string, _hostName, _headers): Promise<any> {
+		const kakaoTokenUrl = 'https://kauth.kakao.com/oauth/token';
+		const body = {
+			grant_type: 'authorization_code',
+			client_id: kakaoClientId,
+			redirect_uri: kakaoCallbackURL,
+			code: code,
+		};
+		// const headerUserInfo = {
+		// 	'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+		// };
+		try {
+			const response = await axios({
+				method: 'GET',
+				url: _hostName,
+				timeout: 30000,
+				headers: _headers,
+				// data: body,
+			});
+			return response;
+		} catch (error) {
+			console.log(error);
+			throw new UnauthorizedException();
+		}
+		// logger.debug(response);
+		// if (response.status === 200) {
+		// 	console.log(
+		// 		`kakaoUserInfo : ${JSON.stringify(response.data)}`,
+		// 	);
+		// 	return response.data;
+		// } else {
+		// 	throw new UnauthorizedException();
+		// }
+	}
+
 
     async kakaoLogin(code: string): Promise<any> {
         // const kakaoKey = '87073966cb41...';
