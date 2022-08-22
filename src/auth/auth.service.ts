@@ -13,40 +13,46 @@ const logger = new Logger('auth.service');
 export class AuthService {
   
 
-	async getTokenFromKakao(code: string, _hostName, _headers): Promise<any> {
-		const kakaoTokenUrl = 'https://kauth.kakao.com/oauth/token';
-		const body = {
-			grant_type: 'authorization_code',
-			client_id: kakaoClientId,
-			redirect_uri: kakaoCallbackURL,
-			code: code,
+	async getTokenFromKakao(code: string): Promise<any> {
+		const url = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientId}&redirect_uri=${kakaoCallbackURL}&code=${code}`;
+		const header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
 		};
-		// const headerUserInfo = {
-		// 	'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-		// };
 		try {
 			const response = await axios({
 				method: 'GET',
-				url: _hostName,
+				url: url,
 				timeout: 30000,
-				headers: _headers,
-				// data: body,
+				headers: header,
 			});
 			return response;
 		} catch (error) {
 			console.log(error);
 			throw new UnauthorizedException();
 		}
-		// logger.debug(response);
-		// if (response.status === 200) {
-		// 	console.log(
-		// 		`kakaoUserInfo : ${JSON.stringify(response.data)}`,
-		// 	);
-		// 	return response.data;
-		// } else {
-		// 	throw new UnauthorizedException();
-		// }
 	}
+
+	async getUserInfoFromKakao(access_token: string): Promise<any> {
+		const url = 'https://kapi.kakao.com/v2/user/me';
+		const headerUserInfo = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+			Authorization: 'Bearer ' + access_token,
+		};
+		try {
+			const response = await axios({
+				method: 'GET',
+				url: url,
+				timeout: 30000,
+				headers: headerUserInfo,
+			});
+			return response;
+		} catch (error) {
+			console.log(error);
+			throw new UnauthorizedException();
+		}
+	}
+
+	
 
 
     async kakaoLogin(code: string): Promise<any> {

@@ -52,42 +52,42 @@ export class AuthController {
 		/**
 		 * 새로 로직 작성 중
 		 */
+
+		// 토큰 발급
 		@Get('/kakaoLogin')
     @Header('Content-Type', 'text/html')
 		async kakaoLoginGetToken(@Query() qs, @Res() res): Promise<void> {
 			
 			const code = qs.code;
-			const _hostName = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientId}&redirect_uri=${kakaoCallbackURL}&code=${code}`;
-			const _headers = {
-				headers: {
-				'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-				},
-			};
+
 			try {
-				const response = await this.authService.getTokenFromKakao(code, _hostName, _headers);
+				const response = await this.authService.getTokenFromKakao(code);
 				logger.debug('data >>>>', response.data);
 				logger.debug('access token >>>>', response.data.access_token);
+				return res.send('Get token complete');				
 			} catch (error) {
 				logger.error(error);
 				res.send(error);
 			}
-			// this.authService
-			// .getTokenFromKakao(code, _hostName, _headers)
-			// .then((e) => {
-			// // console.log(e);
-			// console.log(`TOKEN : ${e.data['access_token']}`);
-			// return res.send(`
-			// 		<div>
-			// 		<h2>축하합니다!</h2>
-			// 		<p>카카오 로그인 성공하였습니다!</p>
-			// 		<a href="/auth/kakaoLogin">메인으로</a>
-			// 		</div>
-			// `);
-			// })
-			// .catch((err)=> {
-			// console.log(err);
-			// return res.send('error');
-			// });
+		}
+
+
+		// 사용자 정보 요청 to 카카오
+		@Get('/kakaoLogin/user')
+		@Header('Content-Type', 'text/html')
+		async kakaoLoginGetUserInfo(@Query() qs, @Res() res): Promise<any> {
+			
+			const access_token = qs.access_token;
+
+			try {
+				const response = await this.authService.getUserInfoFromKakao(access_token);
+				logger.debug('data >>>>', response.data);
+				logger.debug('access token >>>>', response.data.id);
+				return res.send('Get user information complete');
+			} catch (error) {
+				logger.error(error);
+				res.send(error);
+			}
 		}
 
 
