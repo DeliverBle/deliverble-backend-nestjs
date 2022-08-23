@@ -27,7 +27,7 @@ export class AuthService {
 			});
 			return response;
 		} catch (error) {
-			console.log(error);
+			logger.error(error);
 			throw new UnauthorizedException();
 		}
 	}
@@ -47,7 +47,7 @@ export class AuthService {
 			});
 			return response;
 		} catch (error) {
-			console.log(error);
+			logger.error(error);
 			throw new UnauthorizedException();
 		}
 	}

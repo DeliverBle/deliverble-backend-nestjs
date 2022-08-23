@@ -22,7 +22,7 @@ export class AuthController {
     @Header('Content-Type', 'text/html')
     @HttpCode(200)
     // @UseGuards(AuthGuard('kakao'))
-    kakaoLogin(): string {
+    kakaoLoginPage(): string {
         // passport.authenticate('kakao');
         return `
         <div>
@@ -40,7 +40,7 @@ export class AuthController {
 
     @Get('/kakaoLoginLogic')
     @Header('Content-Type', 'text/html')
-    kakaoLoginLogic(@Res() res): void {
+    kakaoLoginGetCode(@Res() res): void {
         const _hostName = 'https://kauth.kakao.com';
         const _restApiKey = kakaoClientId;
         // 카카오 로그인 redirectURI 등록
@@ -54,17 +54,17 @@ export class AuthController {
 		 */
 
 		// 토큰 발급
-		@Get('/kakaoLogin')
+		@Get('/kakao/login')
     @Header('Content-Type', 'text/html')
-		async kakaoLoginGetToken(@Query() qs, @Res() res): Promise<void> {
+		async kakaoLoginGetToken(@Query() qs, @Res() res): Promise<Response> {
 			
 			const code = qs.code;
 
 			try {
 				const response = await this.authService.getTokenFromKakao(code);
 				logger.debug('data >>>>', response.data);
-				logger.debug('access token >>>>', response.data.access_token);
-				return res.send('Get token complete');				
+				return res.send('Get token complete');			
+
 			} catch (error) {
 				logger.error(error);
 				res.send(error);
@@ -73,17 +73,17 @@ export class AuthController {
 
 
 		// 사용자 정보 요청 to 카카오
-		@Get('/kakaoLogin/user')
+		@Get('/kakao/login/user')
 		@Header('Content-Type', 'text/html')
-		async kakaoLoginGetUserInfo(@Query() qs, @Res() res): Promise<any> {
+		async kakaoLoginGetUserInfo(@Query() qs, @Res() res): Promise<Response> {
 			
 			const access_token = qs.access_token;
 
 			try {
 				const response = await this.authService.getUserInfoFromKakao(access_token);
 				logger.debug('data >>>>', response.data);
-				logger.debug('access token >>>>', response.data.id);
 				return res.send('Get user information complete');
+
 			} catch (error) {
 				logger.error(error);
 				res.send(error);
