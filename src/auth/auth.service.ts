@@ -1,5 +1,5 @@
 import { HttpService, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
 require("dotenv").config();
@@ -13,7 +13,7 @@ const logger = new Logger('auth.service');
 export class AuthService {
   
 
-	async getTokenFromKakao(code: string): Promise<any> {
+	async getTokenFromKakao(code: string): Promise<AxiosResponse> {
 		const url = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientId}&redirect_uri=${kakaoCallbackURL}&code=${code}`;
 		const header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -32,7 +32,7 @@ export class AuthService {
 		}
 	}
 
-	async getUserInfoFromKakao(access_token: string): Promise<any> {
+	async getUserInfoFromKakao(access_token: string): Promise<AxiosResponse> {
 		const url = 'https://kapi.kakao.com/v2/user/me';
 		const headerUserInfo = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -51,6 +51,13 @@ export class AuthService {
 			throw new UnauthorizedException();
 		}
 	}
+
+  async getTokenAndUserInfoFromKakao(code: string): Promise<AxiosResponse> {
+    const responseGetToken = await this.getTokenFromKakao(code);
+    logger.debug('responseGetToken >>>>', responseGetToken.data);
+    const access_token = responseGetToken.data.access_token;
+    return await this.getUserInfoFromKakao(access_token);
+  }
 
 	
 

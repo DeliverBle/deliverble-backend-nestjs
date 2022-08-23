@@ -53,7 +53,7 @@ export class AuthController {
 		 * 새로 로직 작성 중
 		 */
 
-		// 토큰 발급
+		// 토큰 발급 후 사용자 정보 요청
 		@Get('/kakao/login')
     @Header('Content-Type', 'text/html')
 		async kakaoLoginGetToken(@Query() qs, @Res() res): Promise<Response> {
@@ -61,9 +61,9 @@ export class AuthController {
 			const code = qs.code;
 
 			try {
-				const response = await this.authService.getTokenFromKakao(code);
+				const response = await this.authService.getTokenAndUserInfoFromKakao(code);
 				logger.debug('data >>>>', response.data);
-				return res.send('Get token complete');			
+				return res.send('Get token and user information complete');			
 
 			} catch (error) {
 				logger.error(error);
