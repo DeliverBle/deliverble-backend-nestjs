@@ -1,10 +1,12 @@
 import { HttpService, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
 import { Gender } from 'src/news/common/Gender';
 import { AuthRepository } from './auth.repository';
+import { Payload } from './common/payload';
 import { Social } from './common/Social';
 import { User } from './user.entity';
 require("dotenv").config();
@@ -21,6 +23,7 @@ export class AuthService {
   constructor(
     @InjectRepository(AuthRepository)
     private authRepository: AuthRepository,
+		private readonly jwtService: JwtService,
   ) {};
 
 	// 토큰 발급 받기
@@ -103,7 +106,7 @@ export class AuthService {
 	}
   
 	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인 -> 가입
-	async kakaoLoginOrSignUp(code: string): Promise<User> {
+	async kakaoLoginOrSignUp(code: string): Promise<User | { accessToken: string }> {
 		// 토큰 받아오기
 		const responseGetToken = await this.getTokenFromKakao(code);
     const access_token = responseGetToken.data.access_token;
@@ -119,6 +122,9 @@ export class AuthService {
 		// 등록된 ID가 있는지 확인해서 가져오기
 		const socialId = kakaoUserInfo.id;
 		const registeredUser = await this.checkUserIs(socialId);
+		
+		// JWT 발급 테스트
+		return this.signIn(registeredUser);
 
 		// 등록된 ID가 없다면 가입하기
 		if (registeredUser === undefined) {
@@ -131,6 +137,22 @@ export class AuthService {
 		return registeredUser;
 
 	}
+
+	async signIn(userInfo: User): Promise<{ accessToken: string }> {
+		const id = User['id'];
+		const socialId = User['socialId'];
+		const email = User['email'];
+		const gender = User['gender'];
+		const social = User['social'];
+
+    const user = await this.authRepository.findOne({ socialId });
+    // if (user && (await bcrypt.compare(password, user.password))) {
+		// 유저토큰 생성(Secret + Paylozd)
+		const payload: Payload = { id, socialId, email, gender, social }; //패이로드에 중요한 정보는 넣으면 안된다.
+		const accessToken = await this.jwtService.sign(payload); //여기서 알아서 payload를합쳐서 만들어준다.
+		return { accessToken };
+  }
+
 
 
 
