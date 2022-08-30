@@ -7,16 +7,16 @@ import { Social } from "./common/Social";
 export class User extends BaseEntity {
     constructor(
         _socialId: string,
-        // _nickname: string,
-        // _email: string,
-        // _gender: Gender,
+        _nickname: string,
+        _email: string,
+        _gender: Gender,
         _social: Social,
         ) {
         super();
         this.socialId = _socialId;
-        // this.nickname = _nickname;
-        // this.email = _email;
-        // this.gender = _gender;
+        this.nickname = _nickname;
+        this.email = _email;
+        this.gender = _gender;
         this.social = _social;
         }
     @PrimaryGeneratedColumn()

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
+import { Gender } from 'src/news/common/Gender';
 import { AuthRepository } from './auth.repository';
 import { Social } from './common/Social';
 import { User } from './user.entity';
@@ -76,13 +77,32 @@ export class AuthService {
     return await this.authRepository.findUserBySocialId(socialId);
   }
 
-	async signUpWithKakao(kakaoId: string): Promise<any> {
-		const user = new User(kakaoId, Social.KAKAO);
+	async signUpWithKakao(kakaoUserInfo: Object): Promise<any> {		
+		const kakaoId: string = kakaoUserInfo['id'];
+		const nickname: string = kakaoUserInfo['kakao_account'].profile.nickname;
+		var email: string | undefined = kakaoUserInfo['kakao_account'].email;
+		var genderRaw: string | undefined = kakaoUserInfo['kakao_account'].gender;
+		var gender: Gender;
+
+		if (email === undefined) {
+			email = 'NO_EMAIL';
+		}
+		
+		// TODO : entity method로 수정 필요
+		if (genderRaw === undefined) {
+			gender = Gender.UNSPECIFIED;
+		} else if (genderRaw === 'male') {
+			gender = Gender.MEN
+		} else {
+			gender = Gender.WOMEN
+		}
+
+		const user = new User(kakaoId, nickname, email, gender, Social.KAKAO);
 		return this.authRepository.createUser(user);
 
 	}
   
-	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인
+	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인 -> 가입
 	async kakaoLoginOrSignUp(code: string): Promise<User> {
 		// 토큰 받아오기
 		const responseGetToken = await this.getTokenFromKakao(code);
@@ -90,18 +110,23 @@ export class AuthService {
 		
 		// 유저 정보 받아오기
 		const responseGetUserInfo = await this.getUserInfoFromKakao(access_token)
-		const userInfo = responseGetUserInfo.data;
-		logger.debug('user data >>>>', userInfo);
+		const kakaoUserInfo = responseGetUserInfo.data;
+		logger.debug('kakao user data >>>>', kakaoUserInfo);
+		console.log(typeof kakaoUserInfo);
+		console.log(kakaoUserInfo.kakao_account.profile.nickname);
+		console.log(kakaoUserInfo.kakao_account.profile.nickname2);
 		
-		// 등록된 ID가 있는지 확인
-		const socialId = userInfo.id;
+		// 등록된 ID가 있는지 확인해서 가져오기
+		const socialId = kakaoUserInfo.id;
 		const registeredUser = await this.checkUserIs(socialId);
 
+		// 등록된 ID가 없다면 가입하기
 		if (registeredUser === undefined) {
 			logger.debug('signup >>>>')
-			return this.signUpWithKakao(socialId);
+			return this.signUpWithKakao(kakaoUserInfo);
 		}
 
+		// 등록된 ID가 있다면 return하기
 		logger.debug('registered user >>>>', registeredUser);
 		return registeredUser;
 
