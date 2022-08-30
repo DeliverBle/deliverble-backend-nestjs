@@ -4,6 +4,8 @@ import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
 import { AuthRepository } from './auth.repository';
+import { Social } from './common/Social';
+import { User } from './user.entity';
 require("dotenv").config();
 
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
@@ -70,13 +72,18 @@ export class AuthService {
   }
 
 	// socialId -> 유저 존재 여부
-  async checkUserIs(socialId: string): Promise<boolean> {
-    const user = await this.authRepository.findUserBySocialId(socialId);
-    return user === undefined;
+  async checkUserIs(socialId: string): Promise<User> {
+    return await this.authRepository.findUserBySocialId(socialId);
   }
+
+	async signUpWithKakao(kakaoId: string): Promise<any> {
+		const user = new User(kakaoId, Social.KAKAO);
+		return this.authRepository.createUser(user);
+
+	}
   
 	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인
-	async kakaoLoginOrSignUp(code: string): Promise<boolean> {
+	async kakaoLoginOrSignUp(code: string): Promise<User> {
 		// 토큰 받아오기
 		const responseGetToken = await this.getTokenFromKakao(code);
     const access_token = responseGetToken.data.access_token;
@@ -84,11 +91,19 @@ export class AuthService {
 		// 유저 정보 받아오기
 		const responseGetUserInfo = await this.getUserInfoFromKakao(access_token)
 		const userInfo = responseGetUserInfo.data;
+		logger.debug('user data >>>>', userInfo);
 		
 		// 등록된 ID가 있는지 확인
 		const socialId = userInfo.id;
-		return await this.checkUserIs(socialId);
+		const registeredUser = await this.checkUserIs(socialId);
 
+		if (registeredUser === undefined) {
+			logger.debug('signup >>>>')
+			return this.signUpWithKakao(socialId);
+		}
+
+		logger.debug('registered user >>>>', registeredUser);
+		return registeredUser;
 
 	}
 
