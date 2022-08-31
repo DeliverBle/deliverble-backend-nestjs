@@ -134,6 +134,7 @@ export class AuthService {
 		
 		const id = userInfo['id'];
 		const socialId = userInfo['socialId'];
+		const nickname = userInfo['nickname'];
 		const email = userInfo['email'];
 		const gender = userInfo['gender'];
 		const social = userInfo['social'];
@@ -141,6 +142,7 @@ export class AuthService {
 		const payload: Payload = { 
 			id: id,
 			socialId: socialId,
+			nickname: nickname,
 			email: email,
 			gender: gender,
 			social: social
