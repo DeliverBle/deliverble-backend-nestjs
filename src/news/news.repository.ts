@@ -38,8 +38,15 @@ export class NewsRepository extends Repository<News> {
             { id: id },
                 updateNewsDto
             )
-        
         return await this.getNewsById(id);
+    }
+
+    async deleteNews(id: number): Promise<News | void> {
+        const news: News = await this.getNewsById(id);
+        await this.delete(
+            { id: id }
+        )
+        return news;
     }
 
 }

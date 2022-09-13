@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post } from '@nestjs/common';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { News } from './news.entity';
@@ -28,5 +28,12 @@ export class NewsController {
     @Param('id') id : number
     ): Promise<News[] | void> {
         return this.newsService.updateAndGetAllNews(id, updateNewsDto);
+	}
+
+    @Delete('delete/:id')
+	deleteNews(
+    @Param('id') id : number
+    ): Promise<News[] | void> {
+        return this.newsService.deleteAndGetAllNews(id);
 	}
 }

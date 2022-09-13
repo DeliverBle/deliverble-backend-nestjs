@@ -24,13 +24,22 @@ export class NewsService {
 	}
 
     async updateNews(id: number, updateNewsDto: UpdateNewsDto) : Promise<News | void> {
-        
         const updateResult: News | void = await this.newsRepository.updateNews(id, updateNewsDto);
         return updateResult;
     }
 
+    async deleteNews(id: number) : Promise<News | void> {
+        const deleteResult: News | void = await this.newsRepository.deleteNews(id);
+        return deleteResult;
+    }
+
     async updateAndGetAllNews(id: number, updateNewsDto: UpdateNewsDto) : Promise<News[] | void> {
         await this.updateNews(id, updateNewsDto);
+        return await this.getAllNews();
+    }
+
+    async deleteAndGetAllNews(id: number) : Promise<News[] | void> {
+        await this.deleteNews(id);
         return await this.getAllNews();
     }
 }
