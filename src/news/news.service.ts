@@ -14,4 +14,8 @@ export class NewsService {
     async createNews(createNewsDto: CreateNewsDto) : Promise<News | void> {
 		return await this.newsRepository.createNews(createNewsDto);
 	}
+
+    async getAllNews() : Promise<News[] | void> {
+		return await this.newsRepository.getAllNews();
+	}
 }

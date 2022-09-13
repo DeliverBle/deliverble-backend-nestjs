@@ -22,4 +22,8 @@ export class NewsRepository extends Repository<News> {
         return news;
     }
 
+    async getAllNews(): Promise<News[]> {
+        return await this.find();
+    }
+
 }
