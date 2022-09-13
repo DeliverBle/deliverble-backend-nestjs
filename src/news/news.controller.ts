@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { CreateNewsDto } from './dto/create-news.dto';
+import { UpdateNewsDto } from './dto/update-news.dto';
 import { News } from './news.entity';
 import { NewsService } from './news.service';
+
+const logger: Logger = new Logger('news controller');
 
 @Controller('news')
 export class NewsController {
@@ -17,5 +20,13 @@ export class NewsController {
     @Get('all')
 	getAllNews(): Promise<News[] | void> {
 		return this.newsService.getAllNews();
+	}
+
+    @Post('update/:id')
+	updateNews(
+    @Body() updateNewsDto: UpdateNewsDto,
+    @Param('id') id : number
+    ): Promise<News[] | void> {
+        return this.newsService.updateAndGetAllNews(id, updateNewsDto);
 	}
 }
