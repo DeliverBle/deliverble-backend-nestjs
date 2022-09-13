@@ -33,6 +33,11 @@ export class NewsService {
         return deleteResult;
     }
 
+    async createAndGetAllNews(createNewsDto: CreateNewsDto) : Promise<News[] | void> {
+        await this.createNews(createNewsDto);
+        return await this.getAllNews();
+    }
+
     async updateAndGetAllNews(id: number, updateNewsDto: UpdateNewsDto) : Promise<News[] | void> {
         await this.updateNews(id, updateNewsDto);
         return await this.getAllNews();

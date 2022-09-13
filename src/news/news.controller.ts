@@ -13,8 +13,8 @@ export class NewsController {
     @Post('create')
 	createNews(
         @Body() createNewsDto: CreateNewsDto
-        ): Promise<News | void> {
-		return this.newsService.createNews(createNewsDto);
+        ): Promise<News[] | void> {
+		return this.newsService.createAndGetAllNews(createNewsDto);
 	}
 
     @Get('all')
