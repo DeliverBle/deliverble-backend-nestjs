@@ -55,7 +55,7 @@ export class AuthController {
 
 	// 사용자 정보 존재 확인(인가코드로)
 	@Post('/kakao/login-or-signup')
-	@Header('Content-Type', 'text/html')
+	@Header('Content-Type', 'application/json; charset=utf-8')
 	async kakaoLoginGetUserIsByCode(@Query() qs, @Res() res): Promise<Response> {
 		const code = qs.code;
 		
