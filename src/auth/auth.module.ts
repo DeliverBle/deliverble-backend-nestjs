@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
   imports: [
     TypeOrmModule.forFeature([AuthRepository]),
     JwtModule.register({
-      secret: 'SECRET',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '300s' },
     }),
     PassportModule,
