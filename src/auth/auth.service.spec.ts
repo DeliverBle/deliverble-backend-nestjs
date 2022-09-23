@@ -70,10 +70,6 @@ describe('AuthService', () => {
     expect(authService).toBeDefined();
   });
 
-  it("should be 4", () => {
-    expect(2+2).toEqual(4);
-  })
-
   describe("checkUserIs() : Kakao id로 DB로부터 유저 존재 여부 판별", () => {
     // 존재하는 경우 : socialId = "222222223"
     // 존재하지 않는 경우 : socialId = "222222222"
