@@ -39,19 +39,12 @@ const MockAuthRepository = () => ({
   },
 })
 
-type MockAuthRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 describe('AuthService', () => {
   let authService: AuthService;
   let jwtService: JwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        JwtModule.register({
-          secret: 'SECRET',
-          signOptions: { expiresIn: '300s' },
-        }),
-      ],
       providers: [
         AuthService,
         JwtService,
