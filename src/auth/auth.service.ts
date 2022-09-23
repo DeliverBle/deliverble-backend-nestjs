@@ -95,7 +95,7 @@ export class AuthService {
 	}
   
 	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인 -> 가입
-	async kakaoLoginOrSignUp(code: string): Promise<User | { accessToken: string }> {
+	async kakaoAuthentication(code: string): Promise<User | { accessToken: string }> {
 
 		// 토큰 받아오기
 		const responseGetToken = await this.getTokenFromKakao(code);
