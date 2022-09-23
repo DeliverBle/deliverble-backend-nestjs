@@ -1,16 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserInfoForView } from './dto/user-info-for-view.dto';
-import { UserInfo } from './dto/user-info.dto';
+import { UserForViewDto } from './dto/user-for-view.dto';
+import { ReturnUserDto } from './dto/return-user.dto';
 
 const logger = new Logger('user.service');
 
 @Injectable()
 export class UserService {
-  // async createNews(createNewsDto: CreateNewsDto) : Promise<News | void> {
-	// 	return await this.newsRepository.createNews(createNewsDto);
-	// }
-  async getUserInfo(userInfo: UserInfo): Promise<UserInfoForView> {
-    const userInfoForView = new UserInfoForView(
+  async getUserInfo(userInfo: ReturnUserDto): Promise<UserForViewDto> {
+    const userInfoForView = new UserForViewDto(
       userInfo.nickname,
       userInfo.email
       );
