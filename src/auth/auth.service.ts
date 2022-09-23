@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
-import { Gender } from 'src/news/common/Gender';
+import { Gender } from '../news/common/Gender';
 import { AuthRepository } from './auth.repository';
 import { Payload } from './dto/payload';
 import { Social } from './common/Social';
@@ -79,7 +79,8 @@ export class AuthService {
 
 
 	async signUpWithKakao(kakaoUserInfo: Object): Promise<any> {		
-		const kakaoId: string = kakaoUserInfo['id'];
+		logger.debug(kakaoUserInfo);
+		const kakaoId: string = kakaoUserInfo['id'].toString();
 		const nickname: string = kakaoUserInfo['kakao_account'].profile.nickname;
 		var email: string | undefined = kakaoUserInfo['kakao_account'].email;
 		var genderRaw: string | undefined = kakaoUserInfo['kakao_account'].gender;
@@ -118,10 +119,15 @@ export class AuthService {
 		// 등록된 ID 찾기
 		const socialId = kakaoUserInfo.id;
 		const registeredUser = await this.checkUserIs(socialId);
+		console.log('user after checkUserId >>>>>>', registeredUser);
 		
 		// 등록된 ID가 없다면, 가입 후 해당 ID 로그인
 		if (registeredUser === undefined) {
 			const newUser = await this.signUpWithKakao(kakaoUserInfo);
+			logger.debug('socialId after signUpWithKakao >>>>>>',
+			typeof newUser.socialId,
+			newUser.socialId
+			)
 			return this.signIn(newUser);
 		}
 		// 등록된 ID가 있다면, 해당 ID 로그인
