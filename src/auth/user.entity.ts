@@ -1,5 +1,5 @@
 import { IsEmail, Length } from "class-validator";
-import { Gender } from "src/news/common/Gender";
+import { Gender } from "../news/common/Gender";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Social } from "./common/Social";
 

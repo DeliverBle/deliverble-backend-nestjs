@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
-import { Gender } from 'src/news/common/Gender';
+import { Gender } from '../news/common/Gender';
 import { AuthRepository } from './auth.repository';
 import { Payload } from './dto/payload';
 import { Social } from './common/Social';
