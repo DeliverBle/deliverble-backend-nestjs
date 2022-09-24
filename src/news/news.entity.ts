@@ -1,5 +1,7 @@
 import { Time } from "src/module/Time";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+// import { Favorite } from "src/user/favorite.entity";
+import { User } from "src/user/user.entity";
+import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./common/Category";
 import { Channel } from "./common/Channel";
 import { Gender } from "./common/Gender";
@@ -94,4 +96,7 @@ export class News extends BaseEntity {
 
     @Column('date')
     reportDate: Date;
+
+    @ManyToMany(() => User, (user) => user.favorites)
+    favorites: User[]
 }
