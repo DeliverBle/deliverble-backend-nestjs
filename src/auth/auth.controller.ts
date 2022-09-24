@@ -75,7 +75,6 @@ export class AuthController {
 
 		} catch (error) {
 			logger.error(error);
-			// console.log('error', error);
 			console.log("error response >>>>>>", error.response);
 			if (error.response.statusCode === statusCode.UNAUTHORIZED) {
 				return res.status(statusCode.UNAUTHORIZED)
