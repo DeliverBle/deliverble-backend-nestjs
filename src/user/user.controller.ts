@@ -50,8 +50,19 @@ export class UserController {
     try {
       const user = req.user;
       newsId = Number(newsId);
-  
-      const data: User = await this.userService.toggleFavoriteNews(user, newsId);
+
+      const addOrDelete: string = await this.userService.toggleFavoriteNews(user, newsId);
+      let isFavorite: boolean;
+      if (addOrDelete === "add") {
+        isFavorite = true;
+      } else if (addOrDelete === "delete") {
+        isFavorite = false;
+      }
+      const data: Object = {
+        newsId: newsId,
+        isFavorite: isFavorite,
+      }
+
       return res.status(statusCode.OK)
         .send(util.success(
           statusCode.OK,

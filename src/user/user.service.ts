@@ -26,7 +26,7 @@ export class UserService {
     return userInfoForView;
   }
 
-  async toggleFavoriteNews(user: User, newsId: number): Promise<User> {
+  async toggleFavoriteNews(user: User, newsId: number): Promise<string> {
     const news: News = await this.newsRepository.findOne(newsId);
     if (news === undefined) {
       throw new BadRequestException;
@@ -42,12 +42,14 @@ export class UserService {
     return await this.addFavoriteNews(user, news);
   }
 
-  async addFavoriteNews(user: User, news: News): Promise<User> {
-    return await this.userRepository.addFavoriteNews(user, news);
+  async addFavoriteNews(user: User, news: News): Promise<string> {
+    await this.userRepository.addFavoriteNews(user, news);
+    return "add";
   }
 
-  async deleteFavoriteNews(user: User, news: News): Promise<User> {
-    return await this.userRepository.deleteFavoriteNews(user, news);
+  async deleteFavoriteNews(user: User, news: News): Promise<string> {
+    await this.userRepository.deleteFavoriteNews(user, news);
+    return "delete";
   }
   
 }
