@@ -17,7 +17,7 @@ export class NewsService {
         private newsRepository: NewsRepository,
     ) {};
 
-    async createNews(createNewsDto: CreateNewsDto) : Promise<News | void> {
+    async createNews(createNewsDto: CreateNewsDto) : Promise<ReturnNewsDto> {
 		return await this.newsRepository.createNews(createNewsDto);
 	}
 

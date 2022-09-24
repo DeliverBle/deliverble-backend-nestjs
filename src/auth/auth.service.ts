@@ -9,6 +9,7 @@ import { AuthRepository } from './auth.repository';
 import { Payload } from './dto/payload';
 import { Social } from './common/Social';
 import { User } from './user.entity';
+import { transformKakaoEmail, transformKakaoGender } from './utils/transform.kakao.user.info';
 require("dotenv").config();
 
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
@@ -82,30 +83,19 @@ export class AuthService {
 		logger.debug(kakaoUserInfo);
 		const kakaoId: string = kakaoUserInfo['id'].toString();
 		const nickname: string = kakaoUserInfo['kakao_account'].profile.nickname;
-		var email: string | undefined = kakaoUserInfo['kakao_account'].email;
-		var genderRaw: string | undefined = kakaoUserInfo['kakao_account'].gender;
-		var gender: Gender;
+		let emailRaw: string | undefined = kakaoUserInfo['kakao_account'].email;
+		let genderRaw: string | undefined = kakaoUserInfo['kakao_account'].gender;
 
-		if (email === undefined) {
-			email = 'NO_EMAIL';
-		}
-		
-		// TODO : entity method로 수정 필요
-		if (genderRaw === undefined) {
-			gender = Gender.UNSPECIFIED;
-		} else if (genderRaw === 'male') {
-			gender = Gender.MEN
-		} else {
-			gender = Gender.WOMEN
-		}
-
+		const email: string = transformKakaoEmail(emailRaw);
+		const gender: Gender = transformKakaoGender(genderRaw);
+		logger.debug('gender in auth.service', gender);
 		const user = new User(kakaoId, nickname, email, gender, Social.KAKAO);
 		return this.authRepository.createUser(user);
 
 	}
   
 	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인 -> 가입
-	async kakaoLoginOrSignUp(code: string): Promise<User | { accessToken: string }> {
+	async kakaoAuthentication(code: string): Promise<User | { accessToken: string }> {
 
 		// 토큰 받아오기
 		const responseGetToken = await this.getTokenFromKakao(code);

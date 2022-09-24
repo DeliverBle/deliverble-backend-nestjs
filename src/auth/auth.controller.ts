@@ -54,13 +54,13 @@ export class AuthController {
 	 */
 
 	// 사용자 정보 존재 확인(인가코드로)
-	@Post('/kakao/login-or-signup')
-	@Header('Content-Type', 'text/html')
-	async loginAndCheckUserByKakao(@Query() qs, @Res() res): Promise<Response> {
+	@Post('/authentication/kakao')
+	@Header('Content-Type', 'application/json; charset=utf-8')
+	async kakaoLoginGetUserIsByCode(@Query() qs, @Res() res): Promise<Response> {
 		const code = qs.code;
 		
 		try {
-			const jwt = await this.authService.kakaoLoginOrSignUp(code);
+			const jwt = await this.authService.kakaoAuthentication(code);
 			res.setHeader('Authorization', 'Bearer ' + jwt['accessToken']);
 			return res.json(jwt);
 
