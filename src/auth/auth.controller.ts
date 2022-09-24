@@ -1,4 +1,7 @@
 import { Controller, Get, Header, HttpCode, Logger, Post, Query, Res, UseGuards } from '@nestjs/common';
+import { message } from 'src/modules/response/response.message';
+import { statusCode } from 'src/modules/response/response.status.code';
+import { util } from 'src/modules/response/response.util';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
@@ -62,7 +65,13 @@ export class AuthController {
 		try {
 			const jwt = await this.authService.kakaoAuthentication(code);
 			res.setHeader('Authorization', 'Bearer ' + jwt['accessToken']);
-			return res.json(jwt);
+			// return res.json(jwt);
+			return res.status(statusCode.OK)
+				.send(util.success(
+					statusCode.OK,
+					message.AUTHENTICATION_SUCCESS,
+					jwt
+				))
 
 		} catch (error) {
 			logger.error(error);
