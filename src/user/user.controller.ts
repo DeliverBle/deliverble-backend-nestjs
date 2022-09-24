@@ -46,13 +46,25 @@ export class UserController {
     @Req() req,
     @Res() res,
     @Param('newsId') newsId : number
-  ): Promise<User> {
+  ): Promise<Response> {
     try {
       const user = req.user;
       newsId = Number(newsId);
   
-      return this.userService.toggleFavoriteNews(user, newsId);
-
+      const data: User = await this.userService.toggleFavoriteNews(user, newsId);
+      return res.status(statusCode.OK)
+        .send(util.success(
+          statusCode.OK,
+          message.TOGGLE_FAVORITE_NEWS_SUCCESS,
+          data
+        ))
+    } catch (error) {
+      logger.error(error);
+      return res.status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(
+          statusCode.INTERNAL_SERVER_ERROR,
+          message.INTERNAL_SERVER_ERROR
+        ))
     }
   }
 }
