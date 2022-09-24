@@ -60,6 +60,13 @@ export class UserController {
         ))
     } catch (error) {
       logger.error(error);
+      if (error.response.statusCode === statusCode.BAD_REQUEST) {
+        return res.status(statusCode.BAD_REQUEST)
+          .send(util.fail(
+            statusCode.BAD_REQUEST,
+            message.BAD_REQUEST
+          ))
+      }
       return res.status(statusCode.INTERNAL_SERVER_ERROR)
         .send(util.fail(
           statusCode.INTERNAL_SERVER_ERROR,

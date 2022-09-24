@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { UserForViewDto } from './dto/user-for-view.dto';
 import { ReturnUserDto } from './dto/return-user.dto';
 import { User } from 'src/user/user.entity';
@@ -28,6 +28,9 @@ export class UserService {
 
   async toggleFavoriteNews(user: User, newsId: number): Promise<User> {
     const news: News = await this.newsRepository.findOne(newsId);
+    if (news === undefined) {
+      throw new BadRequestException;
+    }
 
     const favorites = await user.favorites;
     const favoriteNewsIdList: number[] = []
