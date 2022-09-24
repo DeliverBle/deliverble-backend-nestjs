@@ -13,12 +13,13 @@ export class JwtStrategy extends PassportStrategy(Strategy){
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: true,
-            secretOrKey: 'SECRET',
+            secretOrKey: process.env.JWT_SECRET,
         })
     }
 
     async validate(payload: Payload, done: VerifiedCallback): Promise<any> {
         const user = await this.authService.tokenValidateUser(payload);
+        console.log(user);
         if (!user) {
 			logger.debug('auth test fail >>>>', user);
             return done(new UnauthorizedException({ message: 'user does not exist' }), false);
