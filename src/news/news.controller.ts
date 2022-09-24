@@ -21,7 +21,7 @@ export class NewsController {
     @Res() res
     ): Promise<Response> {            
 		try {
-      const data = await this.newsService.createAndGetAllNews(createNewsDto);
+      const data: ReturnNewsDtoCollection = await this.newsService.createAndGetAllNews(createNewsDto);
       return res.status(statusCode.CREATED).send(
         util.success(
           statusCode.CREATED,
@@ -40,18 +40,55 @@ export class NewsController {
     }
   }
 
-    @Get('all')
-	getAllNews(): Promise<ReturnNewsDtoCollection> {
-		return this.newsService.getAllNews();
+  @Get('all')
+	async getAllNews(
+    @Res() res
+    ): Promise<Response> {
+    try {
+      const data: ReturnNewsDtoCollection = await this.newsService.getAllNews();
+      return res.status(statusCode.OK).send(
+        util.success(
+          statusCode.OK,
+          message.READ_ALL_NEWS_SUCCESS,
+          data
+        )
+      ) 
+    } catch (error) {
+      logger.error(error)
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(
+        util.fail(
+          statusCode.INTERNAL_SERVER_ERROR,
+          message.INTERNAL_SERVER_ERROR
+        )
+      )
+    }
 	}
 
-    @Post('update/:id')
-	updateNews(
+  @Post('update/:id')
+	async updateNews(
     @Body() updateNewsDto: UpdateNewsDto,
-    @Param('id') id : number
+    @Param('id') id : number,
+    @Res() res
     ): Promise<ReturnNewsDtoCollection> {
-        return this.newsService.updateAndGetAllNews(id, updateNewsDto);
-	}
+      try {
+        const data: ReturnNewsDtoCollection = await this.newsService.updateAndGetAllNews(id, updateNewsDto);
+        return res.status(statusCode.OK).send(
+          util.success(
+            statusCode.OK,
+            message.UPDATE_NEWS_SUCCESS,
+            data
+          )
+        ) 
+      } catch (error) {
+        logger.error(error)
+        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR
+          )
+        )
+      }
+	  }
 
     @Delete('delete/:id')
 	deleteNews(
