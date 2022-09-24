@@ -1,4 +1,4 @@
-import { Time } from "src/module/Time";
+import { Time } from "src/modules/Time";
 // import { Favorite } from "src/user/favorite.entity";
 import { User } from "src/user/user.entity";
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
