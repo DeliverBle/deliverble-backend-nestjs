@@ -1,4 +1,4 @@
-import { Time } from "src/module/Time";
+import { Time } from "src/modules/Time";
 import { Category } from "../common/Category";
 import { Channel } from "../common/Channel";
 import { Gender } from "../common/Gender";

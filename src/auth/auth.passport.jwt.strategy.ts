@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy){
         console.log(user);
         if (!user) {
 			logger.debug('auth test fail >>>>', user);
-            return done(new UnauthorizedException({ message: 'user does not exist' }), false);
+            return done(new UnauthorizedException({ message: 'user does not exist (in JwtStrategy)' }), false);
         }
 
         return done(null, user);

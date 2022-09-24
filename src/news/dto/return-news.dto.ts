@@ -1,4 +1,4 @@
-import { Time } from "src/module/Time";
+import { Time } from "src/modules/Time";
 import { Category } from "../common/Category";
 import { Channel } from "../common/Channel";
 import { Gender } from "../common/Gender";
@@ -7,6 +7,7 @@ import { News } from "../news.entity";
 
 export class ReturnNewsDto {
   constructor(news: News) {
+    this.id = news.id
     this.title = news.title;
     this.category = news.category;
     this.script = news.script;
@@ -20,7 +21,7 @@ export class ReturnNewsDto {
     this.isEmbeddable = news.isEmbeddable;
     this.reportDate = news.reportDate;
 }
-
+    id: number;
     title: string;
     category: Category;
     script: string;

@@ -3,11 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Gender } from 'src/news/common/Gender';
 import { UserRepository } from 'src/user/user.repository';
-import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { Social } from './common/Social';
 import { Payload } from './dto/payload';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 
 const mockUser: User = new User(
     "222222223",
