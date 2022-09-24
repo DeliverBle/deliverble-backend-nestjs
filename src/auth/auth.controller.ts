@@ -75,7 +75,20 @@ export class AuthController {
 
 		} catch (error) {
 			logger.error(error);
-			res.send(error);
+			// console.log('error', error);
+			console.log("error response >>>>>>", error.response);
+			if (error.response.statusCode === statusCode.UNAUTHORIZED) {
+				return res.status(statusCode.UNAUTHORIZED)
+					.send(util.fail(
+						statusCode.UNAUTHORIZED,
+						message.AUTHENTICATION_FAIL
+					))
+			}
+			return res.status(statusCode.INTERNAL_SERVER_ERROR)
+				.send(util.fail(
+					statusCode.INTERNAL_SERVER_ERROR,
+					message.INTERNAL_SERVER_ERROR
+				))
 		}
 	}
 	
