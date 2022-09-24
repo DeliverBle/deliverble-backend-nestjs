@@ -1,16 +1,15 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard, PassportModule } from '@nestjs/passport';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserRepository } from 'src/user/user.repository';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './auth.passport.jwt.strategy';
-import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
-// import { KakaoStrategy } from './kakao.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthRepository]),
+    TypeOrmModule.forFeature([UserRepository]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '300s' },
