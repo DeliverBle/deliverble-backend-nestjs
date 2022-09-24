@@ -21,7 +21,7 @@ export class UserController {
   async toggleFavoriteNews(
     @Req() req,
     @Param('newsId') newsId : number
-  ): Promise<any> {
+  ): Promise<User> {
     const user = req.user;
     newsId = Number(newsId);
 

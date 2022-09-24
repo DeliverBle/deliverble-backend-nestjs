@@ -26,7 +26,7 @@ export class UserService {
     return userInfoForView;
   }
 
-  async toggleFavoriteNews(user: User, newsId: number): Promise<any> {
+  async toggleFavoriteNews(user: User, newsId: number): Promise<User> {
     const news: News = await this.newsRepository.findOne(newsId);
 
     const favorites = await user.favorites;
