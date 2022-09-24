@@ -39,7 +39,6 @@ const MockUserRepository = () => ({
   },
 })
 
-type MockUserRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 describe('AuthService', () => {
   let authService: AuthService;
   let jwtService: JwtService;
