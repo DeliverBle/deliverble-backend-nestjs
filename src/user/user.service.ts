@@ -26,12 +26,17 @@ export class UserService {
     return userInfoForView;
   }
 
-  async addFavoriteNews(user: User, newsId: number): Promise<any> {
+  async toggleFavoriteNews(user: User, newsId: number): Promise<any> {
     const news: News = await this.newsRepository.findOne(newsId);
-    console.log(news);
+
+    const favorites = await user.favorites;
+    const favoriteNewsIdList: number[] = []
+    favorites.map((news) => favoriteNewsIdList.push(news.id))
+    
+    if ((favoriteNewsIdList.includes(newsId))) {
+      return await this.userRepository.deleteFavoriteNews(user, news);
+    }
     return await this.userRepository.addFavoriteNews(user, news);
-
   }
-
   
 }

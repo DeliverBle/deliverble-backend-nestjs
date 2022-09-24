@@ -17,15 +17,24 @@ export class UserRepository extends Repository<User> {
     }
 
     async addFavoriteNews(user: User, news: News): Promise<User> {
-      console.log(await user.favorites);
       const favorites = await user.favorites;
-      // const favorite: Favorite = new Favorite(user.id, news.id);
-      // console.log(favorite);
       favorites.push(news);
-      // user.favorites = [news];
-      console.log(user.favorites);
       user.save();
-
       return user;
+    }
+    
+    async deleteFavoriteNews(user: User, news: News): Promise<User> {
+      let favorites = await user.favorites;
+      const newsId: number = news.id;
+
+      user.favorites = Promise.resolve(
+        favorites.filter((news) => {
+          return news.id !== newsId;
+        }),
+      );
+
+      user.save();
+      return user;
+
     }
 }

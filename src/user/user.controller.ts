@@ -18,11 +18,13 @@ export class UserController {
 
   @Post('/favorite/:newsId')
   @UseGuards(JwtAuthGuard)
-  async addFavoriteNews(
+  async toggleFavoriteNews(
     @Req() req,
     @Param('newsId') newsId : number
   ): Promise<any> {
     const user = req.user;
-    return this.userService.addFavoriteNews(user, newsId);
+    newsId = Number(newsId);
+
+    return this.userService.toggleFavoriteNews(user, newsId);
   }
 }
