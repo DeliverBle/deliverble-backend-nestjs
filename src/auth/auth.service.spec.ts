@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { Social } from './common/Social';
 import { Payload } from './dto/payload';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 
 const mockUser: User = new User(
     "222222223",
@@ -39,6 +39,7 @@ const MockUserRepository = () => ({
   },
 })
 
+type MockUserRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 describe('AuthService', () => {
   let authService: AuthService;
   let jwtService: JwtService;
