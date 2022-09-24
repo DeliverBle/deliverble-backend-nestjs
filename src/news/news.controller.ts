@@ -20,7 +20,7 @@ export class NewsController {
     @Body() createNewsDto: CreateNewsDto,
     @Res() res
     ): Promise<Response> {            
-		try {
+    try {
       const data: ReturnNewsDtoCollection = await this.newsService.createAndGetAllNews(createNewsDto);
       return res.status(statusCode.CREATED).send(
         util.success(
@@ -62,7 +62,7 @@ export class NewsController {
         )
       )
     }
-	}
+  }
 
   @Post('update/:id')
 	async updateNews(
@@ -70,30 +70,48 @@ export class NewsController {
     @Param('id') id : number,
     @Res() res
     ): Promise<ReturnNewsDtoCollection> {
-      try {
-        const data: ReturnNewsDtoCollection = await this.newsService.updateAndGetAllNews(id, updateNewsDto);
-        return res.status(statusCode.OK).send(
-          util.success(
-            statusCode.OK,
-            message.UPDATE_NEWS_SUCCESS,
-            data
-          )
-        ) 
-      } catch (error) {
-        logger.error(error)
-        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(
-          util.fail(
-            statusCode.INTERNAL_SERVER_ERROR,
-            message.INTERNAL_SERVER_ERROR
-          )
+    try {
+      const data: ReturnNewsDtoCollection = await this.newsService.updateAndGetAllNews(id, updateNewsDto);
+      return res.status(statusCode.OK).send(
+        util.success(
+          statusCode.OK,
+          message.UPDATE_NEWS_SUCCESS,
+          data
         )
-      }
-	  }
+      ) 
+    } catch (error) {
+      logger.error(error)
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(
+        util.fail(
+          statusCode.INTERNAL_SERVER_ERROR,
+          message.INTERNAL_SERVER_ERROR
+        )
+      )
+    }
+  }
 
-    @Delete('delete/:id')
-	deleteNews(
-    @Param('id') id : number
+  @Delete('delete/:id')
+	async deleteNews(
+    @Param('id') id : number,
+    @Res() res
     ): Promise<ReturnNewsDtoCollection> {
-        return this.newsService.deleteAndGetAllNews(id);
-	}
+    try {
+      const data: ReturnNewsDtoCollection = await this.newsService.deleteAndGetAllNews(id);
+      return res.status(statusCode.OK).send(
+        util.success(
+          statusCode.OK,
+          message.DELETE_NEWS_SUCCESS,
+          data
+        )
+      ) 
+    } catch (error) {
+      logger.error(error)
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(
+        util.fail(
+          statusCode.INTERNAL_SERVER_ERROR,
+          message.INTERNAL_SERVER_ERROR
+        )
+      )
+    }
+  }
 }
