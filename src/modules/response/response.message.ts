@@ -1,4 +1,5 @@
 export const message = {
+  // 에러 메시지
   NULL_VALUE: '필요한 값이 없습니다.',
   FORBIDDEN: 'Forbidden',
   DUPLICATED: 'Duplicated',
@@ -8,21 +9,19 @@ export const message = {
   NULL_VALUE_TOKEN: '토큰이 없습니다.',
   INVALID_TOKEN: '만료된 토큰입니다.',
   INVALID_PASSWORD: '비밀번호 오류',
-
-  READ_USER_SUCCESS: '유저 조회 성공',
-  CREATE_USER_SUCCESS: '유저 생성 성공',
-  DELETE_USER_SUCCESS: '유저 삭제 성공',
-  UPDATE_USER_SUCCEss: '유저 삭제 성공',
   
   // 인증, 인가 로직
   AUTHENTICATION_SUCCESS: '유저 인증 성공',
+  AUTHENTICATION_FAIL: '유저 인증 실패',
+  
+  // 유저, Favorite
+  READ_USER_SUCCESS: '유저 조회 성공',
+  TOGGLE_FAVORITE_NEWS_SUCCESS: '좋아하는 뉴스 토글 성공',
+  
+  // 뉴스
+  CREATE_NEWS_SUCCESS: '뉴스 생성 성공',
+  READ_ALL_NEWS_SUCCESS: '모든 뉴스 조회 성공',
+  UPDATE_NEWS_SUCCESS: '뉴스 수정 성공',
+  DELETE_NEWS_SUCCESS: '뉴스 삭제 성공',
 
-  // 리뷰
-  CREATE_REVIEW_SUCCESS: '리뷰 작성 성공',
-  READ_REVIEW_SUCCESS: '리뷰 조회 성공',
-
-  // 영화
-  CREATE_MOVIE_SUCESS: '영화 생성 성공',
-  CREATE_MOVIE_COMMENT_SUCCESS: '댓글 작성 성공',
-  READ_MOVIE_SUCEESS: '영화 조회 성공'
 }
