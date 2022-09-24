@@ -1,4 +1,7 @@
-import { Body, Controller, Delete, Get, Logger, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Res } from '@nestjs/common';
+import { message } from 'src/modules/response/response.message';
+import { statusCode } from 'src/modules/response/response.status.code';
+import { util } from 'src/modules/response/response.util';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { ReturnNewsDtoCollection } from './dto/return-news-collection.dto';
 import { ReturnNewsDto } from './dto/return-news.dto';
@@ -10,14 +13,32 @@ const logger: Logger = new Logger('news controller');
 
 @Controller('news')
 export class NewsController {
-    constructor(private newsService: NewsService) {};
+  constructor(private newsService: NewsService) {};
 
-    @Post('create')
-	createNews(
-        @Body() createNewsDto: CreateNewsDto
-        ): Promise<ReturnNewsDtoCollection> {            
-		return this.newsService.createAndGetAllNews(createNewsDto);
-	}
+  @Post('create')
+	async createNews(
+    @Body() createNewsDto: CreateNewsDto,
+    @Res() res
+    ): Promise<Response> {            
+		try {
+      const data = await this.newsService.createAndGetAllNews(createNewsDto);
+      return res.status(statusCode.CREATED).send(
+        util.success(
+          statusCode.CREATED,
+          message.CREATE_NEWS_SUCCESS,
+          data
+        )
+      )
+    } catch (error) {
+      logger.error(error)
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(
+        util.fail(
+          statusCode.INTERNAL_SERVER_ERROR,
+          message.INTERNAL_SERVER_ERROR
+        )
+      )
+    }
+  }
 
     @Get('all')
 	getAllNews(): Promise<ReturnNewsDtoCollection> {
