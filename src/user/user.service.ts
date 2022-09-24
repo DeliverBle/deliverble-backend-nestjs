@@ -34,9 +34,17 @@ export class UserService {
     favorites.map((news) => favoriteNewsIdList.push(news.id))
     
     if ((favoriteNewsIdList.includes(newsId))) {
-      return await this.userRepository.deleteFavoriteNews(user, news);
+      return await this.deleteFavoriteNews(user, news);
     }
+    return await this.addFavoriteNews(user, news);
+  }
+
+  async addFavoriteNews(user: User, news: News): Promise<User> {
     return await this.userRepository.addFavoriteNews(user, news);
+  }
+
+  async deleteFavoriteNews(user: User, news: News): Promise<User> {
+    return await this.userRepository.deleteFavoriteNews(user, news);
   }
   
 }
