@@ -57,10 +57,4 @@ export class User extends BaseEntity {
     @JoinTable()
     favorites: Promise<News[]>;
 
-    // @AfterLoad()
-    // async nullChecks() {
-    //   if (!this.favorites) {
-    //     this.favorites = []
-    //   }
-    // }
 }
