@@ -20,7 +20,7 @@ export class UserController {
   async getUserInfo(
     @Req() req,
     @Res() res
-    ): Promise<UserForViewDto> {
+    ): Promise<Response> {
     try {
       const userInfo: ReturnUserDto = req.user;
       const data: UserForViewDto = await this.userService.getUserInfo(userInfo);
@@ -44,11 +44,15 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async toggleFavoriteNews(
     @Req() req,
+    @Res() res,
     @Param('newsId') newsId : number
   ): Promise<User> {
-    const user = req.user;
-    newsId = Number(newsId);
+    try {
+      const user = req.user;
+      newsId = Number(newsId);
+  
+      return this.userService.toggleFavoriteNews(user, newsId);
 
-    return this.userService.toggleFavoriteNews(user, newsId);
+    }
   }
 }

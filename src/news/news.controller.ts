@@ -69,7 +69,7 @@ export class NewsController {
     @Body() updateNewsDto: UpdateNewsDto,
     @Param('id') id : number,
     @Res() res
-    ): Promise<ReturnNewsDtoCollection> {
+    ): Promise<Response> {
     try {
       const data: ReturnNewsDtoCollection = await this.newsService.updateAndGetAllNews(id, updateNewsDto);
       return res.status(statusCode.OK).send(
@@ -94,7 +94,7 @@ export class NewsController {
 	async deleteNews(
     @Param('id') id : number,
     @Res() res
-    ): Promise<ReturnNewsDtoCollection> {
+    ): Promise<Response> {
     try {
       const data: ReturnNewsDtoCollection = await this.newsService.deleteAndGetAllNews(id);
       return res.status(statusCode.OK).send(
