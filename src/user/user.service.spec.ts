@@ -69,7 +69,7 @@ const MockUserRepository = () => ({
 
 const MockNewsRepository = () => ({
   async findOne() {
-    return;
+    return mockNews1;
   }
 })
 
