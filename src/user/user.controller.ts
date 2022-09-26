@@ -7,6 +7,8 @@ import { UserService } from './user.service';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
 import { message } from 'src/modules/response/response.message';
+import { getToggleInfo } from './utils/get-toggle-info';
+import { TOGGLE_FAVORITE } from './dto/toggle-favorite.type';
 
 const logger: Logger = new Logger('user controller')
 
@@ -51,13 +53,9 @@ export class UserController {
       const user = req.user;
       newsId = Number(newsId);
 
-      const addOrDelete: string = await this.userService.toggleFavoriteNews(user, newsId);
-      let isFavorite: boolean;
-      if (addOrDelete === "add") {
-        isFavorite = true;
-      } else if (addOrDelete === "delete") {
-        isFavorite = false;
-      }
+      const addOrDelete: TOGGLE_FAVORITE = await this.userService.toggleFavoriteNews(user, newsId);
+      const isFavorite: boolean = getToggleInfo(addOrDelete);
+
       const data: Object = {
         newsId: newsId,
         isFavorite: isFavorite,

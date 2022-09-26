@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NewsRepository } from 'src/news/news.repository';
 import { UserRepository } from './user.repository';
 import { News } from 'src/news/news.entity';
+import { TOGGLE_FAVORITE } from './dto/toggle-favorite.type';
 
 const logger = new Logger('user.service');
 
@@ -26,7 +27,7 @@ export class UserService {
     return userInfoForView;
   }
 
-  async toggleFavoriteNews(user: User, newsId: number): Promise<string> {
+  async toggleFavoriteNews(user: User, newsId: number): Promise<TOGGLE_FAVORITE> {
     const news: News = await this.newsRepository.findOne(newsId);
     if (news === undefined) {
       throw new BadRequestException;
@@ -42,14 +43,14 @@ export class UserService {
     return await this.addFavoriteNews(user, news);
   }
 
-  async addFavoriteNews(user: User, news: News): Promise<string> {
+  async addFavoriteNews(user: User, news: News): Promise<TOGGLE_FAVORITE> {
     await this.userRepository.addFavoriteNews(user, news);
-    return "add";
+    return TOGGLE_FAVORITE.Add;
   }
 
-  async deleteFavoriteNews(user: User, news: News): Promise<string> {
+  async deleteFavoriteNews(user: User, news: News): Promise<TOGGLE_FAVORITE> {
     await this.userRepository.deleteFavoriteNews(user, news);
-    return "delete";
+    return TOGGLE_FAVORITE.Delete;
   }
   
 }
