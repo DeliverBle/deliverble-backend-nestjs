@@ -10,7 +10,6 @@ const logger = new Logger('user.repository');
 export class UserRepository extends Repository<User> {
 
     async createUser(user: User): Promise<User> {
-      // await user.favorites = [];
       return user.save()
     }
 

@@ -6,7 +6,7 @@ export class SearchCondition {
     this.currentPage = _currentPage;
     this.listSize = _listSize;
   }
-  // ["남자"] --> ["male"]
+  
   channel: string[];
   category: string[];
   announcerGender: string[];

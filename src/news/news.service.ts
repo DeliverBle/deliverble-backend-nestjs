@@ -109,11 +109,6 @@ export class NewsService {
   };
 
   async checkFavorite(exploreNewsDtoList: ExploreNewsDto[], user: User): Promise<ExploreNewsDto[]> {
-    
-    // let exploreNewsList: ExploreNewsDto[]  = newsList.map((news) => {
-    //     let exploreNewsDto: ExploreNewsDto = new ExploreNewsDto(news);
-    //     return exploreNewsDto;
-    // })
     console.log(exploreNewsDtoList);
     if (user !== undefined) {
       const favoriteList: number[] = (await user.favorites).map((news) => news.id);
