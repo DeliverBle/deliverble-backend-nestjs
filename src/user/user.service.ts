@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NewsRepository } from 'src/news/news.repository';
 import { UserRepository } from './user.repository';
 import { News } from 'src/news/news.entity';
-import { TOGGLE_FAVORITE } from './dto/toggle-favorite.type';
+import { TOGGLE_FAVORITE } from './common/toggle-favorite.type';
 
 const logger = new Logger('user.service');
 

@@ -8,7 +8,7 @@ import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
 import { message } from 'src/modules/response/response.message';
 import { getToggleInfo } from './utils/get-toggle-info';
-import { TOGGLE_FAVORITE } from './dto/toggle-favorite.type';
+import { TOGGLE_FAVORITE } from './common/toggle-favorite.type';
 
 const logger: Logger = new Logger('user controller')
 
@@ -72,5 +72,14 @@ export class UserController {
       .status(statusCode.INTERNAL_SERVER_ERROR)
       .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
     }
+  }
+
+  @Get('/load')
+  @UseGuards(JwtAuthGuard)
+  async loadUserInfo(
+    @Req() req
+  ): Promise<User> {
+    // console.log(req);
+    return req.user;
   }
 }
