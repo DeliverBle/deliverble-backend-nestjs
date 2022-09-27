@@ -84,7 +84,6 @@ export class AuthController {
 		}
 	}
 	
-
 	@Get('test')
 	@UseGuards(JwtAuthGuard)
 	authTest(@Res() res): void {
