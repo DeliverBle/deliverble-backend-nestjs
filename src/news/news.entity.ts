@@ -2,10 +2,10 @@ import { Time } from "src/modules/Time";
 // import { Favorite } from "src/user/favorite.entity";
 import { User } from "src/user/user.entity";
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Category } from "./common/Category";
-import { Channel } from "./common/Channel";
-import { Gender } from "./common/Gender";
-import { Suitability } from "./common/Suitability";
+import { Category } from "./common/category.enum";
+import { Channel } from "./common/channel.enum";
+import { Gender } from "./common/gender.enum";
+import { Suitability } from "./common/suitability.enum";
 
 
 @Entity()
