@@ -112,13 +112,15 @@ export class NewsController {
 
       let data: ExploreNewsDtoCollection;
       let paginationInfo: PaginationInfo;
-
+      
       // 검색 조건과 토큰 입력 -> 토큰으로 user.favorite 가져오기
       [data, paginationInfo] = await this.newsService.searchByConditions(searchCondition, bearerToken)
+      
+      const paginationInfoObject: object = { paginationInfo: paginationInfo }
 
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.SEARCH_NEWS_SUCCESS, [data, paginationInfo]))
+        .send(util.success(statusCode.OK, message.SEARCH_NEWS_SUCCESS, data, paginationInfoObject))
     
       } catch (error) {
       logger.error(error)
