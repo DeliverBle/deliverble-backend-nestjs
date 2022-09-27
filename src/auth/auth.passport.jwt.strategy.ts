@@ -13,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy){
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: true,
+            // signOptions: { expiresIn: '10s' },
             secretOrKey: process.env.JWT_SECRET,
         })
     }
