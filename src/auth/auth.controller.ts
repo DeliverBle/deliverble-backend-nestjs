@@ -65,33 +65,24 @@ export class AuthController {
 		try {
 			const jwt = await this.authService.kakaoAuthentication(code);
 			res.setHeader('Authorization', 'Bearer ' + jwt['accessToken']);
-			// return res.json(jwt);
-			return res.status(statusCode.OK)
-				.send(util.success(
-					statusCode.OK,
-					message.AUTHENTICATION_SUCCESS,
-					jwt
-				))
+			return res
+				.status(statusCode.OK)
+				.send(util.success(statusCode.OK, message.AUTHENTICATION_SUCCESS, jwt))
 
 		} catch (error) {
 			logger.error(error);
 			console.log("error response >>>>>>", error.response);
 			if (error.response.statusCode === statusCode.UNAUTHORIZED) {
-				return res.status(statusCode.UNAUTHORIZED)
-					.send(util.fail(
-						statusCode.UNAUTHORIZED,
-						message.AUTHENTICATION_FAIL
-					))
+				return res
+					.status(statusCode.UNAUTHORIZED)
+					.send(util.fail(statusCode.UNAUTHORIZED, message.AUTHENTICATION_FAIL))
 			}
-			return res.status(statusCode.INTERNAL_SERVER_ERROR)
-				.send(util.fail(
-					statusCode.INTERNAL_SERVER_ERROR,
-					message.INTERNAL_SERVER_ERROR
-				))
+			return res
+				.status(statusCode.INTERNAL_SERVER_ERROR)
+				.send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
 		}
 	}
 	
-
 	@Get('test')
 	@UseGuards(JwtAuthGuard)
 	authTest(@Res() res): void {

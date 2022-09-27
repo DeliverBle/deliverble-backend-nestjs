@@ -12,7 +12,7 @@ import { UserService } from './user.service';
     TypeOrmModule.forFeature([UserRepository, NewsRepository]),
   ],  
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService, JwtModule]
 })
 export class UserModule {}
 

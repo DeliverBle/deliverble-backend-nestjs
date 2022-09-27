@@ -6,6 +6,7 @@ export const message = {
   NOT_FOUND: '존재하지 않는 자원',
   BAD_REQUEST: '잘못된 요청',
   INTERNAL_SERVER_ERROR: '서버 내부 오류',
+  EXCEED_PAGE_INDEX: '요청한 페이지 번호가 존재하는 인덱스 개수를 넘어섰습니다.',
   NULL_VALUE_TOKEN: '토큰이 없습니다.',
   INVALID_TOKEN: '만료된 토큰입니다.',
   INVALID_PASSWORD: '비밀번호 오류',
@@ -23,5 +24,8 @@ export const message = {
   READ_ALL_NEWS_SUCCESS: '모든 뉴스 조회 성공',
   UPDATE_NEWS_SUCCESS: '뉴스 수정 성공',
   DELETE_NEWS_SUCCESS: '뉴스 삭제 성공',
+  SEARCH_NEWS_SUCCESS: '영상 검색 결과 조회 성공',
+  RECOMMEND_NEWS_SUCCESS: '추천 영상 조회 성공',
+  DETAIL_NEWS_SUCCESS: '영상 조회 성공',
 
 }

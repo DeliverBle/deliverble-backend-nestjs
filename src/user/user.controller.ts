@@ -8,7 +8,7 @@ import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
 import { message } from 'src/modules/response/response.message';
 import { getToggleInfo } from './utils/get-toggle-info';
-import { TOGGLE_FAVORITE } from './dto/toggle-favorite.type';
+import { TOGGLE_FAVORITE } from './common/toggle-favorite.type';
 
 const logger: Logger = new Logger('user controller')
 
@@ -26,19 +26,15 @@ export class UserController {
     try {
       const userInfo: ReturnUserDto = req.user;
       const data: UserForViewDto = await this.userService.getUserInfo(userInfo);
-      return res.status(statusCode.OK)
-        .send(util.success(
-          statusCode.OK,
-          message.READ_USER_SUCCESS,
-          data
-        ))
-    } catch (error) {
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.READ_USER_SUCCESS, data))
+    
+      } catch (error) {
       logger.error(error);
-      return res.status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(
-          statusCode.INTERNAL_SERVER_ERROR,
-          message.INTERNAL_SERVER_ERROR
-        ))
+      return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
     }
   }
 
@@ -61,26 +57,29 @@ export class UserController {
         isFavorite: isFavorite,
       }
 
-      return res.status(statusCode.OK)
-        .send(util.success(
-          statusCode.OK,
-          message.TOGGLE_FAVORITE_NEWS_SUCCESS,
-          data
-        ))
-    } catch (error) {
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.TOGGLE_FAVORITE_NEWS_SUCCESS, data))
+    
+      } catch (error) {
       logger.error(error);
       if (error.response.statusCode === statusCode.BAD_REQUEST) {
-        return res.status(statusCode.BAD_REQUEST)
-          .send(util.fail(
-            statusCode.BAD_REQUEST,
-            message.BAD_REQUEST
-          ))
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.BAD_REQUEST))
       }
-      return res.status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(
-          statusCode.INTERNAL_SERVER_ERROR,
-          message.INTERNAL_SERVER_ERROR
-        ))
+      return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
     }
+  }
+
+  @Get('/load')
+  @UseGuards(JwtAuthGuard)
+  async loadUserInfo(
+    @Req() req
+  ): Promise<User> {
+    // console.log(req);
+    return req.user;
   }
 }

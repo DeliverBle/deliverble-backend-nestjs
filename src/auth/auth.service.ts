@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
-import { Gender } from '../news/common/Gender';
+import { Gender } from '../news/common/gender.enum';
 import { Payload } from './dto/payload';
 import { Social } from './common/Social';
 import { User } from '../user/user.entity';
@@ -145,7 +145,7 @@ export class AuthService {
 		};
 
 		logger.debug('payload right before signIn >>>>', payload);
-		const accessToken = await this.jwtService.sign(payload); //여기서 알아서 payload를합쳐서 만들어준다.
+		const accessToken = await this.jwtService.sign(payload); //여기서 알아서 payload를 합쳐서 만들어준다.
 		return { accessToken };
   }
 
@@ -154,5 +154,22 @@ export class AuthService {
     return await this.userRepository.findOne({
 			where: { id: payload.id }
 	});
+	}
+
+	async verifyJWTReturnUser(bearerToken: string): Promise<User> {
+		try {
+			// JWT Secret key 불러오기
+			const secretKey = process.env.JWT_SECRET;
+			// Bearer의 token 부분만 파싱하기
+			const jwt = bearerToken.split("Bearer ")[1]
+			const payload: Payload = this.jwtService.verify(jwt, { secret: secretKey })
+			
+			return await this.userRepository.findOne({
+				where: { id: payload.id }
+			});
+
+		} catch (e) {
+			throw new UnauthorizedException()
+		}
 	}
 }
