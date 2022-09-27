@@ -1,8 +1,8 @@
 import { Time } from "src/modules/Time";
-import { Category } from "../common/Category";
-import { Channel } from "../common/Channel";
-import { Gender } from "../common/Gender";
-import { Suitability } from "../common/Suitability";
+import { Category } from "../common/category.enum";
+import { Channel } from "../common/channel.enum";
+import { Gender } from "../common/gender.enum";
+import { Suitability } from "../common/suitability.enum";
 
 export class CreateNewsDto {
     title: string;
