@@ -83,7 +83,7 @@ export class NewsService {
     const tagsForRecommend: Tag[] = await this.tagRepository.getTagsByNameList(tagListForRecommend);
     const news: News = await this.newsRepository.getNewsById(newsId);
     // 해당 뉴스의 태그(화면 표시용) 초기화
-    await this.newsRepository.resetTagsOfNews(news);
+    const newsResetTag: News = await this.newsRepository.resetTagsOfNews(news);
     // 태그 추가
     await this.newsRepository.addTagsForViewToNews(news, tagsForView);
     await this.newsRepository.addTagsForRecommendToNews(news, tagsForRecommend);
@@ -185,6 +185,19 @@ export class NewsService {
 
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return [exploreNewsDtoCollection, paginationInfo];
+  }
+
+  async getRecommendedNews(): Promise<ExploreNewsDtoCollection> {
+    // 추천 태그에 포함된 뉴스 리스트 가져오기
+    const recommendedTag: Tag = await this.tagRepository.getRecommendedTag();
+    let recommendedNewsList: News[] = await recommendedTag.forView;
+    // 정렬 후 8개 슬라이싱
+    recommendedNewsList = await sortByDateAndTitle(recommendedNewsList);
+    recommendedNewsList = recommendedNewsList.slice(0, 8);
+    // 타입 변경 후 반환
+    const exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(recommendedNewsList);
+    const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
+    return exploreNewsDtoCollection;
   }
 
 }
