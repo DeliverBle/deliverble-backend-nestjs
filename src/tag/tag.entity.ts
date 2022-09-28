@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { News } from "src/news/news.entity";
+import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "../news/common/category.enum";
 
 @Entity()
@@ -25,5 +26,11 @@ export class Tag extends BaseEntity {
   default: Category.UNSPECIFIED,
   })
   category: Category;
+
+  @ManyToMany(() => News, (news) => news.tagsForView)
+  forView: News[];
+
+  @ManyToMany(() => News, (news) => news.tagsForRecommend)
+  forRecommend: News[];
 
 }

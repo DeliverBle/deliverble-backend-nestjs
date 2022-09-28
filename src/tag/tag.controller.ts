@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Logger, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Req, Res } from '@nestjs/common';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
@@ -53,10 +53,11 @@ export class TagController {
 
   @Delete('delete/:tagName')
   async deleteTag(
-    @Param('tagName') tagName : string,
+    @Req() req,
     @Res() res
   ): Promise<Response> {
     try {
+      const tagName: string = req.body.tagName;
       const data: ReturnTagDto = await this.tagService.deleteTag(tagName);
       return res
         .status(statusCode.OK)
@@ -74,4 +75,5 @@ export class TagController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
+
 }

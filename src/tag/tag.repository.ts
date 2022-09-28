@@ -20,22 +20,28 @@ export class TagRepository extends Repository<Tag> {
     return tag;
 }
 
-async getTagByName(tagName: string): Promise<ReturnTagDto> {
+async getTagByName(tagName: string): Promise<Tag> {
   const tag: Tag = await this.findOne({
     name: tagName
   })
   if (tag === undefined) {
     throw new BadRequestException;
   }
-  const returnTagDto: ReturnTagDto = new ReturnTagDto(tag);
-  return returnTagDto;
-}
-
-async deleteTag(tagName: string): Promise<ReturnTagDto> {
-  const tag: ReturnTagDto = await this.getTagByName(tagName);
-  await this.delete(
-      { name: tagName }
-  )
   return tag;
 }
+
+async getTagsByNameList(tagList: string[]): Promise<Tag[]> {
+  return await this.createQueryBuilder('tag')
+    .where('tag.name IN (:...tagList)', { tagList })
+    .getMany();
+};
+
+async deleteTag(tagName: string): Promise<ReturnTagDto> {
+    const tag: Tag = await this.getTagByName(tagName);
+    const returnTagDto: ReturnTagDto = new ReturnTagDto(tag);
+    await this.delete(
+      { name: tagName }
+    )
+    return returnTagDto;
+    }
 }
