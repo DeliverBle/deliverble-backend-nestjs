@@ -28,4 +28,9 @@ export const message = {
   RECOMMEND_NEWS_SUCCESS: '추천 영상 조회 성공',
   DETAIL_NEWS_SUCCESS: '영상 조회 성공',
 
+  // 태그
+  CREATE_TAG_SUCCESS: '태그 생성 성공',
+  READ_ALL_TAGS_SUCCESS: '모든 태그 조회 성공',
+  DELETE_TAG_SUCCESS: '태그 삭제 성공',
+
 }

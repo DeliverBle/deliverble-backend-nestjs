@@ -129,7 +129,6 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
-
   
 }
 

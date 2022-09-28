@@ -65,13 +65,13 @@ export class AuthController {
 		try {
 			const jwt = await this.authService.kakaoAuthentication(code);
 			res.setHeader('Authorization', 'Bearer ' + jwt['accessToken']);
+			
 			return res
 				.status(statusCode.OK)
 				.send(util.success(statusCode.OK, message.AUTHENTICATION_SUCCESS, jwt))
 
 		} catch (error) {
 			logger.error(error);
-			console.log("error response >>>>>>", error.response);
 			if (error.response.statusCode === statusCode.UNAUTHORIZED) {
 				return res
 					.status(statusCode.UNAUTHORIZED)
