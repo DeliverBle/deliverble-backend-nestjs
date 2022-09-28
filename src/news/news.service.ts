@@ -83,18 +83,12 @@ export class NewsService {
     const tagsForRecommend: Tag[] = await this.tagRepository.getTagsByNameList(tagListForRecommend);
     const news: News = await this.newsRepository.getNewsById(newsId);
     // 해당 뉴스의 태그(화면 표시용) 초기화
-    console.log("news before reset:", news);
     await this.newsRepository.resetTagsOfNews(news);
     // 태그 추가
-    console.log("news after reset:", news);
     await this.newsRepository.addTagsForViewToNews(news, tagsForView);
-    console.log("news after add tags for view:", news);
     await this.newsRepository.addTagsForRecommendToNews(news, tagsForRecommend);
-    console.log("news after add tags for recommend:", news);
     // 뉴스 불러오기
     const newsAfterAddTags: News = await this.newsRepository.getNewsById(newsId);
-    console.log("news after load:", news);
-    console.log(newsAfterAddTags);
     const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(newsAfterAddTags);
     return returnNewsDto;
   }
