@@ -1,3 +1,4 @@
+import { Tag } from "src/tag/tag.entity";
 import { EntityRepository, Repository, UpdateResult } from "typeorm";
 import { SearchCondition } from "./common/search-condition";
 import { CreateNewsDto } from "./dto/create-news.dto";
@@ -31,12 +32,34 @@ export class NewsRepository extends Repository<News> {
         return await this.find();
     }
 
-    async getNewsById(id: number): Promise<ReturnNewsDto> {
+    async getNewsById(id: number): Promise<News> {
         const news: News = await this.findOne({
             id: id
         })
-        const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
-        return returnNewsDto
+        return news;
+    }
+
+    async resetTagsOfNews(news: News): Promise<News> {
+        news.tagsForView = [];
+        news.tagsForRecommend = [];
+        news.save();
+        return news;
+    }
+
+    async addTagsForViewToNews(news: News, tagsForView: Tag[]): Promise<News> {
+        tagsForView.forEach((tag) => { 
+            news.tagsForView.push(tag);
+        })
+        news.save();
+        return news;
+    }
+
+    async addTagsForRecommendToNews(news: News, tagsForRecommend: Tag[]): Promise<News> {
+        tagsForRecommend.forEach((tag) => { 
+            news.tagsForRecommend.push(tag);
+        })
+        news.save();
+        return news;
     }
 
     async updateNews(id: number, updateNewsDto: UpdateNewsDto): Promise<ReturnNewsDto> {

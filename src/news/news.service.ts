@@ -22,6 +22,8 @@ import { VerifiedCallback } from 'passport-jwt';
 import { Payload } from 'src/auth/dto/payload';
 import { ExploreNewsDtoCollection } from './dto/explore-news-collection.dto';
 import { changeToExploreNewsList } from './utils/change-explore-news-list-to-dto';
+import { Tag } from 'src/tag/tag.entity';
+import { TagRepository } from 'src/tag/tag.repository';
 
 const logger: Logger = new Logger('news service');
 
@@ -30,6 +32,8 @@ export class NewsService {
   constructor(
     @InjectRepository(NewsRepository)
     private newsRepository: NewsRepository,
+    @InjectRepository(TagRepository)
+    private tagRepository: TagRepository,
     private authService: AuthService,
   ) {};
 
@@ -67,6 +71,26 @@ export class NewsService {
   async deleteAndGetAllNews(id: number) : Promise<ReturnNewsDtoCollection> {
     await this.deleteNews(id);
     return await this.getAllNews();
+  }
+
+  async addTagsToNews(
+    newsId: number,
+    tagListForView: string[],
+    tagListForRecommend: string[]
+  ): Promise<ReturnNewsDto> {
+    // 태그, 뉴스 불러오기
+    const tagsForView: Tag[] = await this.tagRepository.getTagsByNameList(tagListForView);
+    const tagsForRecommend: Tag[] = await this.tagRepository.getTagsByNameList(tagListForRecommend);
+    const news: News = await this.newsRepository.getNewsById(newsId);
+    // 해당 뉴스의 태그(화면 표시용) 초기화
+    await this.newsRepository.resetTagsOfNews(news);
+    // 태그 추가
+    await this.newsRepository.addTagsForViewToNews(news, tagsForView);
+    await this.newsRepository.addTagsForRecommendToNews(news, tagsForRecommend);
+    // 뉴스 불러오기
+    const newsAfterAddTags: News = await this.newsRepository.getNewsById(newsId);
+    const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(newsAfterAddTags);
+    return returnNewsDto;
   }
 
   async filterNewsByCategory(newsList: News[], searchCondition: SearchCondition) {

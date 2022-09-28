@@ -99,6 +99,28 @@ export class NewsController {
     }
   }
 
+  @Post('tag/add/:newsId')
+  async addTagsToNews(
+    @Req() req,
+    @Res() res,
+    @Param('newsId') newsId : number,
+  ): Promise<Response> {
+    try {
+      const tagListForView: string[] = req.body.tagListForView;
+      const tagListForRecommend: string[] = req.body.tagListForRecommend;
+      const data: ReturnNewsDto = await this.newsService.addTagsToNews(newsId, tagListForView, tagListForRecommend)
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.ADD_TAG_TO_NEWS_SUCCESS, data))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
 
   @Get('search')
 	async searchNews(
@@ -129,7 +151,6 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
-
   
 }
 

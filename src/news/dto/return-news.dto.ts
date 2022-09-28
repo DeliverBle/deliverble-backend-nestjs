@@ -1,4 +1,5 @@
 import { Time } from "src/modules/Time";
+import { Tag } from "src/tag/tag.entity";
 import { Category } from "../common/category.enum";
 import { Channel } from "../common/channel.enum";
 import { Gender } from "../common/gender.enum";
@@ -20,6 +21,8 @@ export class ReturnNewsDto {
     this.suitability = news.suitability;
     this.isEmbeddable = news.isEmbeddable;
     this.reportDate = news.reportDate;
+    this.tagsForView = news.tagsForView;
+    this.tagsForRecommend = news.tagsForRecommend;
 }
     id: number;
     title: string;
@@ -34,4 +37,6 @@ export class ReturnNewsDto {
     suitability: Suitability;
     isEmbeddable: boolean;
     reportDate: Date;
+    tagsForView?: Tag[];
+    tagsForRecommend?: Tag[];
 }

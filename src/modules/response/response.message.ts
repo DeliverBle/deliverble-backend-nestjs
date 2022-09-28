@@ -27,5 +27,11 @@ export const message = {
   SEARCH_NEWS_SUCCESS: '영상 검색 결과 조회 성공',
   RECOMMEND_NEWS_SUCCESS: '추천 영상 조회 성공',
   DETAIL_NEWS_SUCCESS: '영상 조회 성공',
+  ADD_TAG_TO_NEWS_SUCCESS: '뉴스 태그 추가 성공',
+
+  // 태그
+  CREATE_TAG_SUCCESS: '태그 생성 성공',
+  READ_ALL_TAGS_SUCCESS: '모든 태그 조회 성공',
+  DELETE_TAG_SUCCESS: '태그 삭제 성공',
 
 }
