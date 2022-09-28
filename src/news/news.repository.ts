@@ -33,7 +33,7 @@ export class NewsRepository extends Repository<News> {
     }
 
     async getNewsById(id: number): Promise<News> {
-        const news: News = await this.findOne({
+        const news: News = await this.findOneOrFail({
             id: id
         })
         return news;

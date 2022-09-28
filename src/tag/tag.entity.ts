@@ -1,5 +1,5 @@
 import { News } from "src/news/news.entity";
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "../news/common/category.enum";
 
 @Entity()
@@ -28,9 +28,11 @@ export class Tag extends BaseEntity {
   category: Category;
 
   @ManyToMany(() => News, (news) => news.tagsForView)
-  forView: News[];
+  @JoinTable()
+  forView: Promise<News[]>;
 
   @ManyToMany(() => News, (news) => news.tagsForRecommend)
-  forRecommend: News[];
+  @JoinTable()
+  forRecommend: Promise<News[]>;
 
 }

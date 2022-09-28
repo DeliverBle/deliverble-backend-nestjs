@@ -151,6 +151,23 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
-  
+
+  @Get('recommend')
+  async getRecommendedNews(
+    @Res() res
+  ): Promise<Response> {
+    try {
+      const data : ExploreNewsDtoCollection = await this.newsService.getRecommendedNews() 
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.RECOMMENDED_NEWS_SUCCESS, data))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
 }
 
