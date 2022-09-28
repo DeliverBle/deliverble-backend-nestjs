@@ -192,8 +192,8 @@ export class NewsService {
     const recommendedTag: Tag = await this.tagRepository.getRecommendedTag();
     let recommendedNewsList: News[] = await recommendedTag.forView;
     // 정렬 후 8개 슬라이싱
-    recommendedNewsList = sortByDateAndTitle(recommendedNewsList);
-    recommendedNewsList = recommendedNewsList.slice(8);
+    recommendedNewsList = await sortByDateAndTitle(recommendedNewsList);
+    recommendedNewsList = recommendedNewsList.slice(0, 8);
     // 타입 변경 후 반환
     const exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(recommendedNewsList);
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)

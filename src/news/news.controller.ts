@@ -121,7 +121,6 @@ export class NewsController {
     }
   }
 
-
   @Get('search')
 	async searchNews(
     @Req() req,
