@@ -1,7 +1,8 @@
 import { Time } from "src/modules/Time";
+import { Tag } from "src/tag/tag.entity";
 // import { Favorite } from "src/user/favorite.entity";
 import { User } from "src/user/user.entity";
-import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./common/category.enum";
 import { Channel } from "./common/channel.enum";
 import { Gender } from "./common/gender.enum";
@@ -99,4 +100,16 @@ export class News extends BaseEntity {
 
     @ManyToMany(() => User, (user) => user.favorites)
     favorites: User[]
+
+    @ManyToMany(() => Tag, (tag) => tag.forView, {
+        eager: true,
+    })
+    @JoinTable()
+    tagsForView: Tag[];
+
+    @ManyToMany(() => Tag, (tag) => tag.forRecommend, {
+        eager: true,
+    })
+    @JoinTable()
+    tagsForRecommend: Tag[];
 }

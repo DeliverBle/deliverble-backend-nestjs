@@ -1,10 +1,10 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from './common/Category';
-import { Channel } from './common/Channel';
-import { Gender } from './common/Gender';
-import { Suitability } from './common/Suitability';
+import { Category } from './common/category.enum';
+import { Channel } from './common/channel.enum';
+import { Gender } from './common/gender.enum';
+import { Suitability } from './common/suitability.enum';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { ReturnNewsDto } from './dto/return-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
