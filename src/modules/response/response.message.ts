@@ -26,6 +26,7 @@ export const message = {
   DELETE_NEWS_SUCCESS: '뉴스 삭제 성공',
   SEARCH_NEWS_SUCCESS: '영상 검색 결과 조회 성공',
   RECOMMENDED_NEWS_SUCCESS: '추천 영상 조회 성공',
+  FAVORITE_NEWS_SUCCESS: '즐겨찾는 영상 조회 성공',
   DETAIL_NEWS_SUCCESS: '영상 조회 성공',
   ADD_TAG_TO_NEWS_SUCCESS: '뉴스 태그 추가 성공',
 
