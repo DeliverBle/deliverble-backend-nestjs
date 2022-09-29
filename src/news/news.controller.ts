@@ -6,6 +6,7 @@ import { util } from 'src/modules/response/response.util';
 import { UserController } from 'src/user/user.controller';
 import { User } from 'src/user/user.entity';
 import { ConditionList } from './common/condition-list';
+import { PaginationCondition } from './common/pagination-condition';
 import { PaginationInfo } from './common/pagination-info';
 import { SearchCondition } from './common/search-condition';
 import { CreateNewsDto } from './dto/create-news.dto';
@@ -15,7 +16,8 @@ import { ReturnNewsDto } from './dto/return-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { News } from './news.entity';
 import { NewsService } from './news.service';
-import { convertBodyToSearchCondition } from './utils/convert-body-to-search-condition';
+import { convertBodyToPaginationCondition } from './utils/convert-body-to-condition';
+import { convertBodyToSearchCondition } from './utils/convert-body-to-condition';
 
 const logger: Logger = new Logger('news controller');
 
@@ -136,12 +138,40 @@ export class NewsController {
       
       // 검색 조건과 토큰 입력 -> 토큰으로 user.favorite 가져오기
       [data, paginationInfo] = await this.newsService.searchByConditions(searchCondition, bearerToken)
-      
       const paginationInfoObject: object = { paginationInfo: paginationInfo }
 
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.SEARCH_NEWS_SUCCESS, data, paginationInfoObject))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Get('favorite')
+  @UseGuards(JwtAuthGuard)
+  async getFavoriteNews(
+    @Res() res,
+    @Req() req
+  ): Promise<Response> {
+    try {
+      const user: User = req.user;
+      const body: object = req.body;
+      const paginationCondition: PaginationCondition = convertBodyToPaginationCondition(body);
+      
+      let data: ExploreNewsDtoCollection;
+      let paginationInfo;
+      
+      [data, paginationInfo] = await this.newsService.getFavoriteNews(paginationCondition, user)      
+      const paginationInfoObject: object = { paginationInfo: paginationInfo }
+
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.FAVORITE_NEWS_SUCCESS, data, paginationInfoObject))
     
       } catch (error) {
       logger.error(error)

@@ -24,6 +24,7 @@ import { ExploreNewsDtoCollection } from './dto/explore-news-collection.dto';
 import { changeToExploreNewsList } from './utils/change-explore-news-list-to-dto';
 import { Tag } from 'src/tag/tag.entity';
 import { TagRepository } from 'src/tag/tag.repository';
+import { PaginationCondition } from './common/pagination-condition';
 
 const logger: Logger = new Logger('news service');
 
@@ -123,9 +124,9 @@ export class NewsService {
     }
   };
 
-  async paginateWithOffsetAndLimit(newsList: News[], searchCondition: SearchCondition): Promise<News[]> {
-    const offset: number = searchCondition.getOffset();
-    const limit: number = searchCondition.getLimit();
+  async paginateWithOffsetAndLimit(newsList: News[], condition: SearchCondition | PaginationCondition): Promise<News[]> {
+    const offset: number = condition.getOffset();
+    const limit: number = condition.getLimit();
     const endIndex: number = offset + limit;
 
     this.validateNewsDataLength(newsList, offset);
@@ -185,6 +186,25 @@ export class NewsService {
 
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return [exploreNewsDtoCollection, paginationInfo];
+  }
+
+  async getFavoriteNews(paginationCondition: PaginationCondition, user: User): Promise<[ExploreNewsDtoCollection, PaginationInfo]> {
+    let favoriteNewsList: News[] = await user.favorites;
+    // 페이지네이션 정보 생성
+    const totalCount: number = favoriteNewsList.length;
+    const lastPage = getLastPage(12, totalCount);
+    const paginationInfo = new PaginationInfo(totalCount, lastPage);
+
+    // 정렬
+    favoriteNewsList = sortByDateAndTitle(favoriteNewsList);
+    // 페이지네이션
+    favoriteNewsList = await this.paginateWithOffsetAndLimit(favoriteNewsList ,paginationCondition);
+    
+    // 탐색창(검색 등)에 보여지는 형식으로 수정
+    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(favoriteNewsList);
+    const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
+    return [exploreNewsDtoCollection, paginationInfo];
+    
   }
 
   async getRecommendedNews(): Promise<ExploreNewsDtoCollection> {
