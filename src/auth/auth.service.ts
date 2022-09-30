@@ -165,7 +165,7 @@ export class AuthService {
 			const payload: Payload = this.jwtService.verify(jwt, { secret: secretKey })
 			
 			return await this.userRepository.findOne({
-				where: { id: payload.id }
+				where: { socialId: payload.socialId }
 			});
 
 		} catch (e) {
