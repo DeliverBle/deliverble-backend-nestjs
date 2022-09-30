@@ -134,20 +134,19 @@ export class NewsService {
   };
 
   async checkFavorite(exploreNewsDtoList: ExploreNewsDto[], user: User): Promise<ExploreNewsDto[]> {
-    console.log(exploreNewsDtoList);
-    if (user !== undefined) {
-      const favoriteList: number[] = (await user.favorites).map((news) => news.id);
-      console.log("favorite list:", favoriteList);
-      exploreNewsDtoList = exploreNewsDtoList.map((news) => {
-        if (favoriteList.includes(news.id)) {
-          news.isFavorite = true;
-          return news;
-        } else {
-          news.isFavorite = false;
-          return news;
-        }
-      })
+    if (user === undefined) {
+      return exploreNewsDtoList;
     }
+    const favoriteList: number[] = (await user.favorites).map((news) => news.id);
+    exploreNewsDtoList = exploreNewsDtoList.map((news) => {
+      if (favoriteList.includes(news.id)) {
+        news.isFavorite = true;
+        return news;
+      } else {
+        news.isFavorite = false;
+        return news;
+      }
+    })
     return exploreNewsDtoList;
   }
 
@@ -181,7 +180,6 @@ export class NewsService {
     if (bearerToken !== undefined) {
       const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
       exploreNewsDtoList = await this.checkFavorite(exploreNewsDtoList, user);
-      console.log(exploreNewsDtoList);
     }
 
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
@@ -202,12 +200,14 @@ export class NewsService {
     
     // 탐색창(검색 등)에 보여지는 형식으로 수정
     let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(favoriteNewsList);
+    // 즐겨찾기 여부 true로 수정
+    exploreNewsDtoList.map((news) => news.isFavorite = true);
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return [exploreNewsDtoCollection, paginationInfo];
     
   }
 
-  async getRecommendedNews(): Promise<ExploreNewsDtoCollection> {
+  async getRecommendedNews(bearerToken: string): Promise<ExploreNewsDtoCollection> {
     // 추천 태그에 포함된 뉴스 리스트 가져오기
     const recommendedTag: Tag = await this.tagRepository.getRecommendedTag();
     let recommendedNewsList: News[] = await recommendedTag.forView;
@@ -215,9 +215,15 @@ export class NewsService {
     recommendedNewsList = await sortByDateAndTitle(recommendedNewsList);
     recommendedNewsList = recommendedNewsList.slice(0, 8);
     // 타입 변경 후 반환
-    const exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(recommendedNewsList);
+    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(recommendedNewsList);
+    // 즐겨찾기 체크 (로그인 된 유저라면)
+    if (bearerToken !== undefined) {
+      const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
+      exploreNewsDtoList = await this.checkFavorite(exploreNewsDtoList, user);
+    }
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return exploreNewsDtoCollection;
   }
 
 }
+

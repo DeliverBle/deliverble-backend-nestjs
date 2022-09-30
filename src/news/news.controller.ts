@@ -183,10 +183,12 @@ export class NewsController {
 
   @Get('recommend')
   async getRecommendedNews(
+    @Req() req,
     @Res() res
   ): Promise<Response> {
     try {
-      const data : ExploreNewsDtoCollection = await this.newsService.getRecommendedNews() 
+      const bearerToken: string = req.headers["authorization"];
+      const data : ExploreNewsDtoCollection = await this.newsService.getRecommendedNews(bearerToken) 
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.RECOMMENDED_NEWS_SUCCESS, data))
