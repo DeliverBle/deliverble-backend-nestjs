@@ -123,7 +123,7 @@ export class NewsController {
     }
   }
 
-  @Get('search')
+  @Post('search')
 	async searchNews(
     @Req() req,
     @Res() res
@@ -152,7 +152,7 @@ export class NewsController {
     }
   }
 
-  @Get('favorite')
+  @Post('favorite')
   @UseGuards(JwtAuthGuard)
   async getFavoriteNews(
     @Res() res,
