@@ -35,4 +35,7 @@ export const message = {
   READ_ALL_TAGS_SUCCESS: '모든 태그 조회 성공',
   DELETE_TAG_SUCCESS: '태그 삭제 성공',
 
+  // 스크립트
+  CREATE_SCRIPT_SUCCESS: '스크립트 생성 성공',
+  READ_ALL_SCRIPTS_SUCCESS: '모든 스크립트 조회 성공',
 }

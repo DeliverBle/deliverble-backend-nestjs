@@ -3,7 +3,7 @@ import { Gender } from "../news/common/gender.enum";
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Social } from "../auth/common/Social";
 import { News } from "src/news/news.entity";
-import { Script } from "src/script/script.entity";
+import { Script } from "src/script/entity/script.entity";
 
 @Entity()
 export class User extends BaseEntity {

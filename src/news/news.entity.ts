@@ -1,5 +1,5 @@
 import { Time } from "src/modules/Time";
-import { Script } from "src/script/script.entity";
+import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";
 // import { Favorite } from "src/user/favorite.entity";
 import { User } from "src/user/user.entity";

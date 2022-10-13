@@ -1,15 +1,20 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ScriptExampleRepository } from './script-example.repository';
+import { NewsRepository } from 'src/news/news.repository';
+import { UserRepository } from 'src/user/user.repository';
+import { ScriptExampleRepository } from './repository/script-example.repository';
 import { ScriptController } from './script.controller';
-import { ScriptRepository } from './script.repository';
+import { ScriptRepository } from './repository/script.repository';
 import { ScriptService } from './script.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ScriptRepository, ScriptExampleRepository]),
+    TypeOrmModule.forFeature([
+      ScriptRepository, ScriptExampleRepository, UserRepository, NewsRepository
+    ]),
   ],
   controllers: [ScriptController],
-  providers: [ScriptService]
+  providers: [ScriptService, JwtModule]
 })
 export class ScriptModule {}

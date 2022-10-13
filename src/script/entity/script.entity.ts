@@ -12,8 +12,8 @@ export class Script extends BaseEntity {
   name: string;
 
   @ManyToOne(() => User, (user) => user.scripts)
-  user: User
+  user: User;
 
   @ManyToOne(() => News, (news) => news.scripts)
-  news: News
+  news: News;
 }
