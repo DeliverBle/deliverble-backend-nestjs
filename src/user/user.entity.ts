@@ -1,8 +1,9 @@
 import { IsEmail } from "class-validator";
 import { Gender } from "../news/common/gender.enum";
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Social } from "../auth/common/Social";
 import { News } from "src/news/news.entity";
+import { Script } from "src/script/script.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -56,4 +57,6 @@ export class User extends BaseEntity {
     @JoinTable()
     favorites: Promise<News[]>;
 
+    @OneToMany(() => Script, (script) => script.user)
+    scripts: Script[]
 }
