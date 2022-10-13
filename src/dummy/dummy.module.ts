@@ -3,12 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NewsRepository } from 'src/news/news.repository';
 import { DummyController } from './dummy.controller';
 import { DummyService } from './dummy.service';
-import { DummyScriptRepository } from './repository/dummy-script.repository';
+import { ScriptDefaultRepository } from './repository/script-default.repository';
+import { SentenceDefaultRepository } from './repository/sentence-default.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      DummyScriptRepository, NewsRepository,
+      ScriptDefaultRepository, NewsRepository, SentenceDefaultRepository,
     ]),
   ],
   controllers: [DummyController],

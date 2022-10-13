@@ -1,16 +1,16 @@
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { DummyScript } from "./dummy-script.entity";
+import { ScriptDefault } from "./script-default.entity";
 
 @Entity()
-export class DummySentence extends BaseEntity {
+export class SentenceDefault extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => DummyScript, (dummyScript) => dummyScript.dummySentences, {
+  @ManyToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.sentenceDefaults, {
     onDelete: 'CASCADE',
   })
-  dummyScript: DummyScript;
+  scriptDefault: ScriptDefault;
 
   @Column()
   order: number;
