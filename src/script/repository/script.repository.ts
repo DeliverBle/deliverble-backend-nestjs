@@ -15,4 +15,14 @@ export class ScriptRepository extends Repository<Script> {
     await this.save(script);
     return script;
   }
+
+  async deleteScript(scriptId: number): Promise<Script> {
+    const script: Script = await this.findOneOrFail(scriptId);
+    await this.createQueryBuilder()
+    .delete()
+    .from(Script)
+    .where("id = :scriptId", { scriptId })
+    .execute()
+    return script
+  }
 }

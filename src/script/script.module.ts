@@ -7,11 +7,12 @@ import { ScriptExampleRepository } from './repository/script-example.repository'
 import { ScriptController } from './script.controller';
 import { ScriptRepository } from './repository/script.repository';
 import { ScriptService } from './script.service';
+import { SentenceRepository } from './repository/sentence.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ScriptRepository, ScriptExampleRepository, UserRepository, NewsRepository
+      ScriptRepository, ScriptExampleRepository, UserRepository, NewsRepository, SentenceRepository
     ]),
   ],
   controllers: [ScriptController],

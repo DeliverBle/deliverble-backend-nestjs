@@ -115,5 +115,5 @@ export class News extends BaseEntity {
     tagsForRecommend: Tag[];
 
     @OneToMany(() => Script, (script) => script.news)
-    scripts: Script[]
+    scripts: Script[];
 }

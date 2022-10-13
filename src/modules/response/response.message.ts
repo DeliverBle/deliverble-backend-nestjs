@@ -38,4 +38,8 @@ export const message = {
   // 스크립트
   CREATE_SCRIPT_SUCCESS: '스크립트 생성 성공',
   READ_ALL_SCRIPTS_SUCCESS: '모든 스크립트 조회 성공',
+  DELETE_SCRIPT_SUCCESS: '스크립트 삭제 성공',
+
+  // 문장
+  CREATE_SENTENCE_SUCCESS: '문장 생성 성공',
 }
