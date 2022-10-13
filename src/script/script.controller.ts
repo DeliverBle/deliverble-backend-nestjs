@@ -11,7 +11,6 @@ import { ScriptService } from './script.service';
 @Controller('script')
 export class ScriptController {
   constructor(private scriptService: ScriptService) {};
-  
 
   /*
   * 개발 테스트 로직

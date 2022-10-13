@@ -1,3 +1,4 @@
+import { DummyScript } from "src/dummy/dummy-script.entity";
 import { Time } from "src/modules/Time";
 import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";
@@ -116,4 +117,7 @@ export class News extends BaseEntity {
 
     @OneToMany(() => Script, (script) => script.news)
     scripts: Script[];
+
+    @OneToMany(() => DummyScript, (dummyScript) => dummyScript.news)
+    dummyScripts: DummyScript[];
 }
