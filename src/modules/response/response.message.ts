@@ -42,4 +42,7 @@ export const message = {
 
   // 문장
   CREATE_SENTENCE_SUCCESS: '문장 생성 성공',
+
+  // 더미
+  CREATE_DUMMY_SCRIPT_SUCCESS: '더미 스크립스 생성 성공'
 }

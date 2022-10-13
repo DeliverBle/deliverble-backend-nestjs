@@ -1,4 +1,4 @@
-import { DummyScript } from "src/dummy/dummy-script.entity";
+import { DummyScript } from "src/dummy/entity/dummy-script.entity";
 import { Time } from "src/modules/Time";
 import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";

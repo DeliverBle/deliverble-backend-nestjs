@@ -1,6 +1,7 @@
 import { News } from "src/news/news.entity";
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { DUMMY_SCRIPT_TYPE } from "./common/dummy-script-type.enum";
+import { DUMMY_SCRIPT_TYPE } from "../common/dummy-script-type.enum";
+import { DummySentence } from "./dummy-sentence.entity";
 
 @Entity()
 export class DummyScript extends BaseEntity {
@@ -17,7 +18,7 @@ export class DummyScript extends BaseEntity {
   @ManyToOne(() => News, (news) => news.dummyScripts)
   news: News;
 
-  @OneToMany(() => DummySentence, (sentence) => sentence.script, {
+  @OneToMany(() => DummySentence, (sentence) => sentence.dummyScript, {
     eager: true,
   })
   dummySentences: DummySentence[];
