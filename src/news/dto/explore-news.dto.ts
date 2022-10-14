@@ -4,7 +4,7 @@ import { News } from "../news.entity";
 
 export class ExploreNewsDto {
   constructor(news: News) {
-    this.id = news.id
+    this.id = news.id;
     this.title = news.title;
     this.category = news.category;
     this.channel = news.channel;

@@ -29,7 +29,6 @@ export class UserRepository extends Repository<User> {
           return news.id !== newsId;
         }),
       );
-
       user.save();
       return user;
 

@@ -29,10 +29,26 @@ export const message = {
   FAVORITE_NEWS_SUCCESS: '즐겨찾는 영상 조회 성공',
   DETAIL_NEWS_SUCCESS: '영상 조회 성공',
   ADD_TAG_TO_NEWS_SUCCESS: '뉴스 태그 추가 성공',
+  READ_NEWS_DETAIL_SUCCESS: '뉴스 학습 상세 정보 조회 성공',
 
   // 태그
   CREATE_TAG_SUCCESS: '태그 생성 성공',
   READ_ALL_TAGS_SUCCESS: '모든 태그 조회 성공',
   DELETE_TAG_SUCCESS: '태그 삭제 성공',
 
+  // 스크립트
+  CREATE_SCRIPT_SUCCESS: '스크립트 생성 성공',
+  READ_ALL_SCRIPTS_SUCCESS: '모든 스크립트 조회 성공',
+  DELETE_SCRIPT_SUCCESS: '스크립트 삭제 성공',
+
+  // 문장
+  CREATE_SENTENCE_SUCCESS: '문장 생성 성공',
+
+  // 더미
+  CREATE_SCRIPT_DEFAULT_SUCCESS: '기본 스크립트 생성 성공',
+  READ_SCRIPT_DEFAULT_SUCCESS: '기본 스크립트 조회 성공',
+  DELETE_SCRIPT_DEFAULT_SUCCESS: '기본 스크립트 삭제 성공',
+  CREATE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 생성 성공',
+  UPDATE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 수정 성공',
+  DELETE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 삭제 성공',
 }

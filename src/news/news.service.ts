@@ -225,5 +225,11 @@ export class NewsService {
     return exploreNewsDtoCollection;
   }
 
+  async getNews(newsId: number): Promise<ReturnNewsDto> {
+    const news: News = await this.newsRepository.getNewsById(newsId);
+    const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
+    return returnNewsDto;
+  }
+
 }
 

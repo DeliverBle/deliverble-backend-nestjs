@@ -1,11 +1,13 @@
 import { Body, Controller, Delete, Get, Logger, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { ReturnScriptDefaultDto } from 'src/dummy/dto/return-script-default.dto';
+import { DummyService } from 'src/dummy/dummy.service';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
-import { UserController } from 'src/user/user.controller';
+import { ReturnScriptDtoCollection } from 'src/script/dto/return-script.dto.collection';
+import { ScriptService } from 'src/script/script.service';
 import { User } from 'src/user/user.entity';
-import { ConditionList } from './common/condition-list';
 import { PaginationCondition } from './common/pagination-condition';
 import { PaginationInfo } from './common/pagination-info';
 import { SearchCondition } from './common/search-condition';
@@ -14,7 +16,6 @@ import { ExploreNewsDtoCollection } from './dto/explore-news-collection.dto';
 import { ReturnNewsDtoCollection } from './dto/return-news-collection.dto';
 import { ReturnNewsDto } from './dto/return-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
-import { News } from './news.entity';
 import { NewsService } from './news.service';
 import { convertBodyToPaginationCondition } from './utils/convert-body-to-condition';
 import { convertBodyToSearchCondition } from './utils/convert-body-to-condition';
@@ -23,7 +24,11 @@ const logger: Logger = new Logger('news controller');
 
 @Controller('news')
 export class NewsController {
-  constructor(private newsService: NewsService) {};
+  constructor(
+    private newsService: NewsService,
+    private scriptService: ScriptService,
+    private dummyService: DummyService,
+  ) {};
 
   @Post('create')
 	async createNews(
@@ -192,6 +197,50 @@ export class NewsController {
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.RECOMMENDED_NEWS_SUCCESS, data))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Get('detail/not-authentication/:newsId')
+  async newsDetailNotAuthenticated(
+    @Res() res,
+    @Param('newsId') newsId: number
+  ): Promise<Response> {
+    try {
+      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data2: ReturnScriptDefaultDto = await this.dummyService.getScriptDefault(newsId);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Get('detail/:newsId')
+  @UseGuards(JwtAuthGuard)
+  async newsDetailAuthenticated(
+    @Req() req,
+    @Res() res,
+    @Param('newsId') newsId: number
+  ): Promise<Response> {
+    const userId: number = req.user.id;
+    try {
+      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
+      console.log("data2 in newsDetailAuthenticated", data2);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2.returnScriptDtoCollection))
     
       } catch (error) {
       logger.error(error)
