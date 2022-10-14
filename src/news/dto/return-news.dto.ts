@@ -22,7 +22,6 @@ export class ReturnNewsDto {
     this.isEmbeddable = news.isEmbeddable;
     this.reportDate = news.reportDate;
     this.tagsForView = news.tagsForView;
-    this.tagsForRecommend = news.tagsForRecommend;
 }
     id: number;
     title: string;
@@ -38,5 +37,4 @@ export class ReturnNewsDto {
     isEmbeddable: boolean;
     reportDate: Date;
     tagsForView?: Tag[];
-    tagsForRecommend?: Tag[];
 }
