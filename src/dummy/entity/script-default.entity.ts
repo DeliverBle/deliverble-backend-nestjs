@@ -9,7 +9,9 @@ export class ScriptDefault extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => News, (news) => news.scriptDefault)
+  @OneToOne(() => News, (news) => news.scriptDefault, {
+    eager: true,
+  })
   @JoinColumn()
   news: News;
 

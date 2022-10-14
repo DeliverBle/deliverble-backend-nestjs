@@ -3,6 +3,8 @@ import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
 import { DUMMY_SCRIPT_TYPE } from './common/dummy-script-type.enum';
+import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
+import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { DummyService } from './dummy.service';
 import { ScriptDefault } from './entity/script-default.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
@@ -21,10 +23,10 @@ export class DummyController {
     try {
       const newsId: number = req.body.newsId;
 
-      const data: ScriptDefault = await this.dummyService.createScriptDefault(newsId);
+      const returnScriptDefaultDto: ReturnScriptDefaultDto = await this.dummyService.createScriptDefault(newsId);
       return res
       .status(statusCode.OK)
-      .send(util.success(statusCode.OK, message.CREATE_SCRIPT_DEFAULT_SUCCESS, data))
+      .send(util.success(statusCode.OK, message.CREATE_SCRIPT_DEFAULT_SUCCESS, returnScriptDefaultDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "EntityNotFound") {
@@ -44,10 +46,10 @@ export class DummyController {
     @Param('newsId') newsId: number
   ): Promise<Response> {
     try {
-      const data: ScriptDefault = await this.dummyService.getScriptDefault(newsId);
+      const returnScriptDefaultDto: ReturnScriptDefaultDto = await this.dummyService.getScriptDefault(newsId);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.READ_SCRIPT_DEFAULT_SUCCESS, data))
+        .send(util.success(statusCode.OK, message.READ_SCRIPT_DEFAULT_SUCCESS, returnScriptDefaultDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "TypeError") {
@@ -67,10 +69,10 @@ export class DummyController {
     @Param('newsId') newsId: number
   ): Promise<Response> {
     try {
-      const data: ScriptDefault = await this.dummyService.deleteScriptDefault(newsId);
+      const returnScriptDefaultDto: ReturnScriptDefaultDto = await this.dummyService.deleteScriptDefault(newsId);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.DELETE_SCRIPT_DEFAULT_SUCCESS, data))
+        .send(util.success(statusCode.OK, message.DELETE_SCRIPT_DEFAULT_SUCCESS, returnScriptDefaultDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "TypeError") {
@@ -93,10 +95,10 @@ export class DummyController {
       const newsId: number = req.body.newsId;
       const order: number = req.body.order;
       const text: string = req.body.text;
-      const data: SentenceDefault = await this.dummyService.createSentenceDefault(newsId, order, text);
+      const returnSentenceDefaultDto: ReturnSentenceDefaultDto = await this.dummyService.createSentenceDefault(newsId, order, text);
       return res
       .status(statusCode.OK)
-      .send(util.success(statusCode.OK, message.CREATE_SENTENCE_DEFAULT_SUCCESS, data))
+      .send(util.success(statusCode.OK, message.CREATE_SENTENCE_DEFAULT_SUCCESS, returnSentenceDefaultDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "NotFoundErrorImpl") {
@@ -119,10 +121,10 @@ export class DummyController {
       const sentenceDefaultId: number = req.body.sentenceDefaultId;
       const order: number = req.body.order;
       const text: string = req.body.text;
-      const data: SentenceDefault = await this.dummyService.updateSentenceDefault(sentenceDefaultId, order, text);
+      const returnSentenceDefaultDto: ReturnSentenceDefaultDto = await this.dummyService.updateSentenceDefault(sentenceDefaultId, order, text);
       return res
       .status(statusCode.OK)
-      .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_DEFAULT_SUCCESS, data))
+      .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_DEFAULT_SUCCESS, returnSentenceDefaultDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "NotFoundErrorImpl") {
@@ -142,10 +144,10 @@ export class DummyController {
     @Param('sentenceDefaultId') sentenceDefaultId: number
   ): Promise<Response> {
     try {
-      const data: SentenceDefault = await this.dummyService.deleteSentenceDefault(sentenceDefaultId);
+      const returnSentenceDefaultDto: ReturnSentenceDefaultDto = await this.dummyService.deleteSentenceDefault(sentenceDefaultId);
       return res
       .status(statusCode.OK)
-      .send(util.success(statusCode.OK, message.DELETE_SENTENCE_DEFAULT_SUCCESS, data))
+      .send(util.success(statusCode.OK, message.DELETE_SENTENCE_DEFAULT_SUCCESS, returnSentenceDefaultDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "NotFoundErrorImpl") {
