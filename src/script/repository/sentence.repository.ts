@@ -13,8 +13,7 @@ export class SentenceRepository extends Repository<Sentence> {
     sentence.script = script;
     sentence.order = order;
     sentence.text = text;
-
-    await this.save(sentence);
+    await sentence.save();
     return sentence;
   }
 }

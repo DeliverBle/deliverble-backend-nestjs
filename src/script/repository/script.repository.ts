@@ -19,10 +19,31 @@ export class ScriptRepository extends Repository<Script> {
   async deleteScript(scriptId: number): Promise<Script> {
     const script: Script = await this.findOneOrFail(scriptId);
     await this.createQueryBuilder()
-    .delete()
-    .from(Script)
-    .where("id = :scriptId", { scriptId })
-    .execute()
+      .delete()
+      .from(Script)
+      .where("id = :scriptId", { scriptId })
+      .execute()
     return script
+  }
+
+  async getScriptById(scriptId: number): Promise<Script> {
+    const script: Script = await this.createQueryBuilder('script')
+      .leftJoinAndSelect('script.user', 'user')
+      .leftJoinAndSelect('script.news', 'news')
+      .leftJoinAndSelect('script.sentences', 'sentences')
+      .where('script.id = :scriptId', { scriptId: scriptId })
+      .getOneOrFail();
+    return script;
+  }
+
+  async getScriptsOfUserAndNews(userId: number, newsId: number): Promise<Script[]> {
+    const scripts: Script[] = await this.createQueryBuilder('script')
+      .leftJoinAndSelect('script.user', 'user')
+      .leftJoinAndSelect('script.news', 'news')
+      .leftJoinAndSelect('script.sentences', 'sentences')
+      .where('user.id = :userId', { userId: userId })
+      .andWhere('news.id = :newsId', { newsId: newsId })
+      .getMany();
+    return scripts;
   }
 }

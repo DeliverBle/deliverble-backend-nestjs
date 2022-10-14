@@ -58,5 +58,5 @@ export class User extends BaseEntity {
     favorites: Promise<News[]>;
 
     @OneToMany(() => Script, (script) => script.user)
-    scripts: Script[]
+    scripts: Promise<Script[]>;
 }

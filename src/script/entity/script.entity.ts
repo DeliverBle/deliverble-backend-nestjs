@@ -12,7 +12,9 @@ export class Script extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @ManyToOne(() => User, (user) => user.scripts)
+  @ManyToOne(() => User, (user) => user.scripts, {
+    eager: true,
+  })
   user: User;
 
   @ManyToOne(() => News, (news) => news.scripts)

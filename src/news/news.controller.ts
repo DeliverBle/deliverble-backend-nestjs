@@ -5,6 +5,7 @@ import { DummyService } from 'src/dummy/dummy.service';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
+import { ScriptService } from 'src/script/script.service';
 import { User } from 'src/user/user.entity';
 import { PaginationCondition } from './common/pagination-condition';
 import { PaginationInfo } from './common/pagination-info';
@@ -24,6 +25,7 @@ const logger: Logger = new Logger('news controller');
 export class NewsController {
   constructor(
     private newsService: NewsService,
+    private scriptService: ScriptService,
     private dummyService: DummyService,
   ) {};
 
@@ -211,6 +213,30 @@ export class NewsController {
     try {
       const data: ReturnNewsDto = await this.newsService.getNews(newsId);
       const data2: ReturnScriptDefaultDto = await this.dummyService.getScriptDefault(newsId);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Get('detail/:newsId')
+  @UseGuards(JwtAuthGuard)
+  async newsDetailAuthenticated(
+    @Req() req,
+    @Res() res,
+    @Param('newsId') newsId: number
+  ): Promise<Response> {
+    const userId: number = req.user.id;
+    try {
+      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data2: any = await this.scriptService.getScripts(userId, newsId);
+      console.log("data2 in newsDetailAuthenticated", data2);
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2))

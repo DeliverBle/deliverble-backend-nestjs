@@ -18,14 +18,20 @@ export class ScriptDefaultRepository extends Repository<ScriptDefault> {
 
   async deleteScriptDefault(scriptDefaultId: number): Promise<ScriptDefault> {
     const scriptDefault: ScriptDefault = await this.findOneOrFail(scriptDefaultId);
-    if (!scriptDefault) {
-      throw NotFoundError;
-    }
     await this.createQueryBuilder()
       .delete()
       .from(ScriptDefault)
       .where("id = :scriptDefaultId", { scriptDefaultId })
       .execute()
+    return scriptDefault;
+  }
+
+  async getScriptDefaultByNewsId(newsId: number): Promise<ScriptDefault> {
+    const scriptDefault: ScriptDefault = await this.createQueryBuilder("scriptDefault")
+      .leftJoinAndSelect("scriptDefault.news", "news")
+      .leftJoinAndSelect("scriptDefault.sentenceDefaults", "sentenceDefaults")
+      .where("news.id = :newsId", { newsId: newsId })
+      .getOne();
     return scriptDefault;
   }
 }

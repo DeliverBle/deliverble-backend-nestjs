@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
@@ -7,6 +7,8 @@ import { User } from 'src/user/user.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
+
+const logger: Logger = new Logger('script controller');
 
 @Controller('script')
 export class ScriptController {
@@ -21,10 +23,10 @@ export class ScriptController {
     @Req() req,
     @Res() res
   ): Promise<Response> {
-    const user: User = req.user;
+    const userId: number = req.user.id;
     const newsId: number = req.body.newsId;
     const scriptName: string = req.body.name;
-    const data: Script = await this.scriptService.createScript(user, newsId, scriptName);
+    const data: Script = await this.scriptService.createScript(userId, newsId, scriptName);
     return res
     .status(statusCode.OK)
     .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data))
@@ -60,7 +62,7 @@ export class ScriptController {
     const scriptId: number = req.body.scriptId;
     const order: number = req.body.order;
     const text: string = req.body.text;
-    const data: Sentence = await this.scriptService.createSentence(scriptId, order, text);
+    const data: Sentence = await this.scriptService.createSentenceByScriptId(scriptId, order, text);
     return res
     .status(statusCode.OK)
     .send(util.success(statusCode.OK, message.CREATE_SENTENCE_SUCCESS, data))
