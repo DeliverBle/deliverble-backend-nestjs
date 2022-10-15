@@ -133,7 +133,7 @@ export class AuthService {
 		const nickname = userInfo['nickname'];
 		const email = userInfo['email'];
 		const gender = userInfo['gender'];
-		const social = userInfo['social'];
+		const social = userInfo['social'];	
 
 		const payload: Payload = { 
 			id: id,
@@ -150,7 +150,6 @@ export class AuthService {
   }
 
 	async tokenValidateUser(payload: Payload): Promise<User | undefined> {
-		logger.debug('tokenValidateUser in auth.service - payload', payload);
     return await this.userRepository.findOne({
 			where: { id: payload.id }
 	});

@@ -7,6 +7,7 @@ import { ReturnNewsDto } from 'src/news/dto/return-news.dto';
 import { NewsService } from 'src/news/news.service';
 import { User } from 'src/user/user.entity';
 import { ReturnScriptDto } from './dto/return-script.dto';
+import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
@@ -25,14 +26,14 @@ export class ScriptController {
   */
   @Post('test/create')
   @UseGuards(JwtAuthGuard)
-  async createScript(
+  async createScriptTest(
     @Req() req,
     @Res() res
   ): Promise<Response> {
     const userId: number = req.user.id;
     const newsId: number = req.body.newsId;
     const scriptName: string = req.body.name;
-    const data: Script = await this.scriptService.createScript(userId, newsId, scriptName);
+    const data: Script = await this.scriptService.createScriptTest(userId, newsId, scriptName);
     return res
     .status(statusCode.OK)
     .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data))
@@ -89,13 +90,41 @@ export class ScriptController {
       const data2: ReturnScriptDto = await this.scriptService.changeScriptName(userId, scriptId, name);
       return res
       .status(statusCode.OK)
-      .send(util.success(statusCode.OK, message.CREATE_SENTENCE_SUCCESS, data, data2))
+      .send(util.success(statusCode.OK, message.UPDATE_SCRIPT_NAME_SUCCESS, data, data2))
     } catch (error) {
       logger.error(error)
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
+  }
+
+  @Post('create/:newsId')
+  @UseGuards(JwtAuthGuard)
+  async createScript(
+    @Req() req,
+    @Res() res,
+    @Param('newsId') newsId: number,
+  ): Promise<Response> {
+    const userId: number = req.user.id;
+    try {
+      await this.scriptService.createScriptAfterCountCheck(userId, newsId);
+      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data, data2))
+      } catch (error) {
+        logger.error(error)
+        if (error.name === "BadRequestException") {
+          return res
+            .status(statusCode.BAD_REQUEST)
+            .send(util.fail(statusCode.BAD_REQUEST, message.FULL_SCRIPTS_COUNT))
+        }
+        return res
+          .status(statusCode.INTERNAL_SERVER_ERROR)
+          .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+      }
   }
 
 }

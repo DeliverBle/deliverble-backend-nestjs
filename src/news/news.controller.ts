@@ -237,7 +237,6 @@ export class NewsController {
     try {
       const data: ReturnNewsDto = await this.newsService.getNews(newsId);
       const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
-      console.log("data2 in newsDetailAuthenticated", data2);
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2.returnScriptDtoCollection))
