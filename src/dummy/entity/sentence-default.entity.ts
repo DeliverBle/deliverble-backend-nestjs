@@ -14,6 +14,12 @@ export class SentenceDefault extends BaseEntity {
 
   @Column()
   order: number;
+
+  @Column()
+  startTime: number;
+
+  @Column()
+  endTime: number;
   
   @Column({ type: 'varchar', length: 255 })
   text: string;
