@@ -6,10 +6,11 @@ import { DUMMY_SCRIPT_TYPE } from './common/dummy-script-type.enum';
 import { CreateSentenceDefaultDto } from './dto/create-sentence-default.dto';
 import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
+import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { DummyService } from './dummy.service';
 import { ScriptDefault } from './entity/script-default.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
-import { convertBodyToCreateSentenceDefaultDto } from './utils/convert-body-to-dto';
+import { convertBodyToCreateSentenceDefaultDto, convertBodyToUpdateSentenceDefaultDto } from './utils/convert-body-to-dto';
 
 const logger: Logger = new Logger('dummy controller');
 
@@ -118,10 +119,8 @@ export class DummyController {
     @Res() res,
   ): Promise<Response> {
     try {
-      const sentenceDefaultId: number = req.body.sentenceDefaultId;
-      const order: number = req.body.order;
-      const text: string = req.body.text;
-      const returnSentenceDefaultDto: ReturnSentenceDefaultDto = await this.dummyService.updateSentenceDefault(sentenceDefaultId, order, text);
+      const updateSentenceDefaultDto: UpdateSentenceDefaultDto = convertBodyToUpdateSentenceDefaultDto(req.body);
+      const returnSentenceDefaultDto: ReturnSentenceDefaultDto = await this.dummyService.updateSentenceDefault(updateSentenceDefaultDto);
       return res
       .status(statusCode.OK)
       .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_DEFAULT_SUCCESS, returnSentenceDefaultDto))

@@ -1,6 +1,7 @@
 import { NotFoundError } from "rxjs";
 import { EntityRepository, Repository } from "typeorm";
 import { CreateSentenceDefaultDto } from "../dto/create-sentence-default.dto";
+import { UpdateSentenceDefaultDto } from "../dto/update-sentence-default.dto";
 import { ScriptDefault } from "../entity/script-default.entity";
 import { SentenceDefault } from "../entity/sentence-default.entity";
 
@@ -19,12 +20,15 @@ export class SentenceDefaultRepository extends Repository<SentenceDefault> {
     return sentenceDefault;
   }
 
-  async updateSentenceDefault(sentenceDefaultId: number, order: number, text: string): Promise<SentenceDefault> {
+  async updateSentenceDefault(updateSentenceDefaultDto: UpdateSentenceDefaultDto): Promise<SentenceDefault> {
+    const sentenceDefaultId: number = updateSentenceDefaultDto.sentenceDefaultId;
     await this.createQueryBuilder()
       .update()
       .set({
-        order: order,
-        text: text,
+        order: updateSentenceDefaultDto.order,
+        startTime: updateSentenceDefaultDto.startTime,
+        endTime: updateSentenceDefaultDto.endTime,
+        text: updateSentenceDefaultDto.text,
       })
       .where("id = :sentenceDefaultId", { sentenceDefaultId })
       .execute()

@@ -6,6 +6,7 @@ import { NewsRepository } from 'src/news/news.repository';
 import { CreateSentenceDefaultDto } from './dto/create-sentence-default.dto';
 import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
+import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { ScriptDefault } from './entity/script-default.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
 import { ScriptDefaultRepository } from './repository/script-default.repository';
@@ -59,8 +60,8 @@ export class DummyService {
     return returnSentenceDefaultDto;
   }
 
-  async updateSentenceDefault(sentenceDefaultId: number, order: number, text: string): Promise<ReturnSentenceDefaultDto> {
-    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.updateSentenceDefault(sentenceDefaultId, order, text);
+  async updateSentenceDefault(updateSentenceDefaultDto: UpdateSentenceDefaultDto): Promise<ReturnSentenceDefaultDto> {
+    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.updateSentenceDefault(updateSentenceDefaultDto);
     const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
   }
