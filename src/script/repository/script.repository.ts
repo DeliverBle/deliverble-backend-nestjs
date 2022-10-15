@@ -46,4 +46,5 @@ export class ScriptRepository extends Repository<Script> {
       .getMany();
     return scripts;
   }
+
 }

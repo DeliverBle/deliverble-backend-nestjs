@@ -42,6 +42,7 @@ export const message = {
   DELETE_SCRIPT_SUCCESS: '스크립트 삭제 성공',
   UPDATE_SCRIPT_NAME_SUCCESS: '스크립트 이름 수정 성공',
   // 스크립트 에러
+  NOT_EXISTING_SCRIPT: '없는 스크립트의 id로 요청했습니다.',
   FULL_SCRIPTS_COUNT: '스크립트의 개수가 너무 많아, 더이상 생성할 수 없습니다.',
 
   // 문장
