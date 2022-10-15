@@ -93,6 +93,11 @@ export class ScriptController {
       .send(util.success(statusCode.OK, message.UPDATE_SCRIPT_NAME_SUCCESS, data, data2))
     } catch (error) {
       logger.error(error)
+      if (error.name === "UnauthorizedException") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
@@ -143,15 +148,46 @@ export class ScriptController {
         .send(util.success(statusCode.OK, message.DELETE_SCRIPT_SUCCESS, data, data2))
       } catch (error) {
         logger.error(error)
-        if (error.name === "EntityNotFound") {
-          return res
-            .status(statusCode.BAD_REQUEST)
-            .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
+        if (error.name === "UnauthorizedException") {
+          return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
         }
-        return res
-          .status(statusCode.INTERNAL_SERVER_ERROR)
-          .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        if (error.name === "EntityNotFound") {
+          return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
+        }
+        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
       }
+  }
+
+  @Post('sentence/edit/:scriptId')
+  @UseGuards(JwtAuthGuard)
+  async editSentence(
+    @Req() req,
+    @Res() res,
+    @Param('scriptId') scriptId: number
+  ): Promise<Response> {
+    try {
+      const userId: number = req.user.id;
+      const order: number = req.body.order;
+      const text: string = req.body.text;
+
+      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data2: ReturnScriptDto = await this.scriptService.editSentence(userId, scriptId, order, text);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_SUCCESS, data, data2))
+    } catch (error) {
+      logger.error(error)
+      if (error.name === "UnauthorizedException") {
+        return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      }
+      if (error.name === "BadRequestException") {
+        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER))
+      }
+      if (error.name === "EntityNotFound") {
+        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
+      }
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
   }
 
 }
