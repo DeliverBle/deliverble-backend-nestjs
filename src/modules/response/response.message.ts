@@ -44,9 +44,13 @@ export const message = {
   // 스크립트 에러
   NOT_EXISTING_SCRIPT: '없는 스크립트의 id로 요청했습니다.',
   FULL_SCRIPTS_COUNT: '스크립트의 개수가 너무 많아, 더이상 생성할 수 없습니다.',
+  NOT_OWNER_OF_SCRIPT: '로그인한 유저가 해당 스크립트를 가지고 있지 않습니다.',
 
   // 문장
   CREATE_SENTENCE_SUCCESS: '문장 생성 성공',
+  UPDATE_SENTENCE_SUCCESS: '문장 수정 성공',
+  // 문장 에러
+  NOT_EXISTING_ORDER: '없는 문장 번호로 요청했습니다.',
 
   // 더미
   CREATE_SCRIPT_DEFAULT_SUCCESS: '기본 스크립트 생성 성공',
