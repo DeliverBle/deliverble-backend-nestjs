@@ -25,6 +25,8 @@ import { changeToExploreNewsList } from './utils/change-explore-news-list-to-dto
 import { Tag } from 'src/tag/tag.entity';
 import { TagRepository } from 'src/tag/tag.repository';
 import { PaginationCondition } from './common/pagination-condition';
+import { Script } from 'src/script/entity/script.entity';
+import { ScriptRepository } from 'src/script/repository/script.repository';
 
 const logger: Logger = new Logger('news service');
 
@@ -35,6 +37,8 @@ export class NewsService {
     private newsRepository: NewsRepository,
     @InjectRepository(TagRepository)
     private tagRepository: TagRepository,
+    @InjectRepository(ScriptRepository)
+    private scriptRepository: ScriptRepository,
     private authService: AuthService,
   ) {};
 
@@ -229,6 +233,12 @@ export class NewsService {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
     return returnNewsDto;
+  }
+
+  async getNewsByScriptId(scriptId: number): Promise<ReturnNewsDto> {
+    const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
+    const newsId: number = script.news.id;
+    return await this.getNews(newsId);
   }
 
 }

@@ -17,7 +17,9 @@ export class Script extends BaseEntity {
   })
   user: User;
 
-  @ManyToOne(() => News, (news) => news.scripts)
+  @ManyToOne(() => News, (news) => news.scripts, {
+    eager: true,
+  })
   news: News;
 
   @OneToMany(() => Sentence, (sentence) => sentence.script, {
