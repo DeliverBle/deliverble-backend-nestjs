@@ -44,7 +44,7 @@ export class ScriptService {
       return await this.scriptRepository.find();
     }
 
-    async deleteScript(scriptId: number): Promise<Script> {
+    async deleteScriptTest(scriptId: number): Promise<Script> {
       const scriptDeleted: Script = await this.scriptRepository.deleteScript(scriptId);
       return scriptDeleted;
     }
@@ -60,6 +60,7 @@ export class ScriptService {
     }
  
     /* 
+    * 스크립트 조회
     * 로그인 한 유저가 이미 해당 News에 스크립트를 가지고 있다면 --> 가져와서 반환
     * 해당 News에 스크립트가 없다면 --> Script Default를 가져와 복사 --> 저장 후 반환
     */
@@ -127,4 +128,25 @@ export class ScriptService {
       await this.createScript(userId, newsId);
     };
 
+    // 스크립트 삭제
+    async deleteScript(userId: number, scriptId: number): Promise<void> {
+      // user가 script의 주인인지 확인
+      const script: Script = await this.checkScriptOwner(userId, scriptId);
+      const scriptDeleted: Script = await this.scriptRepository.deleteScript(scriptId);
+    }
+
+    // 스크립트 조회 - scriptId만 받은 경우
+    async getScriptsByScriptId(userId: number, scriptId: number): Promise<ReturnScriptDtoCollection> {
+      const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
+      const newsId: number = script.news.id;
+      return await this.getScripts(userId, newsId);
+    }
+
+    // 스크립트 삭제 후 조회
+    async deleteAndGetScripts(userId: number, scriptId: number): Promise<ReturnScriptDtoCollection> {
+      const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
+      const newsId: number = script.news.id;
+      await this.scriptRepository.deleteScript(scriptId);
+      return await this.getScripts(userId, newsId);
+    }
 }

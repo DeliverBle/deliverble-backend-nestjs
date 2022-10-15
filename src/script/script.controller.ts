@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
@@ -50,11 +50,11 @@ export class ScriptController {
   }
 
   @Post('test/delete/:scriptId')
-  async deleteScript(
+  async deleteScriptTest(
     @Res() res,
     @Param('scriptId') scriptId : number
   ): Promise<Response> {
-    const data: Script = await this.scriptService.deleteScript(scriptId);
+    const data: Script = await this.scriptService.deleteScriptTest(scriptId);
     return res
     .status(statusCode.OK)
     .send(util.success(statusCode.OK, message.DELETE_SCRIPT_SUCCESS, data))
@@ -83,9 +83,9 @@ export class ScriptController {
     @Res() res,
     @Param('scriptId') scriptId: number
   ): Promise<Response> {
-    const userId: number = req.user.id;
-    const name: string = req.body.name;
     try {
+      const userId: number = req.user.id;
+      const name: string = req.body.name;
       const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
       const data2: ReturnScriptDto = await this.scriptService.changeScriptName(userId, scriptId, name);
       return res
@@ -106,8 +106,8 @@ export class ScriptController {
     @Res() res,
     @Param('newsId') newsId: number,
   ): Promise<Response> {
-    const userId: number = req.user.id;
     try {
+      const userId: number = req.user.id;
       await this.scriptService.createScriptAfterCountCheck(userId, newsId);
       const data: ReturnNewsDto = await this.newsService.getNews(newsId);
       const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
@@ -120,6 +120,33 @@ export class ScriptController {
           return res
             .status(statusCode.BAD_REQUEST)
             .send(util.fail(statusCode.BAD_REQUEST, message.FULL_SCRIPTS_COUNT))
+        }
+        return res
+          .status(statusCode.INTERNAL_SERVER_ERROR)
+          .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+      }
+  }
+
+  @Delete('delete/:scriptId')
+  @UseGuards(JwtAuthGuard)
+  async deleteScript(
+    @Req() req,
+    @Res() res,
+    @Param('scriptId') scriptId: number
+  ): Promise<Response> {
+    try {
+      const userId: number = req.user.id;
+      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data2: ReturnScriptDtoCollection = await this.scriptService.deleteAndGetScripts(userId, scriptId);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.DELETE_SCRIPT_SUCCESS, data, data2))
+      } catch (error) {
+        logger.error(error)
+        if (error.name === "EntityNotFound") {
+          return res
+            .status(statusCode.BAD_REQUEST)
+            .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
         }
         return res
           .status(statusCode.INTERNAL_SERVER_ERROR)
