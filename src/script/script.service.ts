@@ -149,4 +149,23 @@ export class ScriptService {
       await this.scriptRepository.deleteScript(scriptId);
       return await this.getScripts(userId, newsId);
     }
+
+    // 문장 수정
+    async editSentence(userId: number, scriptId: number, order: number, text: string): Promise<ReturnScriptDto> {
+      const script: Script = await this.checkScriptOwner(userId, scriptId);
+      let check: boolean = false;
+      script.sentences.forEach((sentence) => {
+        if (sentence.order === order) {
+          sentence.text = text;
+          sentence.save();
+          check = true;
+        }
+      })
+      if (check === false) {
+        throw BadRequestException;
+      }
+      const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
+      return returnScriptDto;
+    }
+
 }
