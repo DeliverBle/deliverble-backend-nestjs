@@ -15,10 +15,10 @@ export class SentenceDefault extends BaseEntity {
   @Column()
   order: number;
 
-  @Column()
+  @Column({ type: "float" })
   startTime: number;
 
-  @Column()
+  @Column({ type: "float" })
   endTime: number;
   
   @Column({ type: 'varchar', length: 255 })
