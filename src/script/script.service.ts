@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ScriptDefault } from 'src/dummy/entity/script-default.entity';
 import { SentenceDefault } from 'src/dummy/entity/sentence-default.entity';
@@ -95,5 +95,21 @@ export class ScriptService {
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(scriptResult);
       return returnScriptDto;
     }
+
+    async changeScriptName(userId: number, scriptId: number, name: string): Promise<ReturnScriptDto> {
+      const script: Script = await this.checkScriptOwner(userId, scriptId);
+      script.name = name;
+      script.save();
+      const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
+      return returnScriptDto;
+    }
+
+    async checkScriptOwner(userId: number, scriptId: number): Promise<Script> {
+      const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
+      if (script.user.id !== userId) {
+        throw UnauthorizedException;
+      }
+      return script;
+     }
 
 }
