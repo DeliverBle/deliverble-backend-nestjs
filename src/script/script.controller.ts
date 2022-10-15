@@ -6,8 +6,10 @@ import { util } from 'src/modules/response/response.util';
 import { ReturnNewsDto } from 'src/news/dto/return-news.dto';
 import { NewsService } from 'src/news/news.service';
 import { User } from 'src/user/user.entity';
+import { CreateMemoDto } from './dto/create-memo.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
+import { Memo } from './entity/memo.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
@@ -190,6 +192,48 @@ export class ScriptController {
       if (error.name === "EntityNotFound") {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
       }
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Post('memo/create/:scriptId')
+  @UseGuards(JwtAuthGuard)
+  async createMemo(
+    @Req() req,
+    @Res() res,
+    @Param('scriptId') scriptId: number
+  ): Promise<Response> {
+    try {
+      const createMemoDto: CreateMemoDto = new CreateMemoDto();
+      const script: Script = await this.scriptService.getScriptById(scriptId);
+      createMemoDto.script = script;
+      createMemoDto.order = req.body.order;
+      createMemoDto.content = req.body.content;
+
+      const data: Memo = await this.scriptService.createMemo(createMemoDto);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.CREATE_MEMO_SUCCESS, data))
+    } catch (error) {
+      logger.error(error);
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Delete('memo/delete/:memoId')
+  @UseGuards(JwtAuthGuard)
+  async deleteMemo(
+    @Req() req,
+    @Res() res,
+    @Param('memoId') memoId: number
+  ): Promise<Response> {
+    try {
+      const data: Memo = await this.scriptService.deleteMemo(memoId);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.DELETE_MEMO_SUCCESS, data))
+    } catch (error) {
+      logger.error(error);
       return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }

@@ -11,11 +11,12 @@ import { ScriptDefaultRepository } from 'src/dummy/repository/script-default.rep
 import { NewsService } from 'src/news/news.service';
 import { TagRepository } from 'src/tag/tag.repository';
 import { AuthService } from 'src/auth/auth.service';
+import { MemoRepository } from './repository/memo.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ScriptRepository, UserRepository, NewsRepository, SentenceRepository, ScriptDefaultRepository, TagRepository,
+      ScriptRepository, SentenceRepository, MemoRepository, UserRepository, NewsRepository, ScriptDefaultRepository, TagRepository,
     ]),
   ],
   controllers: [ScriptController],

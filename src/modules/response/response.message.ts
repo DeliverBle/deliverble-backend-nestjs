@@ -53,6 +53,10 @@ export const message = {
   // 문장 에러
   NOT_EXISTING_ORDER: '없는 문장 번호로 요청했습니다.',
 
+  //메모
+  CREATE_MEMO_SUCCESS: '메모 생성 성공',
+  DELETE_MEMO_SUCCESS: '메모 삭제 성공',
+
   // 더미
   CREATE_SCRIPT_DEFAULT_SUCCESS: '기본 스크립트 생성 성공',
   READ_SCRIPT_DEFAULT_SUCCESS: '기본 스크립트 조회 성공',
