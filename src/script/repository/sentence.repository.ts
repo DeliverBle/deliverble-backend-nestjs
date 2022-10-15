@@ -6,7 +6,6 @@ import { Sentence } from "../entity/sentence.entity";
 
 @EntityRepository(Sentence)
 export class SentenceRepository extends Repository<Sentence> {
-  // 여기부터 수정
   async createSentence(script: Script, order: number, text: string): Promise<Sentence> {
     const sentence = new Sentence()
 
