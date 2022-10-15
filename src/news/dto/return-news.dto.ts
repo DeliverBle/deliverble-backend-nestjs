@@ -1,12 +1,14 @@
-import { Time } from "src/module/Time";
-import { Category } from "../common/Category";
-import { Channel } from "../common/Channel";
-import { Gender } from "../common/Gender";
-import { Suitability } from "../common/Suitability";
+import { Time } from "src/modules/Time";
+import { Tag } from "src/tag/tag.entity";
+import { Category } from "../common/category.enum";
+import { Channel } from "../common/channel.enum";
+import { Gender } from "../common/gender.enum";
+import { Suitability } from "../common/suitability.enum";
 import { News } from "../news.entity";
 
 export class ReturnNewsDto {
   constructor(news: News) {
+    this.id = news.id
     this.title = news.title;
     this.category = news.category;
     this.script = news.script;
@@ -19,8 +21,9 @@ export class ReturnNewsDto {
     this.suitability = news.suitability;
     this.isEmbeddable = news.isEmbeddable;
     this.reportDate = news.reportDate;
+    this.tagsForView = news.tagsForView;
 }
-
+    id: number;
     title: string;
     category: Category;
     script: string;
@@ -33,4 +36,5 @@ export class ReturnNewsDto {
     suitability: Suitability;
     isEmbeddable: boolean;
     reportDate: Date;
+    tagsForView?: Tag[];
 }

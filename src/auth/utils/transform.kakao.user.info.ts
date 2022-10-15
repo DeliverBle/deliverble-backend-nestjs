@@ -1,4 +1,4 @@
-import { Gender } from "src/news/common/Gender";
+import { Gender } from "src/news/common/gender.enum";
 
 
 export const transformKakaoGender = (genderRaw: string | undefined): Gender => {

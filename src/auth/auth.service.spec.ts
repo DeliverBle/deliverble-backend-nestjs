@@ -2,12 +2,11 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Gender } from 'src/news/common/Gender';
-import { Repository } from 'typeorm';
-import { AuthRepository } from './auth.repository';
+import { UserRepository } from 'src/user/user.repository';
 import { AuthService } from './auth.service';
 import { Social } from './common/Social';
 import { Payload } from './dto/payload';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 
 const mockUser: User = new User(
     "222222223",
@@ -18,7 +17,7 @@ const mockUser: User = new User(
 )
 mockUser.id = 1;
 
-const MockAuthRepository = () => ({
+const MockUserRepository = () => ({
   async findOne(socialIdCondition) {
     const socialId: string = socialIdCondition.where.socialId;
     if (socialId === "222222222") {
@@ -39,7 +38,7 @@ const MockAuthRepository = () => ({
   },
 })
 
-type MockAuthRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
+
 describe('AuthService', () => {
   let authService: AuthService;
   let jwtService: JwtService;
@@ -56,8 +55,8 @@ describe('AuthService', () => {
         AuthService,
         JwtService,
         { 
-          provide: getRepositoryToken(AuthRepository),
-          useValue: MockAuthRepository(),
+          provide: getRepositoryToken(UserRepository),
+          useValue: MockUserRepository(),
         }
       ],
     }).compile();

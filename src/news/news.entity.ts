@@ -1,9 +1,14 @@
-import { Time } from "src/module/Time";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Category } from "./common/Category";
-import { Channel } from "./common/Channel";
-import { Gender } from "./common/Gender";
-import { Suitability } from "./common/Suitability";
+import { ScriptDefault } from "src/dummy/entity/script-default.entity";
+import { Time } from "src/modules/Time";
+import { Script } from "src/script/entity/script.entity";
+import { Tag } from "src/tag/tag.entity";
+// import { Favorite } from "src/user/favorite.entity";
+import { User } from "src/user/user.entity";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "./common/category.enum";
+import { Channel } from "./common/channel.enum";
+import { Gender } from "./common/gender.enum";
+import { Suitability } from "./common/suitability.enum";
 
 
 @Entity()
@@ -94,4 +99,25 @@ export class News extends BaseEntity {
 
     @Column('date')
     reportDate: Date;
+
+    @ManyToMany(() => User, (user) => user.favorites)
+    favorites: User[]
+
+    @ManyToMany(() => Tag, (tag) => tag.forView, {
+        eager: true,
+    })
+    @JoinTable()
+    tagsForView: Tag[];
+
+    @ManyToMany(() => Tag, (tag) => tag.forRecommend, {
+        eager: true,
+    })
+    @JoinTable()
+    tagsForRecommend: Tag[];
+
+    @OneToMany(() => Script, (script) => script.news)
+    scripts: Script[];
+
+    @OneToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.news)
+    scriptDefault: Promise<ScriptDefault>;
 }

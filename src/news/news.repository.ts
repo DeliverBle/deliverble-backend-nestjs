@@ -1,9 +1,12 @@
+import { Tag } from "src/tag/tag.entity";
 import { EntityRepository, Repository, UpdateResult } from "typeorm";
+import { SearchCondition } from "./common/search-condition";
 import { CreateNewsDto } from "./dto/create-news.dto";
 import { ReturnNewsDtoCollection } from "./dto/return-news-collection.dto";
 import { ReturnNewsDto } from "./dto/return-news.dto";
 import { UpdateNewsDto } from "./dto/update-news.dto";
 import { News } from "./news.entity";
+import { changeReturnNewsListToDto } from "./utils/change-return-news-list-to-dto";
 
 @EntityRepository(News)
 export class NewsRepository extends Repository<News> {
@@ -25,21 +28,38 @@ export class NewsRepository extends Repository<News> {
         return news;
     }
 
-    async getAllNews(): Promise<ReturnNewsDtoCollection> {
-        const newsList: News[] = await this.find();
-        const returnNewsDtoList: ReturnNewsDto[] = newsList.map(
-            (news: News) => new ReturnNewsDto(news)
-            )
-        const returnNewsDtoCollection: ReturnNewsDtoCollection = new ReturnNewsDtoCollection(returnNewsDtoList)
-        return returnNewsDtoCollection;
+    async getAllNews(): Promise<News[]> {
+        return await this.find();
     }
 
-    async getNewsById(id: number): Promise<ReturnNewsDto> {
-        const news: News = await this.findOne({
+    async getNewsById(id: number): Promise<News> {
+        const news: News = await this.findOneOrFail({
             id: id
         })
-        const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
-        return returnNewsDto
+        return news;
+    }
+
+    async resetTagsOfNews(news: News): Promise<News> {
+        news.tagsForView = [];
+        news.tagsForRecommend = [];
+        news.save();
+        return news;
+    }
+
+    async addTagsForViewToNews(news: News, tagsForView: Tag[]): Promise<News> {
+        tagsForView.forEach((tag) => { 
+            news.tagsForView.push(tag);
+        })
+        news.save();
+        return news;
+    }
+
+    async addTagsForRecommendToNews(news: News, tagsForRecommend: Tag[]): Promise<News> {
+        tagsForRecommend.forEach((tag) => { 
+            news.tagsForRecommend.push(tag);
+        })
+        news.save();
+        return news;
     }
 
     async updateNews(id: number, updateNewsDto: UpdateNewsDto): Promise<ReturnNewsDto> {
@@ -58,4 +78,10 @@ export class NewsRepository extends Repository<News> {
         return news;
     }
 
+    async findByChannel(searchCondition: SearchCondition): Promise<News[]> {
+        const channels: string[] = searchCondition.channel;
+        return await this.createQueryBuilder('news')
+          .where('news.channel IN (:...channels)', { channels })
+          .getMany();
+    };
 }

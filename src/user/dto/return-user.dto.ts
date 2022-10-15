@@ -1,5 +1,5 @@
 import { Social } from "src/auth/common/Social";
-import { Gender } from "src/news/common/Gender";
+import { Gender } from "src/news/common/gender.enum";
 
 export class ReturnUserDto {
   id: number;

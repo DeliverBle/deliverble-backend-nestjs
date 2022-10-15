@@ -1,7 +1,9 @@
-import { IsEmail, Length } from "class-validator";
-import { Gender } from "../news/common/Gender";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Social } from "./common/Social";
+import { IsEmail } from "class-validator";
+import { Gender } from "../news/common/gender.enum";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Social } from "../auth/common/Social";
+import { News } from "src/news/news.entity";
+import { Script } from "src/script/entity/script.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -50,4 +52,11 @@ export class User extends BaseEntity {
       default: Social.ETC,
     })
     social: Social;
+
+    @ManyToMany(() => News, (news) => news.favorites)
+    @JoinTable()
+    favorites: Promise<News[]>;
+
+    @OneToMany(() => Script, (script) => script.user)
+    scripts: Promise<Script[]>;
 }

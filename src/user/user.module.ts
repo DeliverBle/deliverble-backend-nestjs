@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtStrategy } from 'src/auth/auth.passport.jwt.strategy';
-import { AuthRepository } from 'src/auth/auth.repository';
+import { NewsRepository } from 'src/news/news.repository';
 import { UserController } from './user.controller';
+import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthRepository]),
-    PassportModule,
+    TypeOrmModule.forFeature([UserRepository, NewsRepository]),
   ],  
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService, JwtModule]
 })
 export class UserModule {}
 

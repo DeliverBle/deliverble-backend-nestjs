@@ -4,12 +4,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 import { lastValueFrom } from 'rxjs';
-import { Gender } from '../news/common/Gender';
-import { AuthRepository } from './auth.repository';
+import { Gender } from '../news/common/gender.enum';
 import { Payload } from './dto/payload';
 import { Social } from './common/Social';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 import { transformKakaoEmail, transformKakaoGender } from './utils/transform.kakao.user.info';
+import { UserRepository } from 'src/user/user.repository';
 require("dotenv").config();
 
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
@@ -22,8 +22,8 @@ const logger = new Logger('auth.service');
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(AuthRepository)
-    private authRepository: AuthRepository,
+    @InjectRepository(UserRepository)
+    private userRepository: UserRepository,
 		private readonly jwtService: JwtService,
   ) {};
 
@@ -73,7 +73,7 @@ export class AuthService {
 
 	// socialId -> 유저 존재 여부
   async checkUserIs(socialId: string): Promise<User> {
-		return await this.authRepository.findOne({
+		return await this.userRepository.findOne({
 			where: { socialId: socialId }
 		});
   }
@@ -90,12 +90,12 @@ export class AuthService {
 		const gender: Gender = transformKakaoGender(genderRaw);
 		logger.debug('gender in auth.service', gender);
 		const user = new User(kakaoId, nickname, email, gender, Social.KAKAO);
-		return this.authRepository.createUser(user);
+		return this.userRepository.createUser(user);
 
 	}
   
 	// 인가 코드 -> 토큰 -> 유저 정보 -> 유저 존재 여부 확인 -> 가입
-	async kakaoLoginOrSignUp(code: string): Promise<User | { accessToken: string }> {
+	async kakaoAuthentication(code: string): Promise<User | { accessToken: string }> {
 
 		// 토큰 받아오기
 		const responseGetToken = await this.getTokenFromKakao(code);
@@ -133,7 +133,7 @@ export class AuthService {
 		const nickname = userInfo['nickname'];
 		const email = userInfo['email'];
 		const gender = userInfo['gender'];
-		const social = userInfo['social'];
+		const social = userInfo['social'];	
 
 		const payload: Payload = { 
 			id: id,
@@ -145,14 +145,30 @@ export class AuthService {
 		};
 
 		logger.debug('payload right before signIn >>>>', payload);
-		const accessToken = await this.jwtService.sign(payload); //여기서 알아서 payload를합쳐서 만들어준다.
+		const accessToken = await this.jwtService.sign(payload); //여기서 알아서 payload를 합쳐서 만들어준다.
 		return { accessToken };
   }
 
 	async tokenValidateUser(payload: Payload): Promise<User | undefined> {
-		logger.debug('tokenValidateUser in auth.service - payload', payload);
-    return await this.authRepository.findOne({
+    return await this.userRepository.findOne({
 			where: { id: payload.id }
 	});
+	}
+
+	async verifyJWTReturnUser(bearerToken: string): Promise<User> {
+		try {
+			// JWT Secret key 불러오기
+			const secretKey = process.env.JWT_SECRET;
+			// Bearer의 token 부분만 파싱하기
+			const jwt = bearerToken.split("Bearer ")[1]
+			const payload: Payload = this.jwtService.verify(jwt, { secret: secretKey })
+			
+			return await this.userRepository.findOne({
+				where: { socialId: payload.socialId }
+			});
+
+		} catch (e) {
+			throw new UnauthorizedException()
+		}
 	}
 }

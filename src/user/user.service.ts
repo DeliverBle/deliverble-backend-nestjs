@@ -1,11 +1,24 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { UserForViewDto } from './dto/user-for-view.dto';
 import { ReturnUserDto } from './dto/return-user.dto';
+import { User } from 'src/user/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { NewsRepository } from 'src/news/news.repository';
+import { UserRepository } from './user.repository';
+import { News } from 'src/news/news.entity';
+import { TOGGLE_FAVORITE } from './common/toggle-favorite.type';
 
 const logger = new Logger('user.service');
 
 @Injectable()
 export class UserService {
+  constructor(
+    @InjectRepository(UserRepository)
+    private userRepository: UserRepository,
+    @InjectRepository(NewsRepository)
+    private newsRepository: NewsRepository,
+) {};
+
   async getUserInfo(userInfo: ReturnUserDto): Promise<UserForViewDto> {
     const userInfoForView = new UserForViewDto(
       userInfo.nickname,
@@ -13,4 +26,31 @@ export class UserService {
       );
     return userInfoForView;
   }
+
+  async toggleFavoriteNews(user: User, newsId: number): Promise<TOGGLE_FAVORITE> {
+    const news: News = await this.newsRepository.findOne(newsId);
+    if (news === undefined) {
+      throw new BadRequestException;
+    }
+
+    const favorites = await user.favorites;
+    const favoriteNewsIdList: number[] = []
+    favorites.map((news) => favoriteNewsIdList.push(news.id))
+    
+    if ((favoriteNewsIdList.includes(newsId))) {
+      return await this.deleteFavoriteNews(user, news);
+    }
+    return await this.addFavoriteNews(user, news);
+  }
+
+  async addFavoriteNews(user: User, news: News): Promise<TOGGLE_FAVORITE> {
+    await this.userRepository.addFavoriteNews(user, news);
+    return TOGGLE_FAVORITE.Add;
+  }
+
+  async deleteFavoriteNews(user: User, news: News): Promise<TOGGLE_FAVORITE> {
+    await this.userRepository.deleteFavoriteNews(user, news);
+    return TOGGLE_FAVORITE.Delete;
+  }
+  
 }
