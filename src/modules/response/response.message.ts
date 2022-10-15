@@ -1,5 +1,5 @@
 export const message = {
-  // 에러 메시지
+  // 기본 에러 메시지
   NULL_VALUE: '필요한 값이 없습니다.',
   FORBIDDEN: 'Forbidden',
   DUPLICATED: 'Duplicated',
@@ -40,6 +40,9 @@ export const message = {
   CREATE_SCRIPT_SUCCESS: '스크립트 생성 성공',
   READ_ALL_SCRIPTS_SUCCESS: '모든 스크립트 조회 성공',
   DELETE_SCRIPT_SUCCESS: '스크립트 삭제 성공',
+  UPDATE_SCRIPT_NAME_SUCCESS: '스크립트 이름 수정 성공',
+  // 스크립트 에러
+  FULL_SCRIPTS_COUNT: '스크립트의 개수가 너무 많아, 더이상 생성할 수 없습니다.',
 
   // 문장
   CREATE_SENTENCE_SUCCESS: '문장 생성 성공',

@@ -1,4 +1,4 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ScriptDefault } from 'src/dummy/entity/script-default.entity';
 import { SentenceDefault } from 'src/dummy/entity/sentence-default.entity';
@@ -34,7 +34,7 @@ export class ScriptService {
     private scriptDefaultRepository: ScriptDefaultRepository,
   ) {}
     
-    async createScript(userId: number, newsId: number, scriptName: string): Promise<Script> {
+    async createScriptTest(userId: number, newsId: number, scriptName: string): Promise<Script> {
       const user: User = await this.userRepository.findOne(userId);
       const news: News = await this.newsRepository.getNewsById(newsId);
       return await this.scriptRepository.createScript(user, news, scriptName);
@@ -70,7 +70,7 @@ export class ScriptService {
       const scriptsCheck: SCRIPTS_COUNT_CHECK = scriptsCountCheck(scripts);
       // script list가 비어있다면 -> 새로 만든 후 (리스트 형식으로) 반환
       if (scriptsCheck === SCRIPTS_COUNT_CHECK.Empty) {
-        const returnScriptDto: ReturnScriptDto = await this.createScriptOfUser(userId, newsId);
+        const returnScriptDto: ReturnScriptDto = await this.createScript(userId, newsId);
         const returnScriptDtoCollection: ReturnScriptDtoCollection = new ReturnScriptDtoCollection([returnScriptDto]);
         return returnScriptDtoCollection;
       }
@@ -81,11 +81,11 @@ export class ScriptService {
     }
 
     // 새로운 스크립트 생성
-    async createScriptOfUser(userId: number, newsId: number): Promise<ReturnScriptDto> {
+    async createScript(userId: number, newsId: number): Promise<ReturnScriptDto> {
       // Script Default 가져오기
       const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.getScriptDefaultByNewsId(newsId);
       // Script 객체 생성 및 저장
-      const script: Script = await this.createScript(userId, newsId, SCRIPT_DEFAULT_NAME);
+      const script: Script = await this.createScriptTest(userId, newsId, SCRIPT_DEFAULT_NAME);
       // Script Default가 가지고 있는 Sentence들을 list에 담고, for문으로 같은 값을 가지는 Sentence들을 생성한다.
       const sentenceDefaults: SentenceDefault[] = scriptDefault.sentenceDefaults;
       for (var i in sentenceDefaults) {
@@ -96,7 +96,9 @@ export class ScriptService {
       return returnScriptDto;
     }
 
+    // 스크립트 이름 변경
     async changeScriptName(userId: number, scriptId: number, name: string): Promise<ReturnScriptDto> {
+      // user가 script의 주인인지 확인
       const script: Script = await this.checkScriptOwner(userId, scriptId);
       script.name = name;
       script.save();
@@ -104,6 +106,7 @@ export class ScriptService {
       return returnScriptDto;
     }
 
+    // 스크립트 주인 확인
     async checkScriptOwner(userId: number, scriptId: number): Promise<Script> {
       const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
       if (script.user.id !== userId) {
@@ -111,5 +114,17 @@ export class ScriptService {
       }
       return script;
      }
+
+    // 새 스크립트 생성
+    async createScriptAfterCountCheck(userId: number, newsId: number): Promise<void> {
+      // userId와 newsId로 script list 가져오기
+      const scripts: Script[] = await this.scriptRepository.getScriptsOfUserAndNews(userId, newsId);
+      // script list의 개수에 따라 분기하기 위해, 검증 메서드 사용
+      const scriptsCheck: SCRIPTS_COUNT_CHECK = scriptsCountCheck(scripts);
+      if (scriptsCheck === SCRIPTS_COUNT_CHECK.Full) {
+        throw BadRequestException;
+      }
+      await this.createScript(userId, newsId);
+    };
 
 }
