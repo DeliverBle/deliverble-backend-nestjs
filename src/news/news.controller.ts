@@ -213,7 +213,7 @@ export class NewsController {
   ): Promise<Response> {
     try {
       const data: ReturnNewsDto = await this.newsService.getNews(newsId);
-      const data2: ReturnScriptDefaultDto = await this.dummyService.getScriptDefault(newsId);
+      const data2: ReturnScriptDefaultDto[] = [await this.dummyService.getScriptDefault(newsId)];
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2))

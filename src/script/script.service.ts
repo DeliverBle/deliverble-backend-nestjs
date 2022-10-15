@@ -8,11 +8,14 @@ import { NewsRepository } from 'src/news/news.repository';
 import { User } from 'src/user/user.entity';
 import { UserRepository } from 'src/user/user.repository';
 import { SCRIPT_DEFAULT_NAME } from './common/script-default-name';
+import { CreateMemoDto } from './dto/create-memo.dto';
 import { CreateSentenceDto } from './dto/create-sentence.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
+import { Memo } from './entity/memo.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
+import { MemoRepository } from './repository/memo.repository';
 import { ScriptRepository } from './repository/script.repository';
 import { SentenceRepository } from './repository/sentence.repository';
 import { changeScriptsToReturn } from './utils/change-scripts-to-return';
@@ -25,12 +28,14 @@ export class ScriptService {
   constructor(
     @InjectRepository(ScriptRepository)
     private scriptRepository: ScriptRepository,
+    @InjectRepository(SentenceRepository)
+    private sentenceRepository: SentenceRepository,
+    @InjectRepository(MemoRepository)
+    private memoRepository: MemoRepository,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
     @InjectRepository(NewsRepository)
     private newsRepository: NewsRepository,
-    @InjectRepository(SentenceRepository)
-    private sentenceRepository: SentenceRepository,
     @InjectRepository(ScriptDefaultRepository)
     private scriptDefaultRepository: ScriptDefaultRepository,
   ) {}
@@ -43,6 +48,10 @@ export class ScriptService {
 
     async getAllScript(): Promise<Script[]> {
       return await this.scriptRepository.find();
+    }
+
+    async getScriptById(scriptId: number): Promise<Script> {
+      return await this.scriptRepository.findOneOrFail(scriptId);
     }
 
     async deleteScriptTest(scriptId: number): Promise<Script> {
@@ -182,6 +191,18 @@ export class ScriptService {
       }
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
       return returnScriptDto;
+    }
+
+    // 메모 생성
+    async createMemo(createMemoDto: CreateMemoDto): Promise<Memo> {
+      const memo: Memo = await this.memoRepository.createMemo(createMemoDto);
+      return memo;
+    }
+
+    // 메모 삭제
+    async deleteMemo(memoId: number): Promise<Memo> {
+      const memoDeleted: Memo = await this.memoRepository.deleteMemo(memoId);
+      return memoDeleted;
     }
 
 }
