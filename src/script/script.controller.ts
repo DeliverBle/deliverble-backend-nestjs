@@ -68,8 +68,10 @@ export class ScriptController {
   ): Promise<Response> {
     const scriptId: number = req.body.scriptId;
     const order: number = req.body.order;
+    const startTime: number = req.body.startTime;
+    const endTime: number = req.body.endTime;
     const text: string = req.body.text;
-    const data: Sentence = await this.scriptService.createSentenceByScriptId(scriptId, order, text);
+    const data: Sentence = await this.scriptService.createSentenceByScriptId(scriptId, order, startTime, endTime, text);
     return res
     .status(statusCode.OK)
     .send(util.success(statusCode.OK, message.CREATE_SENTENCE_SUCCESS, data))
@@ -151,6 +153,9 @@ export class ScriptController {
         if (error.name === "UnauthorizedException") {
           return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
         }
+        if (error.name === "BadRequestException") {
+          return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_REMOVABLE_SCRIPT))
+        }
         if (error.name === "EntityNotFound") {
           return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
         }
@@ -158,9 +163,9 @@ export class ScriptController {
       }
   }
 
-  @Post('sentence/edit/:scriptId')
+  @Post('sentence/update/:scriptId')
   @UseGuards(JwtAuthGuard)
-  async editSentence(
+  async updateSentence(
     @Req() req,
     @Res() res,
     @Param('scriptId') scriptId: number
@@ -169,9 +174,8 @@ export class ScriptController {
       const userId: number = req.user.id;
       const order: number = req.body.order;
       const text: string = req.body.text;
-
       const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data2: ReturnScriptDto = await this.scriptService.editSentence(userId, scriptId, order, text);
+      const data2: ReturnScriptDto = await this.scriptService.updateSentence(userId, scriptId, order, text);
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_SUCCESS, data, data2))

@@ -45,6 +45,7 @@ export const message = {
   NOT_EXISTING_SCRIPT: '없는 스크립트의 id로 요청했습니다.',
   FULL_SCRIPTS_COUNT: '스크립트의 개수가 너무 많아, 더이상 생성할 수 없습니다.',
   NOT_OWNER_OF_SCRIPT: '로그인한 유저가 해당 스크립트를 가지고 있지 않습니다.',
+  NOT_REMOVABLE_SCRIPT: '스크립트가 1개이므로 삭제할 수 없습니다.',
 
   // 문장
   CREATE_SENTENCE_SUCCESS: '문장 생성 성공',

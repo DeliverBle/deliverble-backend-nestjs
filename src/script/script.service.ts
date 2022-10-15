@@ -8,6 +8,7 @@ import { NewsRepository } from 'src/news/news.repository';
 import { User } from 'src/user/user.entity';
 import { UserRepository } from 'src/user/user.repository';
 import { SCRIPT_DEFAULT_NAME } from './common/script-default-name';
+import { CreateSentenceDto } from './dto/create-sentence.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
 import { Script } from './entity/script.entity';
@@ -49,14 +50,19 @@ export class ScriptService {
       return scriptDeleted;
     }
 
-    async createSentence(script: Script, order: number, text: string): Promise<Sentence> {
-      // const script: Script = await this.scriptRepository.findOne(scriptId);
-      return await this.sentenceRepository.createSentence(script, order, text)
+    async createSentence(createSentenceDto: CreateSentenceDto): Promise<Sentence> {
+      return await this.sentenceRepository.createSentence(createSentenceDto);
     }
 
-    async createSentenceByScriptId(scriptId: number, order: number, text: string): Promise<Sentence> {
+    async createSentenceByScriptId(scriptId: number, order: number, startTime: number, endTime: number, text: string): Promise<Sentence> {
       const script: Script = await this.scriptRepository.findOne(scriptId);
-      return await this.sentenceRepository.createSentence(script, order, text)
+      const createSentenceDto: CreateSentenceDto = new CreateSentenceDto();
+      createSentenceDto.script = script;
+      createSentenceDto.order = order;
+      createSentenceDto.startTime = startTime;
+      createSentenceDto.endTime = endTime;
+      createSentenceDto.text = text;
+      return await this.sentenceRepository.createSentence(createSentenceDto);
     }
  
     /* 
@@ -90,7 +96,13 @@ export class ScriptService {
       // Script Default가 가지고 있는 Sentence들을 list에 담고, for문으로 같은 값을 가지는 Sentence들을 생성한다.
       const sentenceDefaults: SentenceDefault[] = scriptDefault.sentenceDefaults;
       for (var i in sentenceDefaults) {
-        await this.createSentence(script, sentenceDefaults[i].order, sentenceDefaults[i].text)
+        const createSentenceDto: CreateSentenceDto = new CreateSentenceDto()
+        createSentenceDto.script = script;
+        createSentenceDto.order = sentenceDefaults[i].order;
+        createSentenceDto.startTime = sentenceDefaults[i].startTime;
+        createSentenceDto.endTime = sentenceDefaults[i].endTime;
+        createSentenceDto.text = sentenceDefaults[i].text;
+        await this.createSentence(createSentenceDto)
       }
       const scriptResult: Script = await this.scriptRepository.getScriptById(script.id);
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(scriptResult);
@@ -116,7 +128,7 @@ export class ScriptService {
       return script;
      }
 
-    // 새 스크립트 생성
+    // 유저가 스크립트 생성
     async createScriptAfterCountCheck(userId: number, newsId: number): Promise<void> {
       // userId와 newsId로 script list 가져오기
       const scripts: Script[] = await this.scriptRepository.getScriptsOfUserAndNews(userId, newsId);
@@ -146,12 +158,16 @@ export class ScriptService {
     async deleteAndGetScripts(userId: number, scriptId: number): Promise<ReturnScriptDtoCollection> {
       const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
       const newsId: number = script.news.id;
+      const scripts: Script[] = await this.scriptRepository.getScriptsOfUserAndNews(userId, newsId);
+      if (scripts.length === 1) {
+        throw BadRequestException;
+      }
       await this.scriptRepository.deleteScript(scriptId);
       return await this.getScripts(userId, newsId);
     }
 
     // 문장 수정
-    async editSentence(userId: number, scriptId: number, order: number, text: string): Promise<ReturnScriptDto> {
+    async updateSentence(userId: number, scriptId: number, order: number, text: string): Promise<ReturnScriptDto> {
       const script: Script = await this.checkScriptOwner(userId, scriptId);
       let check: boolean = false;
       script.sentences.forEach((sentence) => {
