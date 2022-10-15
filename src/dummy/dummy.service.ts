@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundError } from 'rxjs';
 import { News } from 'src/news/news.entity';
 import { NewsRepository } from 'src/news/news.repository';
+import { CreateSentenceDefaultDto } from './dto/create-sentence-default.dto';
 import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ScriptDefault } from './entity/script-default.entity';
@@ -32,12 +33,8 @@ export class DummyService {
 
   async getScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    logger.debug("news >>>>>>", news)
     const scriptDefaultId: number = (await news.scriptDefault).id;
-    logger.debug("scriptDefaultId in getScriptDefault of dummyService >>>>>>", scriptDefaultId);
     const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.findOneOrFail(scriptDefaultId);
-    logger.debug("scriptDefault in gerScriptDefault of dummyService >>>>>>", scriptDefault);
-    console.log(scriptDefault);
     const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
   }
@@ -50,13 +47,14 @@ export class DummyService {
     return returnScriptDefaultDto;
   }
 
-  async createSentenceDefault(newsId: number, order: number, text: string): Promise<ReturnSentenceDefaultDto> {
+  async createSentenceDefault(createSentenceDefaultDto: CreateSentenceDefaultDto): Promise<ReturnSentenceDefaultDto> {
+    const newsId: number = createSentenceDefaultDto.newsId;
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptDefault: ScriptDefault = await news.scriptDefault;
     if (!scriptDefault) {
       throw NotFoundError;
     }
-    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.createSentenceDefault(scriptDefault, order, text); 
+    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.createSentenceDefault(scriptDefault, createSentenceDefaultDto); 
     const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
   }

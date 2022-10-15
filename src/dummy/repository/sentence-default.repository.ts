@@ -1,16 +1,19 @@
 import { NotFoundError } from "rxjs";
 import { EntityRepository, Repository } from "typeorm";
+import { CreateSentenceDefaultDto } from "../dto/create-sentence-default.dto";
 import { ScriptDefault } from "../entity/script-default.entity";
 import { SentenceDefault } from "../entity/sentence-default.entity";
 
 @EntityRepository(SentenceDefault)
 export class SentenceDefaultRepository extends Repository<SentenceDefault> {
-  async createSentenceDefault(scriptDefault: ScriptDefault, order: number, text: string): Promise<SentenceDefault> {
+  async createSentenceDefault(scriptDefault: ScriptDefault, createSentenceDefaultDto: CreateSentenceDefaultDto): Promise<SentenceDefault> {
     const sentenceDefault = new SentenceDefault()
 
     sentenceDefault.scriptDefault = scriptDefault;
-    sentenceDefault.order = order;
-    sentenceDefault.text = text;
+    sentenceDefault.order = createSentenceDefaultDto.order;
+    sentenceDefault.startTime = createSentenceDefaultDto.startTime;
+    sentenceDefault.endTime = createSentenceDefaultDto.endTime;
+    sentenceDefault.text = createSentenceDefaultDto.text;
 
     await this.save(sentenceDefault);
     return sentenceDefault;
