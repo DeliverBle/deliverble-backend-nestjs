@@ -12,11 +12,12 @@ import { NewsService } from 'src/news/news.service';
 import { TagRepository } from 'src/tag/tag.repository';
 import { AuthService } from 'src/auth/auth.service';
 import { MemoRepository } from './repository/memo.repository';
+import { ScriptCountRepository } from './repository/script-count.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ScriptRepository, SentenceRepository, MemoRepository, UserRepository, NewsRepository, ScriptDefaultRepository, TagRepository,
+      ScriptRepository, SentenceRepository, MemoRepository, UserRepository, NewsRepository, ScriptDefaultRepository, TagRepository, ScriptCountRepository,
     ]),
   ],
   controllers: [ScriptController],

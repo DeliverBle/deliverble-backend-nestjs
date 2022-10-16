@@ -5,6 +5,7 @@ import { DummyService } from 'src/dummy/dummy.service';
 import { ScriptDefaultRepository } from 'src/dummy/repository/script-default.repository';
 import { SentenceDefaultRepository } from 'src/dummy/repository/sentence-default.repository';
 import { MemoRepository } from 'src/script/repository/memo.repository';
+import { ScriptCountRepository } from 'src/script/repository/script-count.repository';
 import { ScriptRepository } from 'src/script/repository/script.repository';
 import { SentenceRepository } from 'src/script/repository/sentence.repository';
 import { ScriptService } from 'src/script/script.service';
@@ -17,7 +18,7 @@ import { NewsService } from './news.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository
+      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, 
     ]),
     AuthModule,
   ],

@@ -17,6 +17,7 @@ import { Memo } from './entity/memo.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { MemoRepository } from './repository/memo.repository';
+import { ScriptCountRepository } from './repository/script-count.repository';
 import { ScriptRepository } from './repository/script.repository';
 import { SentenceRepository } from './repository/sentence.repository';
 import { changeScriptsToReturn } from './utils/change-scripts-to-return';
@@ -39,6 +40,8 @@ export class ScriptService {
     private newsRepository: NewsRepository,
     @InjectRepository(ScriptDefaultRepository)
     private scriptDefaultRepository: ScriptDefaultRepository,
+    @InjectRepository(ScriptCountRepository)
+    private scriptCountRepository: ScriptCountRepository,
   ) {}
     
     async createScriptTest(userId: number, newsId: number, scriptName: string): Promise<Script> {
