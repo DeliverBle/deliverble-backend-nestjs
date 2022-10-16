@@ -1,8 +1,5 @@
-import { News } from "src/news/news.entity";
-import { User } from "src/user/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { CreateSentenceDto } from "../dto/create-sentence.dto";
-import { Script } from "../entity/script.entity";
 import { Sentence } from "../entity/sentence.entity";
 
 @EntityRepository(Sentence)
