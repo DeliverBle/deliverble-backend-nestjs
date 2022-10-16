@@ -7,7 +7,6 @@ import { Suitability } from "../common/suitability.enum";
 export class UpdateNewsDto {
     title: string;
     category: Category;
-    script: string;
     announcerGender: Gender;
     channel: Channel;
     link: string;
