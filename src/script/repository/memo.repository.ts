@@ -26,7 +26,8 @@ export class MemoRepository extends Repository<Memo> {
   }
 
   async getMemoJoinScript(memoId: number): Promise<Memo> {
-    return await this.createQueryBuilder()
+    console.log("check");
+    return await this.createQueryBuilder('memo')
       .leftJoinAndSelect('memo.script', 'script')
       .where('memo.id = :memoId', { memoId: memoId })
       .getOneOrFail();

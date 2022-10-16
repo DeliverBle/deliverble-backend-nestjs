@@ -41,6 +41,7 @@ export class ScriptRepository extends Repository<Script> {
       .leftJoinAndSelect('script.user', 'user')
       .leftJoinAndSelect('script.news', 'news')
       .leftJoinAndSelect('script.sentences', 'sentences')
+      .leftJoinAndSelect('script.memos', 'memos')
       .where('user.id = :userId', { userId: userId })
       .andWhere('news.id = :newsId', { newsId: newsId })
       .getMany();
