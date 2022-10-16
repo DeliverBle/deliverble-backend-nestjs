@@ -4,6 +4,7 @@ import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGe
 import { Social } from "../auth/common/Social";
 import { News } from "src/news/news.entity";
 import { Script } from "src/script/entity/script.entity";
+import { ScriptCount } from "src/script/entity/memo.entity copy";
 
 @Entity()
 export class User extends BaseEntity {
@@ -59,4 +60,8 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Script, (script) => script.user)
     scripts: Promise<Script[]>;
+
+    @OneToMany(() => ScriptCount, (scriptCount) => scriptCount.user)
+    scriptCounts: ScriptCount[];
+    
 }
