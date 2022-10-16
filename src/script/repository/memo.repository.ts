@@ -15,8 +15,7 @@ export class MemoRepository extends Repository<Memo> {
     return memo;
   }
 
-  async deleteMemo(memoId): Promise<Memo> {
-    console.log(memoId);
+  async deleteMemo(memoId: number): Promise<Memo> {
     const memoDeleted: Memo = await this.findOneOrFail(memoId);
     await this.createQueryBuilder()
       .delete()
@@ -24,5 +23,12 @@ export class MemoRepository extends Repository<Memo> {
       .where("id = :memoId", { memoId })
       .execute()
     return memoDeleted;
+  }
+
+  async getMemoJoinScript(memoId: number): Promise<Memo> {
+    return await this.createQueryBuilder()
+      .leftJoinAndSelect('memo.script', 'script')
+      .where('memo.id = :memoId', { memoId: memoId })
+      .getOneOrFail();
   }
 }

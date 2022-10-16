@@ -10,6 +10,7 @@ import { UserRepository } from 'src/user/user.repository';
 import { SCRIPT_DEFAULT_NAME } from './common/script-default-name';
 import { CreateMemoDto } from './dto/create-memo.dto';
 import { CreateSentenceDto } from './dto/create-sentence.dto';
+import { DeleteMemoDto } from './dto/delete-memo.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
 import { Memo } from './entity/memo.entity';
@@ -194,15 +195,31 @@ export class ScriptService {
     }
 
     // 메모 생성
-    async createMemo(createMemoDto: CreateMemoDto): Promise<Memo> {
+    async createMemo(createMemoDto: CreateMemoDto): Promise<ReturnScriptDto> {
+      const script: Script = await this.checkScriptOwner(createMemoDto.userId, createMemoDto.script.id);
       const memo: Memo = await this.memoRepository.createMemo(createMemoDto);
-      return memo;
+      // const script: Script = await this.scriptRepository()
+      const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
+      return returnScriptDto;
     }
 
     // 메모 삭제
-    async deleteMemo(memoId: number): Promise<Memo> {
-      const memoDeleted: Memo = await this.memoRepository.deleteMemo(memoId);
-      return memoDeleted;
+    async deleteMemo(deleteMemoDto: DeleteMemoDto): Promise<ReturnScriptDto> {
+      const userId: number = deleteMemoDto.userId;
+      const scriptId: number = deleteMemoDto.scriptId;
+      const memoId: number = deleteMemoDto.memoId;
+
+      const script: Script = await this.checkScriptOwner(userId, scriptId);
+      await this.memoRepository.deleteMemo(memoId);
+      const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
+      return returnScriptDto;
+    }
+
+    // 메모 id로 스크립트 id 가져오기
+    async getScriptIdByMemoId(memoId: number): Promise<number> {
+      const memo: Memo = await this.memoRepository.getMemoJoinScript(memoId);
+      const scriptId: number = memo.script.id
+      return scriptId;
     }
 
 }
