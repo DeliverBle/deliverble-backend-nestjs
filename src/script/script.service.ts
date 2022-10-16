@@ -197,7 +197,7 @@ export class ScriptService {
     // 메모 생성
     async createMemo(createMemoDto: CreateMemoDto): Promise<ReturnScriptDto> {
       const scriptId: number = createMemoDto.script.id;
-      await this.checkScriptOwner(createMemoDto.userId, createMemoDto.script.id);
+      await this.checkScriptOwner(createMemoDto.userId, scriptId);
       await this.memoRepository.createMemo(createMemoDto);
       const script: Script = await this.scriptRepository.findOneOrFail(scriptId)
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
