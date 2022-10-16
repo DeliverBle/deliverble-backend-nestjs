@@ -210,6 +210,7 @@ export class ScriptController {
       createMemoDto.userId = req.user.id;
       createMemoDto.script = script;
       createMemoDto.order = req.body.order;
+      createMemoDto.startIndex = req.body.startIndex;
       createMemoDto.content = req.body.content;
       const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
       const data2: ReturnScriptDto = await this.scriptService.createMemo(createMemoDto);
