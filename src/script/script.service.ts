@@ -14,9 +14,11 @@ import { DeleteMemoDto } from './dto/delete-memo.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
 import { Memo } from './entity/memo.entity';
+import { ScriptCount } from './entity/script-count.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { MemoRepository } from './repository/memo.repository';
+import { ScriptCountRepository } from './repository/script-count.repository';
 import { ScriptRepository } from './repository/script.repository';
 import { SentenceRepository } from './repository/sentence.repository';
 import { changeScriptsToReturn } from './utils/change-scripts-to-return';
@@ -39,9 +41,11 @@ export class ScriptService {
     private newsRepository: NewsRepository,
     @InjectRepository(ScriptDefaultRepository)
     private scriptDefaultRepository: ScriptDefaultRepository,
+    @InjectRepository(ScriptCountRepository)
+    private scriptCountRepository: ScriptCountRepository,
   ) {}
     
-    async createScriptTest(userId: number, newsId: number, scriptName: string): Promise<Script> {
+    async createScript(userId: number, newsId: number, scriptName: string): Promise<Script> {
       const user: User = await this.userRepository.findOne(userId);
       const news: News = await this.newsRepository.getNewsById(newsId);
       return await this.scriptRepository.createScript(user, news, scriptName);
@@ -87,7 +91,7 @@ export class ScriptService {
       const scriptsCheck: SCRIPTS_COUNT_CHECK = scriptsCountCheck(scripts);
       // script list가 비어있다면 -> 새로 만든 후 (리스트 형식으로) 반환
       if (scriptsCheck === SCRIPTS_COUNT_CHECK.Empty) {
-        const returnScriptDto: ReturnScriptDto = await this.createScript(userId, newsId);
+        const returnScriptDto: ReturnScriptDto = await this.createScriptByDefault(userId, newsId);
         const returnScriptDtoCollection: ReturnScriptDtoCollection = new ReturnScriptDtoCollection([returnScriptDto]);
         return returnScriptDtoCollection;
       }
@@ -97,12 +101,15 @@ export class ScriptService {
       return returnScriptDtoCollection
     }
 
-    // 새로운 스크립트 생성
-    async createScript(userId: number, newsId: number): Promise<ReturnScriptDto> {
+    // 새로운 스크립트 생성 (Script Default 활용)
+    async createScriptByDefault(userId: number, newsId: number): Promise<ReturnScriptDto> {
       // Script Default 가져오기
       const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.getScriptDefaultByNewsId(newsId);
+      // Script 이름 설정을 위한, Script count 조회하기
+      const count: number = await this.getOrCreateScriptCount(userId, newsId);
       // Script 객체 생성 및 저장
-      const script: Script = await this.createScriptTest(userId, newsId, SCRIPT_DEFAULT_NAME);
+      const scriptName: string = SCRIPT_DEFAULT_NAME + count;
+      const script: Script = await this.createScript(userId, newsId, scriptName);
       // Script Default가 가지고 있는 Sentence들을 list에 담고, for문으로 같은 값을 가지는 Sentence들을 생성한다.
       const sentenceDefaults: SentenceDefault[] = scriptDefault.sentenceDefaults;
       for (var i in sentenceDefaults) {
@@ -117,6 +124,19 @@ export class ScriptService {
       const scriptResult: Script = await this.scriptRepository.getScriptById(script.id);
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(scriptResult);
       return returnScriptDto;
+    }
+
+    // 스크립트 이름 생성을 위해 Script count 조회 or 생성
+    async getOrCreateScriptCount(userId: number, newsId: number): Promise<number> {
+      const scriptCount: ScriptCount = await this.scriptCountRepository.getScriptCount(userId, newsId);
+      if (!scriptCount) {
+        const user: User = await this.userRepository.findOneOrFail(userId);
+        const scriptCount: ScriptCount = await this.scriptCountRepository.createScriptCount(user, newsId);
+        return scriptCount.count;
+      }
+      scriptCount.count += 1;
+      scriptCount.save();
+      return scriptCount.count;
     }
 
     // 스크립트 이름 변경
@@ -147,7 +167,7 @@ export class ScriptService {
       if (scriptsCheck === SCRIPTS_COUNT_CHECK.Full) {
         throw BadRequestException;
       }
-      await this.createScript(userId, newsId);
+      await this.createScriptByDefault(userId, newsId);
     };
 
     // 스크립트 삭제

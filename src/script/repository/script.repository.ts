@@ -6,11 +6,12 @@ import { Script } from "../entity/script.entity";
 @EntityRepository(Script)
 export class ScriptRepository extends Repository<Script> {
   async createScript(user: User, news: News, scriptName: string): Promise<Script> {
-    const script = new Script()
+    const script: Script = new Script()
 
     script.name = scriptName;
     script.user = user;
     script.news = news;
+    script.memos = [];
 
     await this.save(script);
     return script;
@@ -31,6 +32,7 @@ export class ScriptRepository extends Repository<Script> {
       .leftJoinAndSelect('script.user', 'user')
       .leftJoinAndSelect('script.news', 'news')
       .leftJoinAndSelect('script.sentences', 'sentences')
+      .leftJoinAndSelect('script.memos', 'memos')
       .where('script.id = :scriptId', { scriptId: scriptId })
       .getOneOrFail();
     return script;

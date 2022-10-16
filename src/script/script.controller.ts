@@ -36,7 +36,7 @@ export class ScriptController {
     const userId: number = req.user.id;
     const newsId: number = req.body.newsId;
     const scriptName: string = req.body.name;
-    const data: Script = await this.scriptService.createScriptTest(userId, newsId, scriptName);
+    const data: Script = await this.scriptService.createScript(userId, newsId, scriptName);
     return res
     .status(statusCode.OK)
     .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data))
