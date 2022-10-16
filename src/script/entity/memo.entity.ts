@@ -15,6 +15,9 @@ export class Memo extends BaseEntity {
   @Column()
   order: number;
 
+  @Column()
+  startIndex: number;
+
   @Column({ type: 'varchar', length: 255 })
   content: string;
 }
