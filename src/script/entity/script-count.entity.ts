@@ -1,23 +1,21 @@
+import { User } from "src/user/user.entity";
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Script } from "./script.entity";
 
 @Entity()
-export class Memo extends BaseEntity {
+export class ScriptCount extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Script, (script) => script.memos, {
+  @ManyToOne(() => User, (user) => user.scriptCounts, {
     onDelete: 'CASCADE',
   })
-  script: Script;
+  user: User;
 
   @Column()
-  order: number;
+  newsId: number;
 
   @Column()
-  startIndex: number;
+  count: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  content: string;
 }
