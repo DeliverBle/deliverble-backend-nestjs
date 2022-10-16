@@ -11,7 +11,6 @@ export class ReturnNewsDto {
     this.id = news.id
     this.title = news.title;
     this.category = news.category;
-    this.script = news.script;
     this.announcerGender = news.announcerGender;
     this.channel = news.channel;
     this.link = news.link;
@@ -26,7 +25,6 @@ export class ReturnNewsDto {
     id: number;
     title: string;
     category: Category;
-    script: string;
     announcerGender: Gender;
     channel: Channel;
     link: string;

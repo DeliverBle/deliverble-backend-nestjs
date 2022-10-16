@@ -16,7 +16,6 @@ export class News extends BaseEntity {
     constructor(
         _title: string,
         _category: Category,
-        _script: string,
         _announcerGender: Gender,
         _channel: Channel,
         _link: string,
@@ -30,7 +29,6 @@ export class News extends BaseEntity {
         super();
         this.title = _title;
         this.category = _category;
-        this.script = _script;
         this.announcerGender = _announcerGender;
         this.channel = _channel;
         this.link = _link;
@@ -54,9 +52,6 @@ export class News extends BaseEntity {
     default: Category.UNSPECIFIED,
     })
     category: Category;
-
-    @Column({ type: 'varchar', length: 1000 })
-    script: string;
 
     @Column({
     type: 'enum',
