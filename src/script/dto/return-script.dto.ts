@@ -1,3 +1,4 @@
+import { Memo } from "../entity/memo.entity";
 import { Script } from "../entity/script.entity";
 import { Sentence } from "../entity/sentence.entity";
 
@@ -8,10 +9,12 @@ export class ReturnScriptDto {
     this.newsId = script.news.id;
     this.name = script.name;
     this.sentences = script.sentences;
+    this.memos = script.memos;
 }   
   id: number;
   userId: number;
   newsId: number;
   name: string;
   sentences: Sentence[];
+  memos: Memo[];
 }
