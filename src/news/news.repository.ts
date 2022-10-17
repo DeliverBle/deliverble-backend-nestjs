@@ -50,7 +50,7 @@ export class NewsRepository extends Repository<News> {
         tagsForView.forEach((tag) => { 
             news.tagsForView.push(tag);
         })
-        news.save();
+        news.save(); 
         return news;
     }
 
@@ -58,7 +58,7 @@ export class NewsRepository extends Repository<News> {
         tagsForRecommend.forEach((tag) => { 
             news.tagsForRecommend.push(tag);
         })
-        news.save();
+        news.save();        
         return news;
     }
 

@@ -241,5 +241,9 @@ export class NewsService {
     return await this.getNews(newsId);
   }
 
+  async getNewsTest(newsId: number): Promise<News> {
+    return this.newsRepository.findOne(newsId);
+  }
+
 }
 

@@ -16,6 +16,7 @@ import { ExploreNewsDtoCollection } from './dto/explore-news-collection.dto';
 import { ReturnNewsDtoCollection } from './dto/return-news-collection.dto';
 import { ReturnNewsDto } from './dto/return-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
+import { News } from './news.entity';
 import { NewsService } from './news.service';
 import { convertBodyToPaginationCondition } from './utils/convert-body-to-condition';
 import { convertBodyToSearchCondition } from './utils/convert-body-to-condition';
@@ -247,6 +248,17 @@ export class NewsController {
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
+  }
+
+  @Get('test/get/:newsId')
+  async getNewsTest(
+    @Res() res,
+    @Param('newsId') newsId: number
+  ): Promise<Response> {
+    const data: News = await this.newsService.getNewsTest(newsId);
+    return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data))
   }
 }
 
