@@ -6,10 +6,10 @@ export class ReturnScriptDefaultDto {
     this.id = scriptDefault.id;
     this.newsId = scriptDefault.news.id;
     this.name = scriptDefault.name;
-    this.sentenceDefaults = scriptDefault.sentenceDefaults;
+    this.sentences = scriptDefault.sentenceDefaults;
 }   
     id: number;
     newsId: number;
     name: string;
-    sentenceDefaults: SentenceDefault[];
+    sentences: SentenceDefault[];
 }
