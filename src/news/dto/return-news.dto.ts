@@ -20,6 +20,7 @@ export class ReturnNewsDto {
     this.suitability = news.suitability;
     this.isEmbeddable = news.isEmbeddable;
     this.reportDate = news.reportDate;
+    this.isFavorite = false;
     this.tagsForView = news.tagsForView;
 }
     id: number;
@@ -34,5 +35,6 @@ export class ReturnNewsDto {
     suitability: Suitability;
     isEmbeddable: boolean;
     reportDate: Date;
+    isFavorite: boolean;
     tagsForView?: Tag[];
 }

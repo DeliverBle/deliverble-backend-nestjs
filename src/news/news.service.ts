@@ -27,6 +27,8 @@ import { TagRepository } from 'src/tag/tag.repository';
 import { PaginationCondition } from './common/pagination-condition';
 import { Script } from 'src/script/entity/script.entity';
 import { ScriptRepository } from 'src/script/repository/script.repository';
+import { checkUser } from './utils/check-user';
+import { checkNewsDtoInFavoriteList } from './utils/check-news-dto-in-favorite-list';
 
 const logger: Logger = new Logger('news service');
 
@@ -43,7 +45,9 @@ export class NewsService {
   ) {};
 
   async createNews(createNewsDto: CreateNewsDto) : Promise<ReturnNewsDto> {
-		return await this.newsRepository.createNews(createNewsDto);
+		const news: News = await this.newsRepository.createNews(createNewsDto);
+    const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
+    return returnNewsDto;
 	}
 
   async getAllNews() : Promise<ReturnNewsDtoCollection> {
@@ -54,13 +58,15 @@ export class NewsService {
 	}
 
   async updateNews(id: number, updateNewsDto: UpdateNewsDto) : Promise<ReturnNewsDto> {
-    const updateResult: ReturnNewsDto = await this.newsRepository.updateNews(id, updateNewsDto);
-    return updateResult;
+    const news: News = await this.newsRepository.updateNews(id, updateNewsDto);
+    const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
+    return returnNewsDto;
   }
 
   async deleteNews(id: number) : Promise<ReturnNewsDto> {
-    const deleteResult: ReturnNewsDto = await this.newsRepository.deleteNews(id);
-    return deleteResult;
+    const deletedNews: News = await this.newsRepository.deleteNews(id);
+    const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(deletedNews);
+    return returnNewsDto;
   }
 
   async createAndGetAllNews(createNewsDto: CreateNewsDto) : Promise<ReturnNewsDtoCollection> {
@@ -137,21 +143,24 @@ export class NewsService {
     return newsList.slice(offset, endIndex)
   };
 
-  async checkFavorite(exploreNewsDtoList: ExploreNewsDto[], user: User): Promise<ExploreNewsDto[]> {
-    if (user === undefined) {
+  async checkExploreNewsDtoListIsFavorite(exploreNewsDtoList: ExploreNewsDto[], user: User): Promise<ExploreNewsDto[]> {
+    if (!checkUser(user)) {
       return exploreNewsDtoList;
     }
     const favoriteList: number[] = (await user.favorites).map((news) => news.id);
     exploreNewsDtoList = exploreNewsDtoList.map((news) => {
-      if (favoriteList.includes(news.id)) {
-        news.isFavorite = true;
-        return news;
-      } else {
-        news.isFavorite = false;
-        return news;
-      }
+      return checkNewsDtoInFavoriteList(news, favoriteList);
     })
     return exploreNewsDtoList;
+  }
+
+  async checkReturnNewsDtoIsFavorite(returnNewsDto: ReturnNewsDto, user: User): Promise<ReturnNewsDto> {
+    if (!checkUser(user)) {
+      return returnNewsDto;
+    }
+    const favoriteList: number[] = (await user.favorites).map((news) => news.id);
+    checkNewsDtoInFavoriteList(returnNewsDto, favoriteList)
+    return returnNewsDto;
   }
 
   async searchByConditions(searchCondition: SearchCondition, bearerToken: string | undefined): Promise<[ExploreNewsDtoCollection, PaginationInfo]> {
@@ -183,7 +192,7 @@ export class NewsService {
     // 즐겨찾기 체크 (로그인 된 유저라면)
     if (bearerToken !== undefined) {
       const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
-      exploreNewsDtoList = await this.checkFavorite(exploreNewsDtoList, user);
+      exploreNewsDtoList = await this.checkExploreNewsDtoListIsFavorite(exploreNewsDtoList, user);
     }
 
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
@@ -223,7 +232,7 @@ export class NewsService {
     // 즐겨찾기 체크 (로그인 된 유저라면)
     if (bearerToken !== undefined) {
       const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
-      exploreNewsDtoList = await this.checkFavorite(exploreNewsDtoList, user);
+      exploreNewsDtoList = await this.checkExploreNewsDtoListIsFavorite(exploreNewsDtoList, user);
     }
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return exploreNewsDtoCollection;

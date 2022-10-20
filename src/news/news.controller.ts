@@ -235,8 +235,10 @@ export class NewsController {
     @Param('newsId') newsId: number
   ): Promise<Response> {
     const userId: number = req.user.id;
+    const user: User = req.user;
     try {
-      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
       return res
         .status(statusCode.OK)
