@@ -89,9 +89,11 @@ export class ScriptController {
     @Param('scriptId') scriptId: number
   ): Promise<Response> {
     try {
-      const userId: number = req.user.id;
+      const user: User = req.user;
+      const userId: number = user.id;
       const name: string = req.body.name;
-      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDto = await this.scriptService.changeScriptName(userId, scriptId, name);
       return res
       .status(statusCode.OK)
@@ -117,9 +119,11 @@ export class ScriptController {
     @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
-      const userId: number = req.user.id;
+      const user: User = req.user;
+      const userId: number = user.id;
       await this.scriptService.createScriptAfterCountCheck(userId, newsId);
-      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
       return res
         .status(statusCode.OK)
@@ -145,8 +149,10 @@ export class ScriptController {
     @Param('scriptId') scriptId: number
   ): Promise<Response> {
     try {
-      const userId: number = req.user.id;
-      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const user: User = req.user;
+      const userId: number = user.id;
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDtoCollection = await this.scriptService.deleteAndGetScripts(userId, scriptId);
       return res
         .status(statusCode.OK)
@@ -174,10 +180,12 @@ export class ScriptController {
     @Param('scriptId') scriptId: number
   ): Promise<Response> {
     try {
-      const userId: number = req.user.id;
+      const user: User = req.user;
+      const userId: number = user.id;
       const order: number = req.body.order;
       const text: string = req.body.text;
-      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDto = await this.scriptService.updateSentence(userId, scriptId, order, text);
       return res
         .status(statusCode.OK)
@@ -205,14 +213,17 @@ export class ScriptController {
     @Param('scriptId') scriptId: number
   ): Promise<Response> {
     try {
+      const user: User = req.user;
       const createMemoDto: CreateMemoDto = new CreateMemoDto();
       const script: Script = await this.scriptService.getScriptById(scriptId);
-      createMemoDto.userId = req.user.id;
+      
+      createMemoDto.userId = user.id;
       createMemoDto.script = script;
       createMemoDto.order = req.body.order;
       createMemoDto.startIndex = req.body.startIndex;
       createMemoDto.content = req.body.content;
-      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDto = await this.scriptService.createMemo(createMemoDto);
       return res
         .status(statusCode.OK)
@@ -240,13 +251,16 @@ export class ScriptController {
     @Param('memoId') memoId: number
   ): Promise<Response> {
     try {
+      const user: User = req.user;
       const scriptId: number = await this.scriptService.getScriptIdByMemoId(memoId);
       const deleteMemoDto: DeleteMemoDto = new DeleteMemoDto;
-      deleteMemoDto.userId = req.user.id;
+
+      deleteMemoDto.userId = user.id;
       deleteMemoDto.scriptId = scriptId;
       deleteMemoDto.memoId = memoId;
       
-      const data: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDto = await this.scriptService.deleteMemo(deleteMemoDto);
       return res
         .status(statusCode.OK)
