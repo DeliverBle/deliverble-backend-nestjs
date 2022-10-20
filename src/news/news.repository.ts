@@ -62,7 +62,7 @@ export class NewsRepository extends Repository<News> {
         return news;
     }
 
-    async updateNews(id: number, updateNewsDto: UpdateNewsDto): Promise<ReturnNewsDto> {
+    async updateNews(id: number, updateNewsDto: UpdateNewsDto): Promise<News> {
         await this.update(
             { id: id },
                 updateNewsDto
@@ -70,8 +70,8 @@ export class NewsRepository extends Repository<News> {
         return await this.getNewsById(id);
     }
 
-    async deleteNews(id: number): Promise<ReturnNewsDto> {
-        const news: ReturnNewsDto = await this.getNewsById(id);
+    async deleteNews(id: number): Promise<News> {
+        const news: News = await this.getNewsById(id);
         await this.delete(
             { id: id }
         )

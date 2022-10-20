@@ -16,7 +16,6 @@ import { NewsService } from './news.service';
 const mockNews: News = new News(
   "test title",
   Category.SOCIETY,
-  "test script",
   Gender.WOMEN,
   Channel.KBS,
   "test link",
@@ -38,7 +37,7 @@ const MockNewsRepository = () => ({
     
 
     const news = new News(
-        title, category, script, announcerGender,
+        title, category, announcerGender,
         channel, link, thumbnail, startTime, endTime,
         suitability, isEmbeddable, reportDate
         );
@@ -48,17 +47,17 @@ const MockNewsRepository = () => ({
 
   async updateNews(id: number, updateNewsDto: UpdateNewsDto): Promise<ReturnNewsDto> {
     const { 
-      title, category, script, announcerGender,
+      title, category, announcerGender,
       channel, link, thumbnail, startTime, endTime,
       suitability, isEmbeddable, reportDate } = updateNewsDto;
   
     const news = new News(
-        title, category, script, announcerGender,
+        title, category, announcerGender,
         channel, link, thumbnail, startTime, endTime,
         suitability, isEmbeddable, reportDate
         );
-
-    return news;
+    const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
+    return returnNewsDto;
   }
 })
 
@@ -109,7 +108,6 @@ describe('NewsService', () => {
       const updateNewsDto: UpdateNewsDto = {
           title: "test2 title",
           category: Category.SOCIETY,
-          script: "test2 script",
           announcerGender: Gender.WOMEN,
           channel: Channel.KBS,
           link: "test2 link",
