@@ -1,4 +1,5 @@
 import { ScriptDefault } from "src/dummy/entity/script-default.entity";
+import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
 import { Time } from "src/modules/Time";
 import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";
@@ -115,4 +116,7 @@ export class News extends BaseEntity {
 
     @OneToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.news)
     scriptDefault: Promise<ScriptDefault>;
+
+    @OneToOne(() => ScriptDefault, (scriptGuide) => scriptGuide.news)
+    scriptGuide: Promise<ScriptGuide>;
 }

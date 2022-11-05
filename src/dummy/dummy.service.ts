@@ -34,7 +34,7 @@ export class DummyService {
 
   async getScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    const scriptDefaultId: number = (await news.scriptDefault).id;
+    const scriptDefaultId: number = (await news.scriptGuide).id;
     const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.findOneOrFail(scriptDefaultId);
     const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
@@ -42,7 +42,7 @@ export class DummyService {
 
   async deleteScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    const scriptDefaultId: number = (await news.scriptDefault).id;
+    const scriptDefaultId: number = (await news.scriptGuide).id;
     const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.deleteScriptDefault(scriptDefaultId);
     const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
