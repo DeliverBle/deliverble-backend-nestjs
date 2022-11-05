@@ -54,7 +54,6 @@ export class DummyService {
   async getScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptDefaultId: number = (await news.scriptGuide).id;
-    logger.debug("scriptDefaultId >>>>>>", scriptDefaultId);
     const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.findOneOrFail(scriptDefaultId);
     const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
@@ -63,7 +62,10 @@ export class DummyService {
   async getScriptGuide(newsId: number): Promise<ReturnScriptGuideDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptGuideId: number = (await news.scriptGuide).id;
-    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.findOneOrFail(scriptGuideId);
+    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.findOne(scriptGuideId);
+    if (!scriptGuide) {
+      throw NotFoundError;
+    }
     const returnScriptGuideDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(scriptGuide);
     return returnScriptGuideDto;
   }
@@ -124,5 +126,11 @@ export class DummyService {
     const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.deleteSentenceDefault(sentenceDefaultId);
     const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
+  }
+
+  async deleteSentenceGuide(sentenceGuideId: number): Promise<ReturnSentenceGuideDto> {
+    const sentenceGuide: SentenceGuide = await this.sentenceGuideRepository.deleteSentenceGuide(sentenceGuideId);
+    const returnSentenceGuideDto: ReturnSentenceGuideDto = new ReturnSentenceGuideDto(sentenceGuide);
+    return returnSentenceGuideDto;
   }
 }

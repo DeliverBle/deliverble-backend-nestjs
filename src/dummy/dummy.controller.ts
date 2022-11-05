@@ -284,4 +284,27 @@ export class DummyController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
+
+  @Delete('guide/sentence/delete/:sentenceGuideId')
+  async deleteSentenceGuide(
+    @Res() res,
+    @Param('sentenceGuideId') sentenceGuideId: number
+  ): Promise<Response> {
+    try {
+      const returnSentenceGuideDto: ReturnSentenceGuideDto = await this.dummyService.deleteSentenceGuide(sentenceGuideId);
+      return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.DELETE_SENTENCE_GUIDE_SUCCESS, returnSentenceGuideDto))
+    } catch (error) {
+      logger.error(error)
+      if (error.name === "NotFoundErrorImpl") {
+        return res
+          .status(statusCode.NOT_FOUND)
+          .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND))
+      }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
 }
