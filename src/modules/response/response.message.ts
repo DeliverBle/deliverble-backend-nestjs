@@ -30,6 +30,7 @@ export const message = {
   DETAIL_NEWS_SUCCESS: '영상 조회 성공',
   ADD_TAG_TO_NEWS_SUCCESS: '뉴스 태그 추가 성공',
   READ_NEWS_DETAIL_SUCCESS: '뉴스 학습 상세 정보 조회 성공',
+  SPEECH_GUIDE_NEWS_SUCCESS: '스피치 가이드 영상 조회 성공',
 
   // 태그
   CREATE_TAG_SUCCESS: '태그 생성 성공',

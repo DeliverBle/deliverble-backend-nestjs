@@ -262,5 +262,25 @@ export class NewsController {
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data))
   }
+
+  @Get('guide')
+  async getSpeechGuideNews(
+    @Req() req,
+    @Res() res
+  ): Promise<Response> {
+    try {
+      const bearerToken: string = req.headers["authorization"];
+      const data : ExploreNewsDtoCollection = await this.newsService.getSpeechGuideNews(bearerToken) 
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.SPEECH_GUIDE_NEWS_SUCCESS, data))
+
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
 }
 
