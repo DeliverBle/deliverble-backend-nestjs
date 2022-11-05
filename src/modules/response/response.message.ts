@@ -66,4 +66,11 @@ export const message = {
   CREATE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 생성 성공',
   UPDATE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 수정 성공',
   DELETE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 삭제 성공',
+
+  CREATE_SCRIPT_GUIDE_SUCCESS: '스피치 가이드 스크립트 생성 성공',
+  READ_SCRIPT_GUIDE_SUCCESS: '스피치 가이드 스크립트 조회 성공',
+  DELETE_SCRIPT_GUIDE_SUCCESS: '스피치 가이드 스크립트 삭제 성공',
+  CREATE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 생성 성공',
+  UPDATE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 수정 성공',
+  DELETE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 삭제 성공',
 }

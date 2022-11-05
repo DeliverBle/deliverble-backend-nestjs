@@ -1,7 +1,7 @@
 import { News } from "src/news/news.entity";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { DUMMY_SCRIPT_TYPE } from "../common/dummy-script-type.enum";
 import { SentenceDefault } from "./sentence-default.entity";
+import { SentenceGuide } from "./sentence-guide.entity";
 
 @Entity()
 export class ScriptDefault extends BaseEntity {
