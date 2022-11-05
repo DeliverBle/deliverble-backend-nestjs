@@ -77,4 +77,5 @@ export const message = {
   DELETE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 삭제 성공',
 
   CREATE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 생성 성공',
+  DELETE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 삭제 성공',
 }

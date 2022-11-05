@@ -21,16 +21,16 @@ export class MemoGuideRepository extends Repository<MemoGuide> {
     return memoGuide;
   }
 
-  // async deleteSentenceGuide(sentenceGuideId: number): Promise<SentenceGuide> {
-  //   const sentenceGuide: SentenceGuide = await this.findOneOrFail(sentenceGuideId);
-  //   if (!sentenceGuide) {
-  //     throw NotFoundError;
-  //   }
-  //   await this.createQueryBuilder()
-  //     .delete()
-  //     .from(SentenceGuide)
-  //     .where("id = :sentenceGuideId", { sentenceGuideId: sentenceGuideId })
-  //     .execute()
-  //   return sentenceGuide;
-  // }
+  async deleteMemoGuide(memoGuideId: number): Promise<MemoGuide> {
+    const memoGuide: MemoGuide = await this.findOneOrFail(memoGuideId);
+    if (!memoGuide) {
+      throw NotFoundError;
+    }
+    await this.createQueryBuilder()
+      .delete()
+      .from(MemoGuide)
+      .where("id = :memoGuideId", { memoGuideId: memoGuideId })
+      .execute()
+    return memoGuide;
+  }
 }

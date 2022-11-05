@@ -148,4 +148,10 @@ export class DummyService {
     const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(memoGuide);
     return returnMemoGuideDto;
   }
+
+  async deleteMemoGuide(memoGuideId: number): Promise<ReturnMemoGuideDto> {
+    const memoGuide: MemoGuide = await this.memoGuideRepository.deleteMemoGuide(memoGuideId);
+    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(memoGuide);
+    return returnMemoGuideDto;
+  }
 }
