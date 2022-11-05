@@ -1,5 +1,6 @@
 import { News } from "src/news/news.entity";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { MemoGuide } from "./memo-guide.entity";
 import { SentenceDefault } from "./sentence-default.entity";
 import { SentenceGuide } from "./sentence-guide.entity";
 
@@ -22,5 +23,10 @@ export class ScriptGuide extends BaseEntity {
     eager: true,
   })
   sentenceGuides: SentenceGuide[];
+
+  @OneToMany(() => MemoGuide, (memoGuide) => memoGuide.scriptGuide, {
+    eager: true,
+  })
+  memoGuides: MemoGuide[];
 
 }

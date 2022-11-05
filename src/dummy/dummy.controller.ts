@@ -3,8 +3,10 @@ import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
 import { DUMMY_SCRIPT_TYPE } from './common/dummy-script-type.enum';
+import { CreateMemoGuideDto } from './dto/create-memo-guide.dto';
 import { CreateSentenceDefaultDto } from './dto/create-sentence-default.dto';
 import { CreateSentenceGuideDto } from './dto/create-sentence-guide.dto';
+import { ReturnMemoGuideDto } from './dto/return-memo-guide.dto';
 import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
@@ -13,8 +15,9 @@ import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
 import { DummyService } from './dummy.service';
 import { ScriptDefault } from './entity/script-default.entity';
+import { ScriptGuide } from './entity/script-guide.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
-import { convertBodyToCreateSentenceDefaultDto, convertBodyToCreateSentenceGuideDto, convertBodyToUpdateSentenceDefaultDto, convertBodyToUpdateSentenceGuideDto } from './utils/convert-body-to-dto';
+import { convertBodyToCreateMemoGuideDto, convertBodyToCreateSentenceDefaultDto, convertBodyToCreateSentenceGuideDto, convertBodyToUpdateSentenceDefaultDto, convertBodyToUpdateSentenceGuideDto } from './utils/convert-body-to-dto';
 
 const logger: Logger = new Logger('dummy controller');
 
@@ -295,6 +298,30 @@ export class DummyController {
       return res
       .status(statusCode.OK)
       .send(util.success(statusCode.OK, message.DELETE_SENTENCE_GUIDE_SUCCESS, returnSentenceGuideDto))
+    } catch (error) {
+      logger.error(error)
+      if (error.name === "NotFoundErrorImpl") {
+        return res
+          .status(statusCode.NOT_FOUND)
+          .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND))
+      }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Post('guide/memo/create')
+  async createMemoGuide(
+    @Req() req,
+    @Res() res
+  ): Promise<Response> {
+    try {
+      const createMemoGuideDto: CreateMemoGuideDto = convertBodyToCreateMemoGuideDto(req.body);
+      const returnMemoGuideDto: ReturnMemoGuideDto = await this.dummyService.createMemoGuide(createMemoGuideDto);
+      return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.CREATE_MEMO_GUIDE_SUCCESS, returnMemoGuideDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "NotFoundErrorImpl") {

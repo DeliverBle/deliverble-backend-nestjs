@@ -1,3 +1,4 @@
+import { CreateMemoGuideDto } from "../dto/create-memo-guide.dto";
 import { CreateSentenceDefaultDto } from "../dto/create-sentence-default.dto"
 import { CreateSentenceGuideDto } from "../dto/create-sentence-guide.dto";
 import { UpdateSentenceDefaultDto } from "../dto/update-sentence-default.dto";
@@ -41,4 +42,13 @@ export const convertBodyToUpdateSentenceGuideDto = (body: any): UpdateSentenceGu
   updateSentenceGuideDto.endTime = body.endTime;
   updateSentenceGuideDto.text = body.text;
   return updateSentenceGuideDto;
+}
+
+export const convertBodyToCreateMemoGuideDto = (body: any): CreateMemoGuideDto => {
+  const createMemoGuideDto: CreateMemoGuideDto = new CreateMemoGuideDto()
+  createMemoGuideDto.newsId = body.newsId;
+  createMemoGuideDto.order = body.order;
+  createMemoGuideDto.startIndex = body.startIndex;
+  createMemoGuideDto.content = body.content;
+  return createMemoGuideDto;
 }

@@ -3,18 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundError } from 'rxjs';
 import { News } from 'src/news/news.entity';
 import { NewsRepository } from 'src/news/news.repository';
+import { CreateMemoGuideDto } from './dto/create-memo-guide.dto';
 import { CreateSentenceDefaultDto } from './dto/create-sentence-default.dto';
 import { CreateSentenceGuideDto } from './dto/create-sentence-guide.dto';
+import { ReturnMemoGuideDto } from './dto/return-memo-guide.dto';
 import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ReturnSentenceGuideDto } from './dto/return-sentence-guide.dto';
 import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
+import { MemoGuide } from './entity/memo-guide.entity';
 import { ScriptDefault } from './entity/script-default.entity';
 import { ScriptGuide } from './entity/script-guide.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
 import { SentenceGuide } from './entity/sentence-guide.entity';
+import { MemoGuideRepository } from './repository/memo-guide.repository';
 import { ScriptDefaultRepository } from './repository/script-default.repository';
 import { ScriptGuideRepository } from './repository/script-guide.repository';
 import { SentenceDefaultRepository } from './repository/sentence-default.repository';
@@ -35,6 +39,8 @@ export class DummyService {
     private scriptGuideRepository: ScriptGuideRepository,
     @InjectRepository(SentenceGuideRepository)
     private sentenceGuideRepository: SentenceGuideRepository,
+    @InjectRepository(MemoGuideRepository)
+    private memoGuideRepository: MemoGuideRepository,
   ) {}
 
   async createScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
@@ -62,10 +68,7 @@ export class DummyService {
   async getScriptGuide(newsId: number): Promise<ReturnScriptGuideDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptGuideId: number = (await news.scriptGuide).id;
-    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.findOne(scriptGuideId);
-    if (!scriptGuide) {
-      throw NotFoundError;
-    }
+    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.findOneOrFail(scriptGuideId);
     const returnScriptGuideDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(scriptGuide);
     return returnScriptGuideDto;
   }
@@ -132,5 +135,17 @@ export class DummyService {
     const sentenceGuide: SentenceGuide = await this.sentenceGuideRepository.deleteSentenceGuide(sentenceGuideId);
     const returnSentenceGuideDto: ReturnSentenceGuideDto = new ReturnSentenceGuideDto(sentenceGuide);
     return returnSentenceGuideDto;
+  }
+
+  async createMemoGuide(createMemoGuideDto: CreateMemoGuideDto): Promise<ReturnMemoGuideDto> {
+    const newsId: number = createMemoGuideDto.newsId;
+    const news: News = await this.newsRepository.getNewsById(newsId);
+    const scriptGuide: ScriptGuide = await news.scriptGuide;
+    if (!scriptGuide) {
+      throw NotFoundError;
+    }
+    const memoGuide: MemoGuide = await this.memoGuideRepository.createMemoGuide(scriptGuide, createMemoGuideDto); 
+    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(memoGuide);
+    return returnMemoGuideDto;
   }
 }

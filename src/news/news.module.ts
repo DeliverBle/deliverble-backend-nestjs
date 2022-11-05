@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { DummyService } from 'src/dummy/dummy.service';
+import { MemoGuideRepository } from 'src/dummy/repository/memo-guide.repository';
 import { ScriptDefaultRepository } from 'src/dummy/repository/script-default.repository';
 import { ScriptGuideRepository } from 'src/dummy/repository/script-guide.repository';
 import { SentenceDefaultRepository } from 'src/dummy/repository/sentence-default.repository';
@@ -20,7 +21,7 @@ import { NewsService } from './news.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, ScriptGuideRepository, SentenceGuideRepository,
+      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, ScriptGuideRepository, SentenceGuideRepository, MemoGuideRepository,
     ]),
     AuthModule,
   ],
