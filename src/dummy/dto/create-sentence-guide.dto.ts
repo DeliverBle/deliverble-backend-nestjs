@@ -1,4 +1,4 @@
-export class CreateSentenceDefaultDto {
+export class CreateSentenceGuideDto {
     newsId: number;
     order: number;
     startTime: number;

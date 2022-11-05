@@ -7,7 +7,7 @@ export class SentenceDefault extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.sentenceGuides, {
+  @ManyToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.sentenceDefaults, {
     onDelete: 'CASCADE',
   })
   scriptDefault: ScriptDefault;

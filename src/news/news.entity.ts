@@ -1,9 +1,7 @@
 import { ScriptDefault } from "src/dummy/entity/script-default.entity";
 import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
-import { Time } from "src/modules/Time";
 import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";
-// import { Favorite } from "src/user/favorite.entity";
 import { User } from "src/user/user.entity";
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./common/category.enum";
@@ -117,6 +115,6 @@ export class News extends BaseEntity {
     @OneToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.news)
     scriptDefault: Promise<ScriptDefault>;
 
-    @OneToOne(() => ScriptDefault, (scriptGuide) => scriptGuide.news)
+    @OneToOne(() => ScriptGuide, (scriptGuide) => scriptGuide.news)
     scriptGuide: Promise<ScriptGuide>;
 }

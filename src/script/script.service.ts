@@ -111,7 +111,7 @@ export class ScriptService {
       const scriptName: string = SCRIPT_DEFAULT_NAME + count;
       const script: Script = await this.createScript(userId, newsId, scriptName);
       // Script Default가 가지고 있는 Sentence들을 list에 담고, for문으로 같은 값을 가지는 Sentence들을 생성한다.
-      const sentenceDefaults: SentenceDefault[] = scriptDefault.sentenceGuides;
+      const sentenceDefaults: SentenceDefault[] = scriptDefault.sentenceDefaults;
       for (var i in sentenceDefaults) {
         const createSentenceDto: CreateSentenceDto = new CreateSentenceDto()
         createSentenceDto.script = script;

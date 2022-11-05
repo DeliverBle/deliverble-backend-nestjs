@@ -217,10 +217,10 @@ export class DummyController {
     @Param('newsId') newsId: number
   ): Promise<Response> {
     try {
-      const returnScriptGuideDto: ReturnScriptDefaultDto = await this.dummyService.deleteScriptDefault(newsId);
+      const returnScriptGuideDto: ReturnScriptGuideDto = await this.dummyService.deleteScriptGuide(newsId);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.DELETE_SCRIPT_DEFAULT_SUCCESS, returnScriptGuideDto))
+        .send(util.success(statusCode.OK, message.DELETE_SCRIPT_GUIDE_SUCCESS, returnScriptGuideDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "TypeError") {
