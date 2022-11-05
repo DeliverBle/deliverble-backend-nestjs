@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Logger, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { ReturnScriptDefaultDto } from 'src/dummy/dto/return-script-default.dto';
+import { ReturnScriptGuideDto } from 'src/dummy/dto/return-script-guide.dto';
 import { DummyService } from 'src/dummy/dummy.service';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
@@ -275,6 +276,26 @@ export class NewsController {
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.SPEECH_GUIDE_NEWS_SUCCESS, data))
 
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Get('guide/detail/:newsId')
+  async newsDetailOfSpeechGuide(
+    @Res() res,
+    @Param('newsId') newsId: number
+  ): Promise<Response> {
+    try {
+      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data2: ReturnScriptGuideDto[] = [await this.dummyService.getScriptGuide(newsId)];
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.SPEECH_GUIDE_NEWS_DETAIL_SUCCESS, data, data2))
+    
       } catch (error) {
       logger.error(error)
       return res
