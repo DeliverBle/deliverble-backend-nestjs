@@ -10,6 +10,7 @@ import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ReturnSentenceGuideDto } from './dto/return-sentence-guide.dto';
 import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
+import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
 import { ScriptDefault } from './entity/script-default.entity';
 import { ScriptGuide } from './entity/script-guide.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
@@ -111,6 +112,12 @@ export class DummyService {
     const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.updateSentenceDefault(updateSentenceDefaultDto);
     const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
+  }
+
+  async updateSentenceGuide(updateSentenceGuideDto: UpdateSentenceGuideDto): Promise<ReturnSentenceGuideDto> {
+    const sentenceGuide: SentenceGuide = await this.sentenceGuideRepository.updateSentenceGuide(updateSentenceGuideDto);
+    const returnSentenceGuideDto: ReturnSentenceGuideDto = new ReturnSentenceGuideDto(sentenceGuide);
+    return returnSentenceGuideDto;
   }
 
   async deleteSentenceDefault(sentenceDefaultId: number): Promise<ReturnSentenceDefaultDto> {

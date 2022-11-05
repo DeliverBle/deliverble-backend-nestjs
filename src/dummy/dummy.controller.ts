@@ -10,10 +10,11 @@ import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ReturnSentenceGuideDto } from './dto/return-sentence-guide.dto';
 import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
+import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
 import { DummyService } from './dummy.service';
 import { ScriptDefault } from './entity/script-default.entity';
 import { SentenceDefault } from './entity/sentence-default.entity';
-import { convertBodyToCreateSentenceDefaultDto, convertBodyToCreateSentenceGuideDto, convertBodyToUpdateSentenceDefaultDto } from './utils/convert-body-to-dto';
+import { convertBodyToCreateSentenceDefaultDto, convertBodyToCreateSentenceGuideDto, convertBodyToUpdateSentenceDefaultDto, convertBodyToUpdateSentenceGuideDto } from './utils/convert-body-to-dto';
 
 const logger: Logger = new Logger('dummy controller');
 
@@ -247,6 +248,30 @@ export class DummyController {
       return res
       .status(statusCode.OK)
       .send(util.success(statusCode.OK, message.CREATE_SENTENCE_GUIDE_SUCCESS, returnSentenceGuideDto))
+    } catch (error) {
+      logger.error(error)
+      if (error.name === "NotFoundErrorImpl") {
+        return res
+          .status(statusCode.NOT_FOUND)
+          .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND))
+      }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Put('guide/sentence/update')
+  async updateSentenceGuide(
+    @Req() req,
+    @Res() res,
+  ): Promise<Response> {
+    try {
+      const updateSentenceGuideDto: UpdateSentenceGuideDto = convertBodyToUpdateSentenceGuideDto(req.body);
+      const returnSentenceGuideDto: ReturnSentenceGuideDto = await this.dummyService.updateSentenceGuide(updateSentenceGuideDto);
+      return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_GUIDE_SUCCESS, returnSentenceGuideDto))
     } catch (error) {
       logger.error(error)
       if (error.name === "NotFoundErrorImpl") {
