@@ -241,7 +241,7 @@ export class NewsService {
   async getSpeechGuideNews(bearerToken: string): Promise<ExploreNewsDtoCollection> {
     // 스피치 가이드 태그에 포함된 뉴스 리스트 가져오기
     const speechGuideTag: Tag = await this.tagRepository.getSpeechGuideTag();
-    let speechGuideNewsList: News[] = await speechGuideTag.forView;
+    let speechGuideNewsList: News[] = await speechGuideTag.forRecommend;
     // 정렬 후 4개 슬라이싱
     speechGuideNewsList = await sortByDateAndTitle(speechGuideNewsList);
     speechGuideNewsList = speechGuideNewsList.slice(0, 4);
