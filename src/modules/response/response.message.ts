@@ -30,6 +30,8 @@ export const message = {
   DETAIL_NEWS_SUCCESS: '영상 조회 성공',
   ADD_TAG_TO_NEWS_SUCCESS: '뉴스 태그 추가 성공',
   READ_NEWS_DETAIL_SUCCESS: '뉴스 학습 상세 정보 조회 성공',
+  SPEECH_GUIDE_NEWS_SUCCESS: '스피치 가이드 영상 조회 성공',
+  SPEECH_GUIDE_NEWS_DETAIL_SUCCESS: '스피치 가이드 상세 정보 조회 성공',
 
   // 태그
   CREATE_TAG_SUCCESS: '태그 생성 성공',
@@ -66,4 +68,14 @@ export const message = {
   CREATE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 생성 성공',
   UPDATE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 수정 성공',
   DELETE_SENTENCE_DEFAULT_SUCCESS: '기본 문장 삭제 성공',
+
+  CREATE_SCRIPT_GUIDE_SUCCESS: '스피치 가이드 스크립트 생성 성공',
+  READ_SCRIPT_GUIDE_SUCCESS: '스피치 가이드 스크립트 조회 성공',
+  DELETE_SCRIPT_GUIDE_SUCCESS: '스피치 가이드 스크립트 삭제 성공',
+  CREATE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 생성 성공',
+  UPDATE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 수정 성공',
+  DELETE_SENTENCE_GUIDE_SUCCESS: '스피치 가이드 문장 삭제 성공',
+
+  CREATE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 생성 성공',
+  DELETE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 삭제 성공',
 }

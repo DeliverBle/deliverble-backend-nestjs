@@ -238,6 +238,24 @@ export class NewsService {
     return exploreNewsDtoCollection;
   }
 
+  async getSpeechGuideNews(bearerToken: string): Promise<ExploreNewsDtoCollection> {
+    // 스피치 가이드 태그에 포함된 뉴스 리스트 가져오기
+    const speechGuideTag: Tag = await this.tagRepository.getSpeechGuideTag();
+    let speechGuideNewsList: News[] = await speechGuideTag.forView;
+    // 정렬 후 4개 슬라이싱
+    speechGuideNewsList = await sortByDateAndTitle(speechGuideNewsList);
+    speechGuideNewsList = speechGuideNewsList.slice(0, 4);
+    // 타입 변경 후 반환
+    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(speechGuideNewsList);
+    // 즐겨찾기 체크 (로그인 된 유저라면)
+    if (bearerToken !== undefined) {
+      const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
+      exploreNewsDtoList = await this.checkExploreNewsDtoListIsFavorite(exploreNewsDtoList, user);
+    }
+    const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
+    return exploreNewsDtoCollection;
+  }
+
   async getNews(newsId: number): Promise<ReturnNewsDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);

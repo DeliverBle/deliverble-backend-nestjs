@@ -50,4 +50,10 @@ export class TagRepository extends Repository<Tag> {
       name: "딜리버블 추천"
     });
   }
+
+  async getSpeechGuideTag(): Promise<Tag> {
+    return this.findOne({
+      name: "스피치 가이드"
+    });
+  }
 }

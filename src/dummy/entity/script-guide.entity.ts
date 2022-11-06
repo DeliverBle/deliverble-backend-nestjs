@@ -1,10 +1,11 @@
 import { News } from "src/news/news.entity";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { MemoGuide } from "./memo-guide.entity";
 import { SentenceDefault } from "./sentence-default.entity";
 import { SentenceGuide } from "./sentence-guide.entity";
 
 @Entity()
-export class ScriptDefault extends BaseEntity {
+export class ScriptGuide extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,9 +19,14 @@ export class ScriptDefault extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @OneToMany(() => SentenceDefault, (sentence) => sentence.scriptDefault, {
+  @OneToMany(() => SentenceGuide, (sentence) => sentence.scriptGuide, {
     eager: true,
   })
-  sentenceDefaults: SentenceDefault[];
+  sentenceGuides: SentenceGuide[];
+
+  @OneToMany(() => MemoGuide, (memoGuide) => memoGuide.scriptGuide, {
+    eager: true,
+  })
+  memoGuides: MemoGuide[];
 
 }
