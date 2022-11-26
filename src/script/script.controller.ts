@@ -10,6 +10,7 @@ import { CreateMemoDto } from './dto/create-memo.dto';
 import { DeleteMemoDto } from './dto/delete-memo.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
+import { UpdateMemoDto } from './dto/update-memo.dto';
 import { Memo } from './entity/memo.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
@@ -228,6 +229,44 @@ export class ScriptController {
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.CREATE_MEMO_SUCCESS, data, data2))
+    } catch (error) {
+      logger.error(error);
+      if (error.name === "UnauthorizedException") {
+        return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      }
+      if (error.name === "BadRequestException") {
+        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER))
+      }
+      if (error.name === "EntityNotFound") {
+        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
+      }
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+  @Patch('memo/update/:memoId')
+  @UseGuards(JwtAuthGuard)
+  async updateMemo(
+    @Req() req,
+    @Res() res,
+    @Param('memoId') memoId: number
+  ): Promise<Response> {
+    try {
+      const user: User = req.user;
+      const scriptId: number = await this.scriptService.getScriptIdByMemoId(memoId);
+      const updateMemoDto: UpdateMemoDto = new UpdateMemoDto;
+
+      updateMemoDto.userId = user.id;
+      updateMemoDto.scriptId = scriptId;
+      updateMemoDto.memoId = memoId;
+      updateMemoDto.content = req.body.content;
+      
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
+      const data2: ReturnScriptDto = await this.scriptService.updateMemo(updateMemoDto);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.UPDATE_MEMO_SUCCESS, data, data2))
     } catch (error) {
       logger.error(error);
       if (error.name === "UnauthorizedException") {

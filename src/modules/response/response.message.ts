@@ -57,6 +57,7 @@ export const message = {
 
   // 메모
   CREATE_MEMO_SUCCESS: '메모 생성 성공',
+  UPDATE_MEMO_SUCCESS: '메모 수정 성공',
   DELETE_MEMO_SUCCESS: '메모 삭제 성공',
   // 메모 에러
   NOT_EXISTING_MEMO: '없는 메모의 id로 요청했습니다.',
