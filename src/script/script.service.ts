@@ -298,11 +298,6 @@ export class ScriptService {
         }
       }
 
-      // add new json type in script
-      script.json = {
-        name: name,
-      };
-
       // upload new recording to script
       const recordingDto = new RecordingDto();
       recordingDto.name = name;
@@ -315,7 +310,7 @@ export class ScriptService {
       // change recordingDto to JSON
       const recordingDtoJson = JSON.stringify(recordingDto);
       console.log("recordingDtoJson >>>>>>>>>>>>> ", recordingDtoJson);
-      script.test = recordingDtoJson;
+      script.test = script.test + " @ " + recordingDtoJson;
 
       // save script
       await script.save();
