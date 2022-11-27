@@ -310,6 +310,9 @@ export class ScriptService {
 
       await this.recordingRepository.createRecording(recordingDto);
 
+      const testScript = await this.getScriptsByScriptId(userId, scriptId);
+      console.log("TEST SCRIPT >>>>>>>> ", testScript);
+
       // // update script
       // const updatedScript = script.addNewRecording(recording);
       // console.log("BEFORE REPO SAVED SCRIPT >>>>>>>>>> ", updatedScript);
