@@ -336,7 +336,7 @@ export class ScriptController {
   @UseInterceptors(FileInterceptor('file'))
   uploadRecording(
     userId: string,
-    scriptId: string,
+    scriptId: number,
     name: string,
     // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
     endtime: number,
