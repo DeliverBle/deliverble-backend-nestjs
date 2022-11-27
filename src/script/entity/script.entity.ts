@@ -16,7 +16,7 @@ export class Script extends BaseEntity {
 
   // create json type
   @Column({ type: 'longblob' })
-  test: string;
+  recordingblob: string;
 
   @ManyToOne(() => User, (user) => user.scripts, {
     eager: true,

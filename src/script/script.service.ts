@@ -310,7 +310,7 @@ export class ScriptService {
       // change recordingDto to JSON
       const recordingDtoJson = JSON.stringify(recordingDto);
       console.log("recordingDtoJson >>>>>>>>>>>>> ", recordingDtoJson);
-      script.test = script.test + " @ " + recordingDtoJson;
+      script.recordingblob = script.recordingblob + " @ " + recordingDtoJson;
 
       // save script
       await script.save();
@@ -337,7 +337,7 @@ export class ScriptService {
       //
       // console.log('responseUserSaved >>> ', responseUserSaved);
 
-      console.log("SCRIPT LONG BLOB >>>>>>>>>>>>> ", script.test);
+      console.log("SCRIPT LONG BLOB >>>>>>>>>>>>> ", script.recordingblob);
 
       return {
         link: response.data['url'],
