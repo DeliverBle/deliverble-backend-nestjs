@@ -64,4 +64,9 @@ export class User extends BaseEntity {
     @OneToMany(() => ScriptCount, (scriptCount) => scriptCount.user)
     scriptCounts: ScriptCount[];
 
+  public updateExistingScript = async (updatedScript: Script) => {
+    const nowScripts = await this.scripts;
+    nowScripts.push(updatedScript);
+    return this;
+  };
 }

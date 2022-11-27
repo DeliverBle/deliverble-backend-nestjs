@@ -306,6 +306,7 @@ export class ScriptService {
       recording.endTime = endtime;
       recording.isDeleted = false;
       recording.date = date;
+
       // insert recording to script
       // if script recordings is null, create new array
       if (script.recordings === undefined) {
@@ -324,6 +325,8 @@ export class ScriptService {
 
       // update script
       const responseSaved = await this.scriptRepository.save(script);
+      await user.updateExistingScript(script);
+      console.log("AFTER USER updateExistingScript ", user, user.scripts)
       const responseUserSaved = await this.userRepository.save(user);
 
       console.log('responseScriptSaved >>> ', responseSaved);
