@@ -440,7 +440,11 @@ export class ScriptService {
     console.log("USER SCRIPTS >>>>>>>>>>>>> ", scripts);
     let script;
     for (let i = 0; i < scripts.length; i++) {
-        if (scripts[i].id == scriptId) {
+      console.log("SCRIPTS[i] >>>>>>>>>>>>> ", scripts[i]);
+      console.log("SCRIPTS[i].id >>>>>>>>>>>>> ", scripts[i].id);
+      console.log("scriptId >>>>>>>>>>>>> ", scriptId);
+      if (scripts[i].id == scriptId) {
+        console.log("MATCHED SCRIPT >>>>>>>>>>>>> ", scripts[i]);
         script = scripts[i];
       }
     }
