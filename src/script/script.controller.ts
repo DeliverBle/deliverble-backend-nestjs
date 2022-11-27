@@ -366,7 +366,7 @@ export class ScriptController {
   changeNameOfRecording(@Body() body, @Req() req) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
-    const scriptId = body.scriptid;
+    const scriptId = body.scriptId;
     const link = body.link;
     const newName = body.newName;
 

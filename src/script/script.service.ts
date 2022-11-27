@@ -387,10 +387,12 @@ export class ScriptService {
     const recordinglobJsonArray = recordinglobArray.map((recordinglob) => {
       return JSON.parse(recordinglob);
     });
+    console.log("RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
     // find recording by link
     const recording = recordinglobJsonArray.find(
       (recording) => recording.link === link,
     );
+    console.log("RECORDING >>>>>>>>>>>>> ", recording);
     // change name
     recording.name = newName;
     // update script
