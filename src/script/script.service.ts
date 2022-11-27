@@ -308,6 +308,11 @@ export class ScriptService {
       recordingDto.date = date;
       recordingDto.script = script;
 
+      // change recordingDto to JSON
+      const recordingDtoJson = JSON.stringify(recordingDto);
+      // add to script json
+      script.test = recordingDtoJson;
+
       await this.recordingRepository.createRecording(recordingDto);
 
       const testScript = await this.getScriptsByScriptId(userId, scriptId);
