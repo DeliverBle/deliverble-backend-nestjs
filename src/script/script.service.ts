@@ -372,24 +372,40 @@ export class ScriptService {
     }
   }
 
-  async changeNameOfRecording(userId: string, scriptId: string, oldName: string, newName: string) {
-    // find user by userId
+  async changeNameOfRecording(
+    userId: number,
+    scriptId: string,
+    link: string,
+    newName: string,
+  ) {
     const user = await this.userRepository.findOneOrFail(userId);
-    // find script by scriptId
-    const scripts = await user.scripts;
-    // find recording by name
-    const script = scripts.find((script) => script.id === Number(scriptId));
-    // change script's name
-    const recording = (await script.recordings).find(
-      (recording) => recording.name === oldName,
+    const script = user.scripts[scriptId];
+    const recordinglob = script.recordingblob;
+    // {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669549924.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550000.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550007.mp3","endTime":"45","isDeleted":false,"date":"2022-09-30 22:30:17"}
+    // split by '@' then make it to json array
+    const recordinglobArray = recordinglob.split(' @ ');
+    const recordinglobJsonArray = recordinglobArray.map((recordinglob) => {
+      return JSON.parse(recordinglob);
+    });
+    // find recording by link
+    const recording = recordinglobJsonArray.find(
+      (recording) => recording.link === link,
     );
+    // change name
     recording.name = newName;
     // update script
+    const updatedRecordinglobJsonArray = recordinglobJsonArray.map(
+      (recordinglob) => {
+        return JSON.stringify(recordinglob);
+      },
+    );
+    const updatedRecordinglob = updatedRecordinglobJsonArray.join(' @ ');
+    script.recordingblob = updatedRecordinglob;
     const responseSaved = await this.scriptRepository.save(script);
     console.log(responseSaved);
 
     return {
-      oldName: oldName,
+      link: link,
       newName: newName,
       userId: userId,
       scriptId: scriptId,

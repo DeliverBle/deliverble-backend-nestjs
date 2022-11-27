@@ -352,7 +352,7 @@ export class ScriptController {
       name,
       endtime,
       date,
-      file
+      file,
     );
   }
 
@@ -362,16 +362,18 @@ export class ScriptController {
   }
 
   @Post('/recording/change-name')
-  changeNameOfRecording(
-    userId: string,
-    scriptId: string,
-    oldName: string,
-    newName: string,
-  ) {
+  @UseGuards(JwtAuthGuard)
+  changeNameOfRecording(@Body() body, @Req() req) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+    const scriptId = body.scriptid;
+    const link = body.link;
+    const newName = body.newName;
+
     return this.scriptService.changeNameOfRecording(
       userId,
       scriptId,
-      oldName,
+      link,
       newName,
     );
   }
