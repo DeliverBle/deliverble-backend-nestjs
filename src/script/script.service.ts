@@ -292,6 +292,7 @@ export class ScriptService {
           script = scripts[i];
         }
       }
+      console.log("SELECTED SCRIPT >>>>> ", script);
 
       if (!script) {
         return {
