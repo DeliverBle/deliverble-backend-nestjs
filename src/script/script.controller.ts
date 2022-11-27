@@ -346,6 +346,8 @@ export class ScriptController {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
 
+    console.log("UPLOAD WELL ! ")
+
     return this.scriptService.uploadRecordingToS3(
       userId,
       scriptId,
