@@ -478,6 +478,10 @@ export class ScriptService {
     // update script
     const updatedRecordinglobJsonArray = recordinglobJsonArray.map(
       (recordinglob) => {
+        // if undefined or null or empty then do nothing
+        if (!recordinglob || recordinglob == '') {
+          return;
+        }
         return JSON.stringify(recordinglob);
       },
     );
