@@ -334,16 +334,12 @@ export class ScriptController {
   // upload recording
   @Post('/recording/upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(
-    @Req() req,
-    @Res() res,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const userId = req.userId;
-    const scriptId = req.scriptid;
-    const name = req.name;
+  uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File) {
+    const userId = body.userId;
+    const scriptId = body.scriptid;
+    const name = body.name;
     // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
-    const endtime = req.endtime;
+    const endtime = body.endtime;
 
     console.log(file);
     console.log("userId: ", userId);
