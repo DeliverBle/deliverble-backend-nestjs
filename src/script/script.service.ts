@@ -27,6 +27,7 @@ import { changeScriptsToReturn } from './utils/change-scripts-to-return';
 import { scriptsCountCheck, SCRIPTS_COUNT_CHECK } from './utils/scripts-count-check';
 import axios from "axios";
 import { Blob } from 'buffer'
+import { Recording } from "./entity/recording.entity";
 
 const logger: Logger = new Logger('script service');
 
@@ -261,11 +262,10 @@ export class ScriptService {
       return scriptId;
     }
 
-    async uploadRecordingToS3(item: Express.Multer.File) {
+    async uploadRecordingToS3(userId: string, scriptId: string, name: string, endtime: number, item: Express.Multer.File) {
       console.log("item", item);
       const formData = new FormData();
       formData.append('file', JSON.stringify(item), 'file_name.mp3');
-
 
       const response = await axios({
         method: 'post',
@@ -276,8 +276,73 @@ export class ScriptService {
         },
       });
 
-      console.log("RESPONSE");
-      console.log(response.data);
+      // find user by userId
+      const user = await this.userRepository.findOneOrFail(userId);
+      const scripts = await user.scripts;
+      const script = scripts.find((script) => script.id === Number(scriptId));
+      // upload new recording to script
+      const recording = new Recording();
+      recording.name = name;
+      recording.link = response.data.link;
+      recording.endTime = endtime;
+      recording.isDeleted = false;
+      // insert recording to script
+      script.recordings.push(recording);
+      // update script
+      const responseSaved = await this.scriptRepository.save(script);
+      console.log(responseSaved);
+
+      return {
+        link: response.data.link,
+        name: name,
+        userId: userId,
+        scriptId: scriptId,
+      }
     }
 
+  async deleteRecording(userId: string, scriptId: string, name: string) {
+    // find user by userId
+    const user = await this.userRepository.findOneOrFail(userId);
+    // find script by scriptId
+    const scripts = await user.scripts;
+    // find recording by name
+    const script = scripts.find((script) => script.id === Number(scriptId));
+    // change script's isdeleted to true
+    const recording = script.recordings.find((recording) => recording.name === name);
+    recording.isDeleted = true;
+    // update script
+    const responseSaved = await this.scriptRepository.save(script);
+    console.log(responseSaved);
+
+    return {
+      name: name,
+      userId: userId,
+      scriptId: scriptId,
+      isDeleted: true,
+    }
+  }
+
+  async changeNameOfRecording(userId: string, scriptId: string, oldName: string, newName: string) {
+    // find user by userId
+    const user = await this.userRepository.findOneOrFail(userId);
+    // find script by scriptId
+    const scripts = await user.scripts;
+    // find recording by name
+    const script = scripts.find((script) => script.id === Number(scriptId));
+    // change script's name
+    const recording = script.recordings.find(
+      (recording) => recording.name === oldName,
+    );
+    recording.name = newName;
+    // update script
+    const responseSaved = await this.scriptRepository.save(script);
+    console.log(responseSaved);
+
+    return {
+      oldName: oldName,
+      newName: newName,
+      userId: userId,
+      scriptId: scriptId,
+    };
+  }
 }

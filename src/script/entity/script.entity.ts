@@ -3,6 +3,7 @@ import { User } from "src/user/user.entity";
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Memo } from "./memo.entity";
 import { Sentence } from "./sentence.entity";
+import { Recording } from "./recording.entity";
 
 @Entity()
 export class Script extends BaseEntity {
@@ -33,4 +34,8 @@ export class Script extends BaseEntity {
   })
   memos: Memo[];
 
+  @OneToMany(() => Memo, (memo) => memo.script, {
+    eager: true,
+  })
+  recordings: Recording[];
 }

@@ -334,8 +334,41 @@ export class ScriptController {
   // upload recording
   @Post('/recording/upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(@UploadedFile() file: Express.Multer.File) {
+  uploadRecording(
+    userId: string,
+    scriptId: string,
+    name: string,
+    // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
+    endtime: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     console.log(file);
-    return this.scriptService.uploadRecordingToS3(file);
+    return this.scriptService.uploadRecordingToS3(
+      userId,
+      scriptId,
+      name,
+      endtime,
+      file,
+    );
+  }
+
+  @Post('/recording/delete')
+  deleteRecording(userId: string, scriptId: string, name: string) {
+    return this.scriptService.deleteRecording(userId, scriptId, name);
+  }
+
+  @Post('/recording/change-name')
+  changeNameOfRecording(
+    userId: string,
+    scriptId: string,
+    oldName: string,
+    newName: string,
+  ) {
+    return this.scriptService.changeNameOfRecording(
+      userId,
+      scriptId,
+      oldName,
+      newName,
+    );
   }
 }
