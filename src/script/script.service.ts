@@ -460,6 +460,7 @@ export class ScriptService {
     // {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669549924.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550000.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550007.mp3","endTime":"45","isDeleted":false,"date":"2022-09-30 22:30:17"}
     // split by '@' then make it to json array
     const recordinglobArray = blobString.split(' @ ');
+    console.log("RECORDINGLOB ARRAY >>>>>>>>>>>>> ", recordinglobArray);
     const recordinglobJsonArray = recordinglobArray.map((recordinglob) => {
       return JSON.parse(recordinglob);
     });
