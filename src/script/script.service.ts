@@ -11,9 +11,10 @@ import { UserRepository } from 'src/user/user.repository';
 import { SCRIPT_DEFAULT_NAME } from './common/script-default-name';
 import { CreateMemoDto } from './dto/create-memo.dto';
 import { CreateSentenceDto } from './dto/create-sentence.dto';
-import { DeleteMemoDto } from './dto/delete-memo.dto';
+import { DeleteMemoDto as UpdataMemoDto } from './dto/delete-memo.dto';
 import { ReturnScriptDto } from './dto/return-script.dto';
 import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
+import { UpdateMemoDto } from './dto/update-memo.dto';
 import { Memo } from './entity/memo.entity';
 import { ScriptCount } from './entity/script-count.entity';
 import { Script } from './entity/script.entity';
@@ -147,7 +148,7 @@ export class ScriptService {
       // user가 script의 주인인지 확인
       const script: Script = await this.checkScriptOwner(userId, scriptId);
       script.name = name;
-      script.save();
+      await script.save();
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
       return returnScriptDto;
     }
@@ -228,13 +229,26 @@ export class ScriptService {
     }
 
     // 메모 삭제
-    async deleteMemo(deleteMemoDto: DeleteMemoDto): Promise<ReturnScriptDto> {
+    async deleteMemo(deleteMemoDto: UpdataMemoDto): Promise<ReturnScriptDto> {
       const userId: number = deleteMemoDto.userId;
       const scriptId: number = deleteMemoDto.scriptId;
       const memoId: number = deleteMemoDto.memoId;
 
       await this.checkScriptOwner(userId, scriptId);
       await this.memoRepository.deleteMemo(memoId);
+      const script: Script = await this.scriptRepository.findOneOrFail(scriptId)
+      const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
+      return returnScriptDto;
+    }
+
+    // 메모 수정
+    async updateMemo(updateMemoDto: UpdateMemoDto): Promise<ReturnScriptDto> {
+      const userId: number = updateMemoDto.userId;
+      const scriptId: number = updateMemoDto.scriptId;
+      const memoId: number = updateMemoDto.memoId;
+
+      await this.checkScriptOwner(userId, scriptId);
+      await this.memoRepository.updateMemo(updateMemoDto);
       const script: Script = await this.scriptRepository.findOneOrFail(scriptId)
       const returnScriptDto: ReturnScriptDto = new ReturnScriptDto(script);
       return returnScriptDto;
