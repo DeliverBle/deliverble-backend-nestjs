@@ -308,27 +308,27 @@ export class ScriptService {
       recordingDto.date = date;
       recordingDto.script = script;
 
-      const recording = await this.recordingRepository.createRecording(recordingDto);
+      await this.recordingRepository.createRecording(recordingDto);
 
       const testScript = await this.getScriptsByScriptId(userId, scriptId);
       console.log("TEST SCRIPT >>>>>>>> ", testScript);
 
       // update script
-      const updatedScript = script.addNewRecording(recording);
-      console.log("BEFORE REPO SAVED SCRIPT >>>>>>>>>> ", updatedScript);
-      const savedScript = await updatedScript.save();
-      console.log("updatedScript >>>>>>>>>>>>>>> ", savedScript);
-
-      const repositorySavedScript = await this.scriptRepository.updateScript(user, updatedScript, scriptId);
-      const receiptSavedUpdatedScript = await this.scriptRepository.save(updatedScript);
-      console.log("REPO SAVED SCRIPT >>>>>>>>>> ", repositorySavedScript);
-      console.log("RECEIPT SAVED SCRIPT >>>>>>>>>> ", receiptSavedUpdatedScript);
-
-      await user.updateExistingScript(updatedScript);
-      console.log("AFTER USER updateExistingScript ", user, user.scripts)
-      const responseUserSaved = await this.userRepository.save(user);
-
-      console.log('responseUserSaved >>> ', responseUserSaved);
+      // const updatedScript = script.addNewRecording(recording);
+      // console.log("BEFORE REPO SAVED SCRIPT >>>>>>>>>> ", updatedScript);
+      // const savedScript = await updatedScript.save();
+      // console.log("updatedScript >>>>>>>>>>>>>>> ", savedScript);
+      //
+      // const repositorySavedScript = await this.scriptRepository.updateScript(user, updatedScript, scriptId);
+      // const receiptSavedUpdatedScript = await this.scriptRepository.save(updatedScript);
+      // console.log("REPO SAVED SCRIPT >>>>>>>>>> ", repositorySavedScript);
+      // console.log("RECEIPT SAVED SCRIPT >>>>>>>>>> ", receiptSavedUpdatedScript);
+      //
+      // await user.updateExistingScript(updatedScript);
+      // console.log("AFTER USER updateExistingScript ", user, user.scripts)
+      // const responseUserSaved = await this.userRepository.save(user);
+      //
+      // console.log('responseUserSaved >>> ', responseUserSaved);
 
       return {
         link: response.data['url'],
