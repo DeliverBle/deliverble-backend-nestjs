@@ -14,6 +14,10 @@ export class Script extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
+  // create json type
+  @Column({ type: 'longblob' })
+  test: string;
+
   @ManyToOne(() => User, (user) => user.scripts, {
     eager: true,
   })

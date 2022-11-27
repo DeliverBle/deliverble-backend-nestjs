@@ -1,35 +1,34 @@
-import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ScriptDefault } from 'src/dummy/entity/script-default.entity';
-import { SentenceDefault } from 'src/dummy/entity/sentence-default.entity';
-import { ScriptDefaultRepository } from 'src/dummy/repository/script-default.repository';
-import { News } from 'src/news/news.entity';
-import { NewsRepository } from 'src/news/news.repository';
-import { User } from 'src/user/user.entity';
-const FormData = require('form-data');
-import { UserRepository } from 'src/user/user.repository';
-import { SCRIPT_DEFAULT_NAME } from './common/script-default-name';
-import { CreateMemoDto } from './dto/create-memo.dto';
-import { CreateSentenceDto } from './dto/create-sentence.dto';
-import { DeleteMemoDto as UpdataMemoDto } from './dto/delete-memo.dto';
-import { ReturnScriptDto } from './dto/return-script.dto';
-import { ReturnScriptDtoCollection } from './dto/return-script.dto.collection';
-import { UpdateMemoDto } from './dto/update-memo.dto';
-import { Memo } from './entity/memo.entity';
-import { ScriptCount } from './entity/script-count.entity';
-import { Script } from './entity/script.entity';
-import { Sentence } from './entity/sentence.entity';
-import { MemoRepository } from './repository/memo.repository';
-import { ScriptCountRepository } from './repository/script-count.repository';
-import { ScriptRepository } from './repository/script.repository';
-import { SentenceRepository } from './repository/sentence.repository';
-import { changeScriptsToReturn } from './utils/change-scripts-to-return';
-import { scriptsCountCheck, SCRIPTS_COUNT_CHECK } from './utils/scripts-count-check';
+import { BadRequestException, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ScriptDefault } from "src/dummy/entity/script-default.entity";
+import { SentenceDefault } from "src/dummy/entity/sentence-default.entity";
+import { ScriptDefaultRepository } from "src/dummy/repository/script-default.repository";
+import { News } from "src/news/news.entity";
+import { NewsRepository } from "src/news/news.repository";
+import { User } from "src/user/user.entity";
+import { UserRepository } from "src/user/user.repository";
+import { SCRIPT_DEFAULT_NAME } from "./common/script-default-name";
+import { CreateMemoDto } from "./dto/create-memo.dto";
+import { CreateSentenceDto } from "./dto/create-sentence.dto";
+import { DeleteMemoDto as UpdataMemoDto } from "./dto/delete-memo.dto";
+import { ReturnScriptDto } from "./dto/return-script.dto";
+import { ReturnScriptDtoCollection } from "./dto/return-script.dto.collection";
+import { UpdateMemoDto } from "./dto/update-memo.dto";
+import { Memo } from "./entity/memo.entity";
+import { ScriptCount } from "./entity/script-count.entity";
+import { Script } from "./entity/script.entity";
+import { Sentence } from "./entity/sentence.entity";
+import { MemoRepository } from "./repository/memo.repository";
+import { ScriptCountRepository } from "./repository/script-count.repository";
+import { ScriptRepository } from "./repository/script.repository";
+import { SentenceRepository } from "./repository/sentence.repository";
+import { changeScriptsToReturn } from "./utils/change-scripts-to-return";
+import { SCRIPTS_COUNT_CHECK, scriptsCountCheck } from "./utils/scripts-count-check";
 import axios from "axios";
-import { Blob } from 'buffer'
-import { Recording } from "./entity/recording.entity";
 import { RecordingDto } from "./dto/recording.dto";
 import { RecordingRepository } from "./repository/recording.repository";
+
+const FormData = require('form-data');
 
 const logger: Logger = new Logger('script service');
 
@@ -298,6 +297,11 @@ export class ScriptService {
           message: "There is no script with this id",
         }
       }
+
+      // add new json type in script
+      script.json = {
+        name: name,
+      };
 
       // upload new recording to script
       const recordingDto = new RecordingDto();
