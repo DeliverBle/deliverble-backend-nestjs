@@ -13,7 +13,7 @@ export class Recording extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   link: string; // 추후 URI 값 객체로 만들기 리팩토링 (e.g. aws s3 링크가 아니면 error throw)
 
-  @ManyToOne(() => Script, (script) => script.memos, {
+  @ManyToOne(() => Script, (script) => script.recordings, {
     onDelete: 'CASCADE',
   })
   script: Script;
