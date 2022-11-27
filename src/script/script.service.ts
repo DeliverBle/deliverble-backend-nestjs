@@ -270,8 +270,6 @@ export class ScriptService {
       const formData = new FormData();
       formData.append('file', JSON.stringify(item), 'file_name.mp3');
 
-      console.log("formData ", formData);
-
       const response = await axios({
         method: 'post',
         url: 'http://localhost:8000/upload',
