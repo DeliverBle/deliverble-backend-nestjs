@@ -310,13 +310,16 @@ export class ScriptService {
 
       // change recordingDto to JSON
       const recordingDtoJson = JSON.stringify(recordingDto);
-      // add to script json
+      console.log("recordingDtoJson >>>>>>>>>>>>> ", recordingDtoJson);
       script.test = recordingDtoJson;
 
-      await this.recordingRepository.createRecording(recordingDto);
+      // save script
+      await script.save();
 
-      const testScript = await this.getScriptsByScriptId(userId, scriptId);
-      console.log("TEST SCRIPT >>>>>>>> ", testScript);
+      // await this.recordingRepository.createRecording(recordingDto);
+
+      // const testScript = await this.getScriptsByScriptId(userId, scriptId);
+      // console.log("TEST SCRIPT >>>>>>>> ", testScript);
 
       // update script
       // const updatedScript = script.addNewRecording(recording);
