@@ -19,8 +19,5 @@ export class Memo extends BaseEntity {
   startIndex: number;
 
   @Column({ type: 'varchar', length: 255 })
-  keyword: string;
-
-  @Column({ type: 'varchar', length: 255 })
   content: string;
 }
