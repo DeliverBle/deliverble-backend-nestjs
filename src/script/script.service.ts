@@ -262,7 +262,7 @@ export class ScriptService {
       return scriptId;
     }
 
-    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, item: Express.Multer.File) {
+    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, date: string, item: Express.Multer.File) {
       console.log("item", item);
       const formData = new FormData();
       formData.append('file', JSON.stringify(item), 'file_name.mp3');
@@ -285,10 +285,16 @@ export class ScriptService {
 
       let script;
       for (let i = 0; i < scripts.length; i++) {
-        console.log("SCRIPTS[i] >>>>>>>>>>>>> ", i);
         if (scripts[i].id == scriptId) {
-          console.log("SCRIPT >>>>>>>>>>>>>>> ", scripts[i]);
           script = scripts[i];
+        }
+      }
+
+      // if there is nothing return with 400 error
+      if (!script) {
+        return {
+          status: 400,
+          message: "There is no script with this id",
         }
       }
 
@@ -298,21 +304,27 @@ export class ScriptService {
       recording.link = response.data['url'];
       recording.endTime = endtime;
       recording.isDeleted = false;
+      recording.date = date;
       // insert recording to script
       // if script recordings is null, create new array
       if (script.recordings == null) {
         script.recordings = [];
       }
       script.recordings.push(recording);
+      console.log("AFTER PUSH RECORDING ", script);
       // update script
       const responseSaved = await this.scriptRepository.save(script);
-      console.log(responseSaved);
+      const responseUserSaved = await this.userRepository.save(user);
+
+      console.log('responseScriptSaved >>> ', responseSaved);
+      console.log('responseUserSaved >>> ', responseUserSaved);
 
       return {
         link: response.data['url'],
         name: name,
         userId: userId,
         scriptId: scriptId,
+        date: date
       }
     }
 

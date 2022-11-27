@@ -19,4 +19,7 @@ export class Recording extends BaseEntity {
   // isdeleted
   @Column({ type: 'boolean' })
   isDeleted: boolean;
+
+  @Column({ type: 'varchar', length: 255 })
+  date: string; // 추후 Date 값 객체로 만들기 리팩토링
 }

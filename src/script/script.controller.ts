@@ -337,27 +337,22 @@ export class ScriptController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File, @Req() req) {
-    // const userId = body.userId;
     const scriptId = body.scriptid;
     const name = body.name;
     // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
     const endtime = body.endtime;
+    const date = body.date;
 
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
-
-    console.log(file);
-    console.log("userId: ", userId);
-    console.log("scriptId: ", scriptId);
-    console.log("name: ", name);
-    console.log("endtime: ", endtime);
 
     return this.scriptService.uploadRecordingToS3(
       userId,
       scriptId,
       name,
       endtime,
-      file,
+      date,
+      file
     );
   }
 
