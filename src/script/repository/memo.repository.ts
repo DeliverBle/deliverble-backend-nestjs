@@ -10,6 +10,7 @@ export class MemoRepository extends Repository<Memo> {
     memo.script = createMemoDto.script;
     memo.order = createMemoDto.order;
     memo.startIndex = createMemoDto.startIndex;
+    memo.keyword = createMemoDto.keyword;
     memo.content = createMemoDto.content;
     
     await memo.save();
