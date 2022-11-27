@@ -323,14 +323,15 @@ export class ScriptService {
       // console.log("AFTER UPDATE SCRIPT BY RECORDING ARR", script.recordings)
 
       // update script
-      const responseSaved = await this.scriptRepository.save(script);
       const updatedScript = script.addNewRecording(recording);
-      console.log("UPDATED SCRIPT >>>>>>>>>> ", updatedScript);
-      await user.updateExistingScript(updatedScript);
+      const receiptSavedUpdatedScript = await this.scriptRepository.save(updatedScript);
+      console.log("UPDATED SCRIPT >>>>>>>>>> ", receiptSavedUpdatedScript);
+      await user.updateExistingScript(receiptSavedUpdatedScript);
+
       console.log("AFTER USER updateExistingScript ", user, user.scripts)
       const responseUserSaved = await this.userRepository.save(user);
 
-      console.log('responseScriptSaved >>> ', responseSaved);
+      console.log('responseScriptSaved >>> ', receiptSavedUpdatedScript);
       console.log('responseUserSaved >>> ', responseUserSaved);
 
       return {
