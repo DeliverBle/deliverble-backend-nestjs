@@ -29,6 +29,7 @@ import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ReturnUserDto } from "../user/dto/return-user.dto";
 
 const logger: Logger = new Logger('script controller');
 
@@ -333,13 +334,17 @@ export class ScriptController {
 
   // upload recording
   @Post('/recording/upload')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File) {
-    const userId = body.userId;
+  uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File, @Req() req) {
+    // const userId = body.userId;
     const scriptId = body.scriptid;
     const name = body.name;
     // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
     const endtime = body.endtime;
+
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
 
     console.log(file);
     console.log("userId: ", userId);

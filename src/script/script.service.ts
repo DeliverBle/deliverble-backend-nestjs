@@ -262,7 +262,7 @@ export class ScriptService {
       return scriptId;
     }
 
-    async uploadRecordingToS3(userId: string, scriptId: number, name: string, endtime: number, item: Express.Multer.File) {
+    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, item: Express.Multer.File) {
       console.log("item", item);
       const formData = new FormData();
       formData.append('file', JSON.stringify(item), 'file_name.mp3');
