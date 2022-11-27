@@ -34,7 +34,7 @@ export class Script extends BaseEntity {
   })
   memos: Memo[];
 
-  @OneToMany(() => Memo, (memo) => memo.script, {
+  @OneToMany(() => Recording, (recording) => recording.script, {
     eager: true,
   })
   recordings: Recording[];
