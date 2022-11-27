@@ -462,6 +462,9 @@ export class ScriptService {
     const recordinglobArray = blobString.split(' @ ');
     console.log("RECORDINGLOB ARRAY >>>>>>>>>>>>> ", recordinglobArray);
     const recordinglobJsonArray = recordinglobArray.map((recordinglob) => {
+      if (recordinglob == '') {
+        return;
+      }
       return JSON.parse(recordinglob);
     });
     console.log("RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
