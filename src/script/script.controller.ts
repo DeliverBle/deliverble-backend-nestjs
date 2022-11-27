@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Patch,
+  Post,
+  Req,
+  Res, UploadedFile,
+  UseGuards,
+  UseInterceptors
+} from "@nestjs/common";
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
@@ -14,6 +27,7 @@ import { Memo } from './entity/memo.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
+import { FileInterceptor } from "@nestjs/platform-express";
 
 const logger: Logger = new Logger('script controller');
 
@@ -278,4 +292,11 @@ export class ScriptController {
     }
   }
 
+  // upload recording
+  @Post('/recording/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadRecording(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+    return this.scriptService.uploadRecordingToS3(file);
+  }
 }

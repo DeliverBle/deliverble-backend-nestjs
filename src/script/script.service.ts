@@ -6,6 +6,7 @@ import { ScriptDefaultRepository } from 'src/dummy/repository/script-default.rep
 import { News } from 'src/news/news.entity';
 import { NewsRepository } from 'src/news/news.repository';
 import { User } from 'src/user/user.entity';
+const FormData = require('form-data');
 import { UserRepository } from 'src/user/user.repository';
 import { SCRIPT_DEFAULT_NAME } from './common/script-default-name';
 import { CreateMemoDto } from './dto/create-memo.dto';
@@ -23,6 +24,8 @@ import { ScriptRepository } from './repository/script.repository';
 import { SentenceRepository } from './repository/sentence.repository';
 import { changeScriptsToReturn } from './utils/change-scripts-to-return';
 import { scriptsCountCheck, SCRIPTS_COUNT_CHECK } from './utils/scripts-count-check';
+import axios from "axios";
+import { Blob } from 'buffer'
 
 const logger: Logger = new Logger('script service');
 
@@ -242,6 +245,25 @@ export class ScriptService {
       const memo: Memo = await this.memoRepository.getMemoJoinScript(memoId);
       const scriptId: number = memo.script.id
       return scriptId;
+    }
+
+    async uploadRecordingToS3(item: Express.Multer.File) {
+      console.log("item", item);
+      const formData = new FormData();
+      formData.append('file', JSON.stringify(item), 'file_name.mp3');
+
+
+      const response = await axios({
+        method: 'post',
+        url: 'http://localhost:8000/upload',
+        data: formData,
+        headers: {
+          'Content-Type': `multipart/form-data;`,
+        },
+      });
+
+      console.log("RESPONSE");
+      console.log(response.data);
     }
 
 }
