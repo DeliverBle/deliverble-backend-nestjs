@@ -342,6 +342,8 @@ export class ScriptService {
       //
       // console.log('responseUserSaved >>> ', responseUserSaved);
 
+      console.log("SCRIPT >>>>>>>>>>>>> ", script.test);
+
       return {
         link: response.data['url'],
         name: name,
