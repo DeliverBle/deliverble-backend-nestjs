@@ -5,5 +5,6 @@ export class CreateMemoDto {
   script: Script;
   order: number;
   startIndex: number;
+  keyword: string;
   content: string;
 }
