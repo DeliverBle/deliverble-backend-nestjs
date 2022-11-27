@@ -46,6 +46,9 @@ export class Script extends BaseEntity {
       nowRecordings = [];
     }
     nowRecordings.push(newRecording);
+    console.log('newRecordings after push , newRecording');
     this.recordings = Promise.resolve(nowRecordings);
+
+    return this.recordings;
   };
 }
