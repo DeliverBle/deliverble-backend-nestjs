@@ -367,6 +367,7 @@ export class ScriptController {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = body.scriptid;
+    console.log("scriptId Off Recording", body.scriptid);
     const link = body.link;
     const newName = body.newName;
 

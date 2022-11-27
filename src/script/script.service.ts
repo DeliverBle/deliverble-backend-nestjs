@@ -379,6 +379,7 @@ export class ScriptService {
     newName: string,
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
+    console.log("scriptId On Recording >>>>>>>>>>>>> ", scriptId);
     // USER SCRIPTS >>>>>>>>>>>>>  [
     //   Script {
     //     addNewRecording: [Function (anonymous)],
