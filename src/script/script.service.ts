@@ -293,6 +293,8 @@ export class ScriptService {
       // upload new recording to script
       const recording = new Recording();
       recording.name = name;
+      console.log('response ', response);
+      console.log('response data link ', response.data);
       recording.link = response.data.link;
       recording.endTime = endtime;
       recording.isDeleted = false;
