@@ -300,6 +300,7 @@ export class ScriptService {
 
       // upload new recording to script
       const recording = new Recording();
+      let recordingArr;
       recording.name = name;
       recording.link = response.data['url'];
       recording.endTime = endtime;
@@ -307,11 +308,20 @@ export class ScriptService {
       recording.date = date;
       // insert recording to script
       // if script recordings is null, create new array
-      if (script.recordings == null) {
-        script.recordings = [];
+      if (script.recordings === undefined) {
+        recordingArr = [];
+      } else {
+        recordingArr = script.recordings;
       }
-      script.recordings.push(recording);
-      console.log("AFTER PUSH RECORDING ", script);
+      recordingArr.push(recording);
+      console.log("AFTER PUSH RECORDING SCRIPT ", script);
+      console.log("AFTER PUSH RECORDING ARR", recordingArr);
+
+      // update script's recording
+      script.recordings = recordingArr;
+      console.log("AFTER UPDATE SCRIPT RECORDING BY RECORDING ARR", script.recordings)
+      console.log("AFTER UPDATE SCRIPT BY RECORDING ARR", script.recordings)
+
       // update script
       const responseSaved = await this.scriptRepository.save(script);
       const responseUserSaved = await this.userRepository.save(user);
