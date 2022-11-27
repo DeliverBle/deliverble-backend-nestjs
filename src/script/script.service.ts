@@ -350,7 +350,9 @@ export class ScriptService {
     // find recording by name
     const script = scripts.find((script) => script.id === Number(scriptId));
     // change script's isdeleted to true
-    const recording = script.recordings.find((recording) => recording.name === name);
+    const recording = (await script.recordings).find(
+      (recording) => recording.name === name,
+    );
     recording.isDeleted = true;
     // update script
     const responseSaved = await this.scriptRepository.save(script);
@@ -372,7 +374,7 @@ export class ScriptService {
     // find recording by name
     const script = scripts.find((script) => script.id === Number(scriptId));
     // change script's name
-    const recording = script.recordings.find(
+    const recording = (await script.recordings).find(
       (recording) => recording.name === oldName,
     );
     recording.name = newName;
