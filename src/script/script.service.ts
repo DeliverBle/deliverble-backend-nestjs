@@ -300,7 +300,6 @@ export class ScriptService {
 
       // upload new recording to script
       const recording = new Recording();
-      let recordingArr;
       recording.name = name;
       recording.link = response.data['url'];
       recording.endTime = endtime;
@@ -326,6 +325,7 @@ export class ScriptService {
       // update script
       const responseSaved = await this.scriptRepository.save(script);
       const updatedScript = script.addNewRecording(recording);
+      console.log("UPDATED SCRIPT >>>>>>>>>> ", updatedScript);
       await user.updateExistingScript(updatedScript);
       console.log("AFTER USER updateExistingScript ", user, user.scripts)
       const responseUserSaved = await this.userRepository.save(user);
