@@ -310,7 +310,7 @@ export class ScriptService {
       recordingDto.endTime = endtime;
       recordingDto.isDeleted = false;
       recordingDto.date = date;
-      recordingDto.script = script;
+      // recordingDto.script = script;
 
       // change recordingDto to JSON
       const recordingDtoJson = JSON.stringify(recordingDto);
@@ -342,7 +342,7 @@ export class ScriptService {
       //
       // console.log('responseUserSaved >>> ', responseUserSaved);
 
-      console.log("SCRIPT >>>>>>>>>>>>> ", script.test);
+      console.log("SCRIPT LONG BLOB >>>>>>>>>>>>> ", script.test);
 
       return {
         link: response.data['url'],
