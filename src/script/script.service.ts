@@ -285,18 +285,11 @@ export class ScriptService {
 
       let script;
       for (let i = 0; i < scripts.length; i++) {
-        console.log("i : ", i);
-        console.log("scripts[i].id : ", scripts[i].id);
-        console.log("scriptId : ", scriptId);
         if (scripts[i].id == scriptId) {
-          console.log(" I ", scripts[i])
           script = scripts[i];
-          console.log("SELECTED", script);
         }
-        console.log("NON SELECTED, script")
       }
 
-      console.log("SCRIPT >>>>>>>>>>>>>> ", script);
       // upload new recording to script
       const recording = new Recording();
       recording.name = name;
@@ -304,6 +297,10 @@ export class ScriptService {
       recording.endTime = endtime;
       recording.isDeleted = false;
       // insert recording to script
+      // if script recordings is null, create new array
+      if (script.recordings == null) {
+        script.recordings = [];
+      }
       script.recordings.push(recording);
       // update script
       const responseSaved = await this.scriptRepository.save(script);
