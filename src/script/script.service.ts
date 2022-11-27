@@ -28,6 +28,8 @@ import { scriptsCountCheck, SCRIPTS_COUNT_CHECK } from './utils/scripts-count-ch
 import axios from "axios";
 import { Blob } from 'buffer'
 import { Recording } from "./entity/recording.entity";
+import { RecordingDto } from "./dto/recording.dto";
+import { RecordingRepository } from "./repository/recording.repository";
 
 const logger: Logger = new Logger('script service');
 
@@ -48,6 +50,8 @@ export class ScriptService {
     private scriptDefaultRepository: ScriptDefaultRepository,
     @InjectRepository(ScriptCountRepository)
     private scriptCountRepository: ScriptCountRepository,
+    @InjectRepository(RecordingRepository)
+    private recordingRepository: RecordingRepository
   ) {}
     
     async createScript(userId: number, newsId: number, scriptName: string): Promise<Script> {
@@ -276,12 +280,10 @@ export class ScriptService {
         },
       });
 
-      // find user by userId
       const user = await this.userRepository.findOneOrFail(userId);
       console.log("USER >>>>>>>>>>>>>>>>> ", user);
       const scripts = await user.scripts;
       console.log("SCRIPTS >>>>>>>>>>>>> ", scripts);
-      // for loop the find matched script id
 
       let script;
       for (let i = 0; i < scripts.length; i++) {
@@ -290,7 +292,6 @@ export class ScriptService {
         }
       }
 
-      // if there is nothing return with 400 error
       if (!script) {
         return {
           status: 400,
@@ -299,45 +300,32 @@ export class ScriptService {
       }
 
       // upload new recording to script
-      const recording = new Recording();
-      recording.name = name;
-      recording.link = response.data['url'];
-      recording.endTime = endtime;
-      recording.isDeleted = false;
-      recording.date = date;
+      const recordingDto = new RecordingDto();
+      recordingDto.name = name;
+      recordingDto.link = response.data['url'];
+      recordingDto.endTime = endtime;
+      recordingDto.isDeleted = false;
+      recordingDto.date = date;
+      recordingDto.script = script;
 
-      // insert recording to script
-      // if script recordings is null, create new array
-      // if (script.recordings === undefined) {
-      //   recordingArr = [];
-      // } else {
-      //   recordingArr = script.recordings;
-      // }
-      // recordingArr.push(recording);
-      // console.log("AFTER PUSH RECORDING SCRIPT ", script);
-      // console.log("AFTER PUSH RECORDING ARR", recordingArr);
+      await this.recordingRepository.createRecording(recordingDto);
 
-      // // update script's recording
-      // script.recordings = recordingArr;
-      // console.log("AFTER UPDATE SCRIPT RECORDING BY RECORDING ARR", script.recordings)
-      // console.log("AFTER UPDATE SCRIPT BY RECORDING ARR", script.recordings)
-
-      // update script
-      const updatedScript = script.addNewRecording(recording);
-      console.log("BEFORE REPO SAVED SCRIPT >>>>>>>>>> ", updatedScript);
-      const savedScript = await updatedScript.save();
-      console.log("updatedScript >>>>>>>>>>>>>>> ", savedScript);
+      // // update script
+      // const updatedScript = script.addNewRecording(recording);
+      // console.log("BEFORE REPO SAVED SCRIPT >>>>>>>>>> ", updatedScript);
+      // const savedScript = await updatedScript.save();
+      // console.log("updatedScript >>>>>>>>>>>>>>> ", savedScript);
 
       // const repositorySavedScript = await this.scriptRepository.updateScript(user, updatedScript, scriptId);
       // const receiptSavedUpdatedScript = await this.scriptRepository.save(updatedScript);
       // console.log("REPO SAVED SCRIPT >>>>>>>>>> ", repositorySavedScript);
 
-      await user.updateExistingScript(updatedScript);
-      console.log("AFTER USER updateExistingScript ", user, user.scripts)
-      const responseUserSaved = await this.userRepository.save(user);
-
-      // console.log('responseScriptSaved >>> ', receiptSavedUpdatedScript);
-      console.log('responseUserSaved >>> ', responseUserSaved);
+      // await user.updateExistingScript(updatedScript);
+      // console.log("AFTER USER updateExistingScript ", user, user.scripts)
+      // const responseUserSaved = await this.userRepository.save(user);
+      //
+      // // console.log('responseScriptSaved >>> ', receiptSavedUpdatedScript);
+      // console.log('responseUserSaved >>> ', responseUserSaved);
 
       return {
         link: response.data['url'],
