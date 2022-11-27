@@ -37,18 +37,26 @@ export class Script extends BaseEntity {
   @OneToMany(() => Memo, (memo) => memo.script, {
     eager: true,
   })
-  recordings: Promise<Recording[]>;
+  recordings: Recording[];
 
-  public addNewRecording = async (newRecording: Recording) => {
-    let nowRecordings = await this.recordings;
-    console.log('now Recordings this recordings : ', nowRecordings);
-    if (nowRecordings === undefined) {
-      nowRecordings = [];
+  public addNewRecording = (recording: Recording) => {
+    if (this.recordings == undefined) {
+      this.recordings = [];
     }
-    nowRecordings.push(newRecording);
-    console.log('newRecordings after push , newRecording');
-    this.recordings = Promise.resolve(nowRecordings);
+    this.recordings.push(recording);
+    return this;
+  }
 
-    return this.recordings;
-  };
+  // public addNewRecording = async (newRecording: Recording) => {
+  //   let nowRecordings = await this.recordings;
+  //   console.log('now Recordings this recordings : ', nowRecordings);
+  //   if (nowRecordings === undefined) {
+  //     nowRecordings = [];
+  //   }
+  //   nowRecordings.push(newRecording);
+  //   console.log('newRecordings after push , newRecording');
+  //   this.recordings = Promise.resolve(nowRecordings);
+  //
+  //   return this.recordings;
+  // };
 }

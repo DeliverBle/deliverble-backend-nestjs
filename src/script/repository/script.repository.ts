@@ -2,6 +2,7 @@ import { News } from "src/news/news.entity";
 import { User } from "src/user/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { Script } from "../entity/script.entity";
+import { Recording } from "../entity/recording.entity";
 
 @EntityRepository(Script)
 export class ScriptRepository extends Repository<Script> {
@@ -13,6 +14,16 @@ export class ScriptRepository extends Repository<Script> {
     script.news = news;
     script.memos = [];
 
+    await this.save(script);
+    return script;
+  }
+
+  async updateScript(
+    recordings: Recording[],
+    scriptId: number,
+  ): Promise<Script> {
+    const script: Script = await this.findOneOrFail(scriptId);
+    script.recordings = recordings;
     await this.save(script);
     return script;
   }
