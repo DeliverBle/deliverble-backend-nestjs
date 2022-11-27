@@ -38,4 +38,13 @@ export class Script extends BaseEntity {
     eager: true,
   })
   recordings: Recording[];
+
+  public addNewRecording = async (newRecording: Recording) => {
+    const nowRecordings = await this.recordings;
+    if (this.recordings === undefined) {
+      this.recordings = [];
+    }
+    this.recordings = [...nowRecordings, newRecording];
+    return this;
+  };
 }
