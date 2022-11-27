@@ -379,8 +379,67 @@ export class ScriptService {
     newName: string,
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
-    console.log("USER SCRIPTS >>>>>>>>>>>>> ", await user.scripts);
-    const script = user.scripts[scriptId];
+    // USER SCRIPTS >>>>>>>>>>>>>  [
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 40,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 41,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer 7b 22 6e 61 6d 65 22 3a 22 68 65 6c 6c 6f 22 2c 22 6c 69 6e 6b 22 3a 22 68 74 74 70 73 3a 2f 2f 64 65 6c 69 76 65 72 61 62 6c 65 2d 72 65 63 6f 72 64 ... 448 more bytes>
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 43,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 57,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 58,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 63,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 64,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 65,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   },
+    //   Script {
+    //     addNewRecording: [Function (anonymous)],
+    //     id: 80,
+    //     name: '스크립트 1',
+    //     recordingblob: <Buffer >
+    //   }
+    // ]
+    // find script by id
+    const scripts = await user.scripts;
+    console.log("USER SCRIPTS >>>>>>>>>>>>> ", scripts);
+    const script = scripts.find((script) => script.id === Number(scriptId));
+    console.log("SELECTED SCRIPT >>>>>>>>>>>>> ", script);
     const recordinglob = script.recordingblob;
     // {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669549924.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550000.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550007.mp3","endTime":"45","isDeleted":false,"date":"2022-09-30 22:30:17"}
     // split by '@' then make it to json array
