@@ -367,9 +367,12 @@ export class ScriptController {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = body.scriptid;
+    console.log("body in general >>> ", body);
     console.log("scriptId Off Recording", body.scriptid);
     const link = body.link;
     const newName = body.newName;
+    console.log("link >>> ", link);
+    console.log("newName >>> ", newName);
 
     return this.scriptService.changeNameOfRecording(
       userId,
