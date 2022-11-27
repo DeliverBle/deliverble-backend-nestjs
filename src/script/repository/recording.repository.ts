@@ -17,6 +17,15 @@ export class RecordingRepository extends Repository<Recording> {
     recording.script = recordingDto.script;
 
     await recording.save();
+
+    console.log(">>>>>>> LINK >>>>>>>>>>>>> ", await this.getRecordingByLink(recording.link));
     return recording;
+  }
+
+  // find by recording using link
+  async getRecordingByLink(link: string): Promise<Recording> {
+    return await this.createQueryBuilder('recording')
+      .where('recording.link = :link', { link: link })
+      .getOneOrFail();
   }
 }
