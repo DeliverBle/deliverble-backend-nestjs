@@ -285,9 +285,15 @@ export class ScriptService {
 
       let script;
       for (let i = 0; i < scripts.length; i++) {
-        if (scripts[i].id === scriptId) {
+        console.log("i : ", i);
+        console.log("scripts[i].id : ", scripts[i].id);
+        console.log("scriptId : ", scriptId);
+        if (scripts[i].id == scriptId) {
+          console.log(" I ", scripts[i])
           script = scripts[i];
+          console.log("SELECTED", script);
         }
+        console.log("NON SELECTED, script")
       }
 
       console.log("SCRIPT >>>>>>>>>>>>>> ", script);
