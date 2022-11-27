@@ -51,7 +51,7 @@ export class ScriptService {
     @InjectRepository(ScriptCountRepository)
     private scriptCountRepository: ScriptCountRepository,
     @InjectRepository(RecordingRepository)
-    private recordingRepository: RecordingRepository
+    private recordingRepository: RecordingRepository,
   ) {}
     
     async createScript(userId: number, newsId: number, scriptName: string): Promise<Script> {
