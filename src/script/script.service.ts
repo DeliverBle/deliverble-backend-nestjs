@@ -285,7 +285,9 @@ export class ScriptService {
 
       let script;
       for (let i = 0; i < scripts.length; i++) {
+        console.log("SCRIPTS[i] >>>>>>>>>>>>> ", i);
         if (scripts[i].id == scriptId) {
+          console.log("SCRIPT >>>>>>>>>>>>>>> ", scripts[i]);
           script = scripts[i];
         }
       }
