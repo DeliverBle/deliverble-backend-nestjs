@@ -470,7 +470,12 @@ export class ScriptService {
     console.log("RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
     // find recording by link
     const recording = recordinglobJsonArray.find(
-      (recording) => recording.link === link,
+      (recording) => {
+        if (recording == undefined || recording == '') {
+          return false;
+        }
+        return recording.link === link;
+      },
     );
     console.log("RECORDING >>>>>>>>>>>>> ", recording);
     // change name
