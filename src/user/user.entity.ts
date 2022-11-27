@@ -67,13 +67,14 @@ export class User extends BaseEntity {
   public updateExistingScript = async (updatedScript: Script) => {
     const nowScripts = await this.scripts;
     console.log('updateExistingScript ::: nowScripts ', nowScripts);
-    const newScripts = nowScripts.map((script) => {
-      if (script.id === updatedScript.id) {
-        return updatedScript;
-      }
-      return script;
-    });
-    this.scripts = Promise.resolve(newScripts);
+    // const newScripts = nowScripts.map((script) => {
+    //   if (script.id === updatedScript.id) {
+    //     return updatedScript;
+    //   }
+    //   return script;
+    // });
+    nowScripts.push(updatedScript);
+    this.scripts = Promise.resolve(nowScripts);
     return this;
   };
 }
