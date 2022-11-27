@@ -19,12 +19,17 @@ export class ScriptRepository extends Repository<Script> {
   }
 
   async updateScript(
+    user: User,
     recordings: Recording[],
     scriptId: number,
   ): Promise<Script> {
     const script: Script = await this.findOneOrFail(scriptId);
     script.recordings = recordings;
+    console.log("updateScript >>>>>>>>>>>>>>>>> ", script.user, user);
+    script.user = user;
+    console.log("after updatescript User >>>>>>> ", script.user, user);
     await this.save(script);
+    console.log("this.save script after ", this)
     return script;
   }
 
