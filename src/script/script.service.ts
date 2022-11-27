@@ -379,6 +379,7 @@ export class ScriptService {
     newName: string,
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
+    console.log("USER SCRIPTS >>>>>>>>>>>>> ", user.scripts);
     const script = user.scripts[scriptId];
     const recordinglob = script.recordingblob;
     // {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669549924.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550000.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550007.mp3","endTime":"45","isDeleted":false,"date":"2022-09-30 22:30:17"}
