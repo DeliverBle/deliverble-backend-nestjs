@@ -1,5 +1,4 @@
 import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
-import { Time } from "src/modules/Time";
 import { Tag } from "src/tag/tag.entity";
 import { Category } from "../common/category.enum";
 import { Channel } from "../common/channel.enum";
@@ -45,10 +44,8 @@ export class ReturnNewsDto {
     const scriptGuide: ScriptGuide = await news.scriptGuide;
     if (!scriptGuide) {
       this.haveGuide = false
-      console.log("haveGuide is false");
       return;
     }
-    console.log("haveGuide is true");
     this.haveGuide = true;
   }
 }
