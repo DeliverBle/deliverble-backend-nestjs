@@ -258,6 +258,7 @@ export class NewsService {
 
   async getNews(newsId: number): Promise<ReturnNewsDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
+    // console.log(await news.scriptGuide);
     const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
     return returnNewsDto;
   }
