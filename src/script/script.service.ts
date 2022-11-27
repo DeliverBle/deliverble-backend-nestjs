@@ -278,8 +278,11 @@ export class ScriptService {
 
       // find user by userId
       const user = await this.userRepository.findOneOrFail(userId);
+      console.log("USER >>>>>>>>>>>>>>>>> ", user);
       const scripts = await user.scripts;
+      console.log("SCRIPTS >>>>>>>>>>>>> ", scripts);
       const script = scripts.find((script) => script.id === Number(scriptId));
+      console.log("SCRIPT >>>>>>>>>>>>>> ", script);
       // upload new recording to script
       const recording = new Recording();
       recording.name = name;
