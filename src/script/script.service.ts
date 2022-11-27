@@ -281,7 +281,15 @@ export class ScriptService {
       console.log("USER >>>>>>>>>>>>>>>>> ", user);
       const scripts = await user.scripts;
       console.log("SCRIPTS >>>>>>>>>>>>> ", scripts);
-      const script = scripts.find((script) => script.id === Number(scriptId));
+      // for loop the find matched script id
+
+      let script;
+      for (let i = 0; i < scripts.length; i++) {
+        if (scripts[i].id === scriptId) {
+          script = scripts[i];
+        }
+      }
+
       console.log("SCRIPT >>>>>>>>>>>>>> ", script);
       // upload new recording to script
       const recording = new Recording();
