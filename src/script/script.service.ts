@@ -545,10 +545,6 @@ export class ScriptService {
         }
         return JSON.parse(recordinglob);
       });
-      // if recordinglobJsonArray is null or undefined, pass
-      if (!recordinglobJsonArray) {
-        return;
-      }
       // remove null in recordinglobJsonArray
       // [
       //         null,
@@ -565,6 +561,10 @@ export class ScriptService {
           return recordinglob != null;
         },
       );
+      // if filteredRecordinglobJsonArray is zero, do nothing
+      if (filteredRecordinglobJsonArray.length === 0) {
+        return;
+      }
       recordingAllScriptsArray.push(filteredRecordinglobJsonArray);
       console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", filteredRecordinglobJsonArray);
     });
