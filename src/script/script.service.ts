@@ -318,30 +318,6 @@ export class ScriptService {
       // save script
       await script.save();
 
-      // await this.recordingRepository.createRecording(recordingDto);
-
-      // const testScript = await this.getScriptsByScriptId(userId, scriptId);
-      // console.log("TEST SCRIPT >>>>>>>> ", testScript);
-
-      // update script
-      // const updatedScript = script.addNewRecording(recording);
-      // console.log("BEFORE REPO SAVED SCRIPT >>>>>>>>>> ", updatedScript);
-      // const savedScript = await updatedScript.save();
-      // console.log("updatedScript >>>>>>>>>>>>>>> ", savedScript);
-      //
-      // const repositorySavedScript = await this.scriptRepository.updateScript(user, updatedScript, scriptId);
-      // const receiptSavedUpdatedScript = await this.scriptRepository.save(updatedScript);
-      // console.log("REPO SAVED SCRIPT >>>>>>>>>> ", repositorySavedScript);
-      // console.log("RECEIPT SAVED SCRIPT >>>>>>>>>> ", receiptSavedUpdatedScript);
-      //
-      // await user.updateExistingScript(updatedScript);
-      // console.log("AFTER USER updateExistingScript ", user, user.scripts)
-      // const responseUserSaved = await this.userRepository.save(user);
-      //
-      // console.log('responseUserSaved >>> ', responseUserSaved);
-
-      console.log("SCRIPT LONG BLOB >>>>>>>>>>>>> ", script.recordingblob);
-
       return {
         link: response.data['url'],
         name: name,
@@ -351,28 +327,89 @@ export class ScriptService {
       }
     }
 
-  async deleteRecording(userId: string, scriptId: string, name: string) {
-    // find user by userId
+  async deleteRecording(userId: number, scriptId: number, link: string) {
     const user = await this.userRepository.findOneOrFail(userId);
-    // find script by scriptId
+    console.log("delete :: scriptId On Recording >>>>>>>>>>>>> ", scriptId);
+
+    // find script by id
     const scripts = await user.scripts;
-    // find recording by name
-    const script = scripts.find((script) => script.id === Number(scriptId));
-    // change script's isdeleted to true
-    const recording = (await script.recordings).find(
-      (recording) => recording.name === name,
+    console.log("delete :: USER SCRIPTS >>>>>>>>>>>>> ", scripts);
+
+    let script;
+    for (let i = 0; i < scripts.length; i++) {
+      console.log("delete :: SCRIPTS[i] >>>>>>>>>>>>> ", scripts[i]);
+      console.log("delete :: SCRIPTS[i].id >>>>>>>>>>>>> ", scripts[i].id);
+      console.log("delete :: scriptId >>>>>>>>>>>>> ", scriptId);
+
+      if (scripts[i].id == scriptId) {
+        console.log("delete :: MATCHED SCRIPT >>>>>>>>>>>>> ", scripts[i]);
+        script = scripts[i];
+      }
+    }
+    console.log("delete :: SELECTED SCRIPT >>>>>>>>>>>>> ", script);
+
+    if (!script) {
+      return {
+        status: 400,
+        message: "delete :: There is no script with this id",
+      }
+    }
+
+    const recordinglob = script.recordingblob;
+    const blobString = recordinglob.toString();
+
+    // {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669549924.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550000.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550007.mp3","endTime":"45","isDeleted":false,"date":"2022-09-30 22:30:17"}
+    // split by '@' then make it to json array
+    const recordinglobArray = blobString.split(' @ ');
+    console.log("delete :: RECORDINGLOB ARRAY >>>>>>>>>>>>> ", recordinglobArray);
+    const recordinglobJsonArray = recordinglobArray.map((recordinglob) => {
+      if (recordinglob == '') {
+        return;
+      }
+      return JSON.parse(recordinglob);
+    });
+    console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
+    // find recording by link
+    const recording = recordinglobJsonArray.find(
+      (recording) => {
+        if (recording == undefined || recording == '') {
+          return false;
+        }
+        return recording.link === link;
+      },
     );
-    recording.isDeleted = true;
+    if (!recording) {
+      return {
+        status: 400,
+        message: "delete :: There is no recording with this link",
+      }
+    }
+    console.log("delete :: RECORDING >>>>>>>>>>>>> ", recording);
+
+    // change name
+    recording.deleted = true;
     // update script
+    const updatedRecordinglobJsonArray = recordinglobJsonArray.map(
+      (recordinglob) => {
+        // if undefined or null or empty then do nothing
+        if (!recordinglob || recordinglob == '') {
+          return;
+        }
+        return JSON.stringify(recordinglob);
+      },
+    );
+    const updatedRecordinglob = updatedRecordinglobJsonArray.join(' @ ');
+    script.recordingblob = updatedRecordinglob;
+    console.log("delete :: recordingblob ::", script.recordingblob)
     const responseSaved = await this.scriptRepository.save(script);
-    console.log(responseSaved);
+    console.log("delete :: response saved ", responseSaved);
 
     return {
-      name: name,
+      link: link,
+      deleted: true,
       userId: userId,
       scriptId: scriptId,
-      isDeleted: true,
-    }
+    };
   }
 
   async changeNameOfRecording(
@@ -383,77 +420,31 @@ export class ScriptService {
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
     console.log("scriptId On Recording >>>>>>>>>>>>> ", scriptId);
-    // USER SCRIPTS >>>>>>>>>>>>>  [
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 40,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 41,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer 7b 22 6e 61 6d 65 22 3a 22 68 65 6c 6c 6f 22 2c 22 6c 69 6e 6b 22 3a 22 68 74 74 70 73 3a 2f 2f 64 65 6c 69 76 65 72 61 62 6c 65 2d 72 65 63 6f 72 64 ... 448 more bytes>
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 43,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 57,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 58,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 63,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 64,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 65,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   },
-    //   Script {
-    //     addNewRecording: [Function (anonymous)],
-    //     id: 80,
-    //     name: '스크립트 1',
-    //     recordingblob: <Buffer >
-    //   }
-    // ]
+
     // find script by id
     const scripts = await user.scripts;
     console.log("USER SCRIPTS >>>>>>>>>>>>> ", scripts);
+
     let script;
     for (let i = 0; i < scripts.length; i++) {
       console.log("SCRIPTS[i] >>>>>>>>>>>>> ", scripts[i]);
       console.log("SCRIPTS[i].id >>>>>>>>>>>>> ", scripts[i].id);
       console.log("scriptId >>>>>>>>>>>>> ", scriptId);
+
       if (scripts[i].id == scriptId) {
         console.log("MATCHED SCRIPT >>>>>>>>>>>>> ", scripts[i]);
         script = scripts[i];
       }
     }
-    // const script = scripts.find((script) => script.id == Number(scriptId));
     console.log("SELECTED SCRIPT >>>>>>>>>>>>> ", script);
+
+    if (!script) {
+      return {
+        status: 400,
+        message: "There is no script with this id",
+      }
+    }
+
     const recordinglob = script.recordingblob;
     const blobString = recordinglob.toString();
 
@@ -477,7 +468,14 @@ export class ScriptService {
         return recording.link === link;
       },
     );
+    if (!recording) {
+      return {
+        status: 400,
+        message: "There is no recording with this link",
+      }
+    }
     console.log("RECORDING >>>>>>>>>>>>> ", recording);
+
     // change name
     recording.name = newName;
     // update script

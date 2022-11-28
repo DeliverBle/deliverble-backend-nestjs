@@ -359,8 +359,18 @@ export class ScriptController {
   }
 
   @Post('/recording/delete')
-  deleteRecording(userId: string, scriptId: string, name: string) {
-    return this.scriptService.deleteRecording(userId, scriptId, name);
+  @UseGuards(JwtAuthGuard)
+  deleteRecording(@Body() body, @Req() req) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+    const scriptId = body.scriptId;
+    const link = body.link;
+
+    return this.scriptService.deleteRecording(
+      userId,
+      scriptId,
+      link,
+    );
   }
 
   @Post('/recording/change-name')
