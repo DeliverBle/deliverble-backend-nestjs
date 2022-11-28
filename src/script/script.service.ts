@@ -387,7 +387,7 @@ export class ScriptService {
     console.log("delete :: RECORDING >>>>>>>>>>>>> ", recording);
 
     // change name
-    recording.deleted = true;
+    recording.isDeleted = true;
     // update script
     const updatedRecordinglobJsonArray = recordinglobJsonArray.map(
       (recordinglob) => {
