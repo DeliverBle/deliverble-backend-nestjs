@@ -501,25 +501,49 @@ export class ScriptService {
     };
   }
 
+  async getRecordingByScriptId(userId: number, scriptId: number) {
+    const user = await this.userRepository.findOneOrFail(userId);
+    console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> User ", user);
+
+    // find script by id
+    const userScripts = await user.scripts;
+    console.log("getAllUserScript :: USER SCRIPTS >>>>>>>>>>>>> ", userScripts);
+
+    if (!userScripts) {
+      return {
+        status: 400,
+        message: "getRecordingByScriptId :: There is no script in this user",
+      }
+    }
+
+    let filteredScript;
+    for (let i = 0; i < userScripts.length; i++) {
+      console.log("getAllUserScript :: SCRIPTS[i] >>>>>>>>>>>>> ", userScripts[i]);
+      console.log("getAllUserScript :: SCRIPTS[i].id >>>>>>>>>>>>> ", userScripts[i].id);
+      console.log("getAllUserScript :: scriptId >>>>>>>>>>>>> ", scriptId);
+
+      if (userScripts[i].id == scriptId) {
+        console.log("getRecordingByScriptId :: MATCHED SCRIPT >>>>>>>>>>>>> ", userScripts[i]);
+        filteredScript = userScripts[i];
+      }
+    }
+
+    if (!filteredScript) {
+      return {
+        status: 400,
+        message: "There is no script with this id",
+      }
+    }
+
+    return filteredScript;
+  }
+
   async getUserAllRecording(userId: number) {
     const user = await this.userRepository.findOneOrFail(userId);
     console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> User ", user);
 
     // find script by id
     const scripts = await user.scripts;
-    // console.log("getAllUserScript :: USER SCRIPTS >>>>>>>>>>>>> ", scripts);
-    //
-    // let script;
-    // for (let i = 0; i < scripts.length; i++) {
-    //   console.log("getAllUserScript :: SCRIPTS[i] >>>>>>>>>>>>> ", scripts[i]);
-    //   console.log("getAllUserScript :: SCRIPTS[i].id >>>>>>>>>>>>> ", scripts[i].id);
-    //   console.log("getAllUserScript :: scriptId >>>>>>>>>>>>> ", scriptId);
-    //
-    //   if (scripts[i].id == scriptId) {
-    //     console.log("delete :: MATCHED SCRIPT >>>>>>>>>>>>> ", scripts[i]);
-    //     script = scripts[i];
-    //   }
-    // }
     console.log("delete :: SELECTED SCRIPT >>>>>>>>>>>>> ", scripts);
 
     if (!scripts) {
