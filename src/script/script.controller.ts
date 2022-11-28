@@ -401,7 +401,7 @@ export class ScriptController {
     );
   }
 
-  @Get('/recording/script/:scriptId')
+  @Get('/recording/:scriptId')
   @UseGuards(JwtAuthGuard)
   getRecordingByScriptId(@Body() body, @Req() req) {
     const userInfo: ReturnUserDto = req.user;
