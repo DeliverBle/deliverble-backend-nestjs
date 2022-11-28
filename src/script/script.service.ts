@@ -545,6 +545,10 @@ export class ScriptService {
         }
         return JSON.parse(recordinglob);
       });
+      // if recordinglobJsonArray is null or undefined, pass
+      if (!recordinglobJsonArray) {
+        return;
+      }
       recordingAllScriptsArray.push(recordinglobJsonArray);
       console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
     });
