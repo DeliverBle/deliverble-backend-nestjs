@@ -370,7 +370,7 @@ export class ScriptService {
     });
     console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
     // find recording by link
-    const recording = recordinglobJsonArray.find(
+    const toBeDeletedRecording = recordinglobJsonArray.find(
       (recording) => {
         if (recording == undefined || recording == '') {
           return false;
@@ -378,21 +378,26 @@ export class ScriptService {
         return recording.link === link;
       },
     );
-    if (!recording) {
+    if (!toBeDeletedRecording) {
       return {
         status: 400,
         message: "delete :: There is no recording with this link",
       }
     }
-    console.log("delete :: RECORDING >>>>>>>>>>>>> ", recording);
+    console.log("delete :: toBeDeletedRecording >>>>>>>>>>>>> ", toBeDeletedRecording);
 
     // change name
-    recording.isDeleted = true;
+    const toBeDeletedRecordingLink = toBeDeletedRecording.link;
+
     // update script
     const updatedRecordinglobJsonArray = recordinglobJsonArray.map(
       (recordinglob) => {
         // if undefined or null or empty then do nothing
         if (!recordinglob || recordinglob == '') {
+          return;
+        }
+        // if recordingLob has toBeDeletedRecordingLink then pass
+        if (recordinglob.link === toBeDeletedRecordingLink) {
           return;
         }
         return JSON.stringify(recordinglob);
