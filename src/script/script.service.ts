@@ -549,8 +549,24 @@ export class ScriptService {
       if (!recordinglobJsonArray) {
         return;
       }
-      recordingAllScriptsArray.push(recordinglobJsonArray);
-      console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
+      // remove null in recordinglobJsonArray
+      // [
+      //         null,
+      //         {
+      //             "name": "defense",
+      //             "link": "https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669597696.mp3",
+      //             "endTime": "43",
+      //             "isDeleted": false,
+      //             "date": "2022-05-03 17:42:30"
+      //         }
+      //     ],
+      const filteredRecordinglobJsonArray = recordinglobJsonArray.filter(
+        (recordinglob) => {
+          return recordinglob != null;
+        },
+      );
+      recordingAllScriptsArray.push(filteredRecordinglobJsonArray);
+      console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", filteredRecordinglobJsonArray);
     });
 
     return recordingAllScriptsArray;
