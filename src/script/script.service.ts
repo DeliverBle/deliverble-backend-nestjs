@@ -503,7 +503,7 @@ export class ScriptService {
 
   async getUserAllRecording(userId: number) {
     const user = await this.userRepository.findOneOrFail(userId);
-    console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> ", scriptId);
+    console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> User ", user);
 
     // find script by id
     const scripts = await user.scripts;
