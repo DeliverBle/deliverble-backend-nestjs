@@ -265,7 +265,7 @@ export class ScriptService {
       return scriptId;
     }
 
-    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, date: string, itemBuffer: string) {
+    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, date: string, itemBuffer: Buffer) {
       console.log("itemBuffer", itemBuffer[0]);
       const formData = new FormData();
       formData.append('file', itemBuffer, 'file_name.mp3');
@@ -274,9 +274,10 @@ export class ScriptService {
         method: 'post',
         url: 'http://localhost:8000/upload',
         data: formData,
-        headers: {
-          'Content-Type': `multipart/form-data;`,
-        },
+        headers: formData.getHeaders(),
+        // headers: {
+        //   'Content-Type': `multipart/form-data;`,
+        // },
       });
 
       console.log("THIS RESPONSE ", response);

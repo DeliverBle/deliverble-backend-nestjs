@@ -354,7 +354,7 @@ export class ScriptController {
       name,
       endtime,
       date,
-      file.buffer.toString(),
+      file.buffer,
     );
   }
 
