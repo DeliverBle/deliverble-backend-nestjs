@@ -389,4 +389,15 @@ export class ScriptController {
       newName,
     );
   }
+
+  @Get('/recording/all')
+  @UseGuards(JwtAuthGuard)
+  getUserAllRecording(@Body() body, @Req() req) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+
+    return this.scriptService.getUserAllRecording(
+      userId,
+    );
+  }
 }

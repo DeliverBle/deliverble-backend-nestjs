@@ -501,7 +501,7 @@ export class ScriptService {
     };
   }
 
-  async getAllUserScript(userId: number) {
+  async getUserAllRecording(userId: number) {
     const user = await this.userRepository.findOneOrFail(userId);
     console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> ", scriptId);
 
