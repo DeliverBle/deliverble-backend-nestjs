@@ -265,10 +265,10 @@ export class ScriptService {
       return scriptId;
     }
 
-    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, date: string, item: Express.Multer.File) {
-      console.log("item", item);
+    async uploadRecordingToS3(userId: number, scriptId: number, name: string, endtime: number, date: string, itemBuffer: string) {
+      console.log("itemBuffer", itemBuffer[0]);
       const formData = new FormData();
-      formData.append('file', JSON.stringify(item), 'file_name.mp3');
+      formData.append('file', itemBuffer, 'file_name.mp3');
 
       const response = await axios({
         method: 'post',
