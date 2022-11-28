@@ -502,40 +502,62 @@ export class ScriptService {
   }
 
   async getRecordingByScriptId(userId: number, scriptId: number) {
-    const user = await this.userRepository.findOneOrFail(userId);
-    console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> User ", user);
-
-    // find script by id
-    const userScripts = await user.scripts;
-    console.log("getAllUserScript :: USER SCRIPTS >>>>>>>>>>>>> ", userScripts);
-
-    if (!userScripts) {
+    const allRecording = await this.getUserAllRecording(userId);
+    // allRecording is like this following
+    // [
+    //     [
+    //         {
+    //             "name": "defense second",
+    //             "link": "https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669597784.mp3",
+    //             "endTime": "43",
+    //             "isDeleted": true,
+    //             "date": "2022-05-03 17:42:30",
+    //             "deleted": true,
+    //             "scriptId": 63
+    //         },
+    //         {
+    //             "name": "\b새로운 녹음",
+    //             "link": "https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669597831.mp3",
+    //             "endTime": "43",
+    //             "isDeleted": true,
+    //             "date": "2022-05-03 17:42:30",
+    //             "scriptId": 63
+    //         }
+    //     ],
+    //     [
+    //         {
+    //             "name": "defense",
+    //             "link": "https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669597696.mp3",
+    //             "endTime": "43",
+    //             "isDeleted": false,
+    //             "date": "2022-05-03 17:42:30",
+    //             "scriptId": 65
+    //         }
+    //     ]
+    // ]
+    // filter by scriptId
+    // make sure allRecording is not empty or undefined or null, if then, return 400
+    if (!allRecording) {
       return {
         status: 400,
-        message: "getRecordingByScriptId :: There is no script in this user",
-      }
+        message: "There is no script on your user",
+      };
     }
 
-    let filteredScript;
-    for (let i = 0; i < userScripts.length; i++) {
-      console.log("getAllUserScript :: SCRIPTS[i] >>>>>>>>>>>>> ", userScripts[i]);
-      console.log("getAllUserScript :: SCRIPTS[i].id >>>>>>>>>>>>> ", userScripts[i].id);
-      console.log("getAllUserScript :: scriptId >>>>>>>>>>>>> ", scriptId);
+    // @ts-ignore
+    const filteredRecording = allRecording?.filter((recording) => {
+      return recording[0].scriptId == scriptId;
+    });
 
-      if (userScripts[i].id == scriptId) {
-        console.log("getRecordingByScriptId :: MATCHED SCRIPT >>>>>>>>>>>>> ", userScripts[i]);
-        filteredScript = userScripts[i];
-      }
-    }
-
-    if (!filteredScript) {
+    // if filteredRecording is empty or nil, return 400
+    if (!filteredRecording) {
       return {
         status: 400,
-        message: "There is no script with this id",
-      }
+        message: "There is no recording with this scriptId",
+      };
     }
 
-    return filteredScript;
+    return filteredRecording;
   }
 
   async getUserAllRecording(userId: number) {
