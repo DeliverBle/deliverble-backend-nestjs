@@ -321,7 +321,6 @@ export class ScriptService {
       return {
         link: response.data['url'],
         name: name,
-        userId: userId,
         scriptId: scriptId,
         date: date
       }
@@ -412,7 +411,6 @@ export class ScriptService {
     return {
       link: link,
       deleted: true,
-      userId: userId,
       scriptId: scriptId,
     };
   }
@@ -501,8 +499,7 @@ export class ScriptService {
     return {
       link: link,
       newName: newName,
-      userId: userId,
-      scriptId: scriptId,
+      scriptId: parseInt(String(scriptId)),
     };
   }
 
@@ -617,9 +614,10 @@ export class ScriptService {
         return;
       }
       // insert scriptId first
-      const filteredRecordinglobJsonArrayWithScriptId = filteredRecordinglobJsonArray.map(
-        (recordinglob) => {
+      const filteredRecordinglobJsonArrayWithScriptId =
+        filteredRecordinglobJsonArray.map((recordinglob) => {
           recordinglob.scriptId = script.id;
+          recordinglob.endTime = parseInt(recordinglob.endTime);
           return recordinglob;
         });
       recordingAllScriptsArray.push(filteredRecordinglobJsonArrayWithScriptId);
