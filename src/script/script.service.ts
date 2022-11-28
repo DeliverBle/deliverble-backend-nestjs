@@ -500,4 +500,55 @@ export class ScriptService {
       scriptId: scriptId,
     };
   }
+
+  async getAllUserScript(userId: number) {
+    const user = await this.userRepository.findOneOrFail(userId);
+    console.log("getAllUserScript :: scriptId On Recording >>>>>>>>>>>>> ", scriptId);
+
+    // find script by id
+    const scripts = await user.scripts;
+    // console.log("getAllUserScript :: USER SCRIPTS >>>>>>>>>>>>> ", scripts);
+    //
+    // let script;
+    // for (let i = 0; i < scripts.length; i++) {
+    //   console.log("getAllUserScript :: SCRIPTS[i] >>>>>>>>>>>>> ", scripts[i]);
+    //   console.log("getAllUserScript :: SCRIPTS[i].id >>>>>>>>>>>>> ", scripts[i].id);
+    //   console.log("getAllUserScript :: scriptId >>>>>>>>>>>>> ", scriptId);
+    //
+    //   if (scripts[i].id == scriptId) {
+    //     console.log("delete :: MATCHED SCRIPT >>>>>>>>>>>>> ", scripts[i]);
+    //     script = scripts[i];
+    //   }
+    // }
+    console.log("delete :: SELECTED SCRIPT >>>>>>>>>>>>> ", scripts);
+
+    if (!scripts) {
+      return {
+        status: 400,
+        message: "delete :: There is no script in this user",
+      }
+    }
+
+    // scripts forEach
+    const recordingAllScriptsArray = [];
+    scripts.forEach((script) => {
+      const recordinglob = script.recordingblob;
+      const blobString = recordinglob.toString();
+
+      // {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669549924.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550000.mp3","endTime":"45","isDeleted":false,"date":"2022-11-30 22:30:17"} @ {"name":"hello","link":"https://deliverable-recording.s3.ap-northeast-2.amazonaws.com/1669550007.mp3","endTime":"45","isDeleted":false,"date":"2022-09-30 22:30:17"}
+      // split by '@' then make it to json array
+      const recordinglobArray = blobString.split(' @ ');
+      console.log("delete :: RECORDINGLOB ARRAY >>>>>>>>>>>>> ", recordinglobArray);
+      const recordinglobJsonArray = recordinglobArray.map((recordinglob) => {
+        if (recordinglob == '') {
+          return;
+        }
+        return JSON.parse(recordinglob);
+      });
+      recordingAllScriptsArray.push(recordinglobJsonArray);
+      console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", recordinglobJsonArray);
+    });
+
+    return recordingAllScriptsArray;
+  }
 }
