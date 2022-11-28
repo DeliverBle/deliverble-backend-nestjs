@@ -565,8 +565,14 @@ export class ScriptService {
       if (filteredRecordinglobJsonArray.length === 0) {
         return;
       }
-      recordingAllScriptsArray.push(filteredRecordinglobJsonArray);
-      console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", filteredRecordinglobJsonArray);
+      // insert scriptId first
+      const filteredRecordinglobJsonArrayWithScriptId = filteredRecordinglobJsonArray.map(
+        (recordinglob) => {
+          recordinglob.scriptId = script.id;
+          return recordinglob;
+        });
+      recordingAllScriptsArray.push(filteredRecordinglobJsonArrayWithScriptId);
+      console.log("delete :: RECORDINGLOBJSONARRAY >>>>>>>>>>>>> ", filteredRecordinglobJsonArrayWithScriptId);
     });
 
     return recordingAllScriptsArray;
