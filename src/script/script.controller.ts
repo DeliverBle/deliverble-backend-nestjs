@@ -6,7 +6,7 @@ import {
   Logger,
   Param,
   Patch,
-  Post,
+  Post, Query,
   Req,
   Res, UploadedFile,
   UseGuards,
@@ -390,7 +390,7 @@ export class ScriptController {
     );
   }
 
-  @Get('/recording/all')
+  @Get('/recording/find/all')
   @UseGuards(JwtAuthGuard)
   getUserAllRecording(@Body() body, @Req() req) {
     const userInfo: ReturnUserDto = req.user;
@@ -401,12 +401,14 @@ export class ScriptController {
     );
   }
 
-  @Get('/recording/:scriptId')
+  @Get('/recording/find')
   @UseGuards(JwtAuthGuard)
-  getRecordingByScriptId(@Body() body, @Req() req) {
+  getRecordingByScriptId(@Body() body, @Req() req, @Query() query) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
-    const scriptId = req.params.scriptId;
+    // const scriptId = req.params.scriptId;
+    // get from query param
+    const scriptId = query.scriptId;
     console.log("getRecordingByScriptId scriptId :: ", scriptId);
 
     return this.scriptService.getRecordingByScriptId(
