@@ -8,6 +8,7 @@ import { News } from "../news.entity";
 
 export class ReturnNewsDto {
   constructor(news: News) {
+    this.checkHaveGuide(news);
     this.id = news.id
     this.title = news.title;
     this.category = news.category;
@@ -21,7 +22,6 @@ export class ReturnNewsDto {
     this.isEmbeddable = news.isEmbeddable;
     this.reportDate = news.reportDate;
     this.isFavorite = false;
-    this.checkHaveGuide(news);
     this.tagsForView = news.tagsForView;
   }
   id: number;
