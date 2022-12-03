@@ -187,7 +187,7 @@ export class NewsService {
     newsList = await this.paginateWithOffsetAndLimit(newsList ,searchCondition);
     
     // 탐색창(검색 등)에 보여지는 형식으로 수정
-    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(newsList);
+    let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(newsList);
 
     // 즐겨찾기 체크 (로그인 된 유저라면)
     if (bearerToken !== undefined) {
@@ -212,7 +212,7 @@ export class NewsService {
     favoriteNewsList = await this.paginateWithOffsetAndLimit(favoriteNewsList ,paginationCondition);
     
     // 탐색창(검색 등)에 보여지는 형식으로 수정
-    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(favoriteNewsList);
+    let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(favoriteNewsList);
     // 즐겨찾기 여부 true로 수정
     exploreNewsDtoList.map((news) => news.isFavorite = true);
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
@@ -228,7 +228,7 @@ export class NewsService {
     recommendedNewsList = await sortByDateAndTitle(recommendedNewsList);
     recommendedNewsList = recommendedNewsList.slice(0, 8);
     // 타입 변경 후 반환
-    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(recommendedNewsList);
+    let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(recommendedNewsList);
     // 즐겨찾기 체크 (로그인 된 유저라면)
     if (bearerToken !== undefined) {
       const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
@@ -246,7 +246,7 @@ export class NewsService {
     speechGuideNewsList = await sortByDateAndTitle(speechGuideNewsList);
     speechGuideNewsList = speechGuideNewsList.slice(0, 4);
     // 타입 변경 후 반환
-    let exploreNewsDtoList: ExploreNewsDto[] = changeToExploreNewsList(speechGuideNewsList);
+    let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(speechGuideNewsList);
     // 즐겨찾기 체크 (로그인 된 유저라면)
     if (bearerToken !== undefined) {
       const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
@@ -258,7 +258,6 @@ export class NewsService {
 
   async getNews(newsId: number): Promise<ReturnNewsDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    // console.log(await news.scriptGuide);
     const returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
     return returnNewsDto;
   }
@@ -273,5 +272,17 @@ export class NewsService {
     return this.newsRepository.findOne(newsId);
   }
 
+  async changeToExploreNewsList(newsList: News[]): Promise<ExploreNewsDto[]> {
+    let exploreNewsDtoList: ExploreNewsDto[] = [];
+    for (const news of newsList) {
+      const exploreNewsDto: ExploreNewsDto = await new ExploreNewsDto(news);
+      await exploreNewsDto.checkHaveGuide(news);
+      exploreNewsDtoList.push(exploreNewsDto);
+    }
+    return exploreNewsDtoList;
+  }
+
 }
+
+
 

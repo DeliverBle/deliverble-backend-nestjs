@@ -14,8 +14,6 @@ async function bootstrap() {
 }
 bootstrap();
 
-console.log(">>>>>>>>>>>>>>>>>>>> typeorm config", typeORMConfig)
-
 passport.use('kakao', new KakaoStrategy({
   clientID: kakaoClientId,
   callbackURL: kakaoCallbackURL,     // 위에서 설정한 Redirect URI
