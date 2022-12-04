@@ -35,7 +35,6 @@ export class User extends BaseEntity {
   
     @IsEmail()
     @Column({
-      unique: true,
       default: "NO_EMAIL"
     })
     email: string;
