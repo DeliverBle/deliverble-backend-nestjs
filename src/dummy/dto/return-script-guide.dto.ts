@@ -9,11 +9,22 @@ export class ReturnScriptGuideDto {
     this.newsId = scriptGuide.news.id;
     this.name = scriptGuide.name;
     this.sentences = scriptGuide.sentenceGuides;
-    this.memoGuides = scriptGuide.memoGuides;
+    this.saveSortedMemoGuides(scriptGuide);
 }   
     id: number;
     newsId: number;
     name: string;
     sentences: SentenceGuide[];
     memoGuides: MemoGuide[];
+
+    saveSortedMemoGuides(scriptGuide: ScriptGuide): void {
+      let sortingMemos = scriptGuide.memoGuides;
+      sortingMemos.sort((prev, next) => {
+        if (prev.order == next.order) {
+          return prev.startIndex - next.startIndex;
+        }
+        return prev.order - next.order;
+      });
+      this.memoGuides = sortingMemos;
+    }
 }
