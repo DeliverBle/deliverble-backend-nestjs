@@ -303,5 +303,27 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
+
+  @Post('similar/:newsId')
+  async saveSimilarNews(
+    @Req() req,
+    @Res() res,
+    @Param('newsId') newsId: number,
+  ): Promise<Response> {
+    try {
+      const bearerToken: string = req.headers["authorization"];
+      // await this.newsService.saveSimilarNews(bearerToken);
+      const data: ExploreNewsDtoCollection = await this.newsService.getSimilarNews(newsId, bearerToken);
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
 }
 

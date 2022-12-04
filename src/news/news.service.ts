@@ -282,7 +282,83 @@ export class NewsService {
     return exploreNewsDtoList;
   }
 
+  async getSimilarNews(newsId: number, bearerToken: string): Promise<ExploreNewsDtoCollection> {
+    const news: News = await this.newsRepository.getNewsById(newsId);
+    const similarNewsList: News[] = await this.getSimilarNewsList(news);
+    let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(similarNewsList);
+    // 즐겨찾기 체크 (로그인 된 유저라면)
+    if (bearerToken !== undefined) {
+      const user: User = await this.authService.verifyJWTReturnUser(bearerToken);
+      exploreNewsDtoList = await this.checkExploreNewsDtoListIsFavorite(exploreNewsDtoList, user);
+    }
+    const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
+    return exploreNewsDtoCollection;
+  }
+
+  async getSimilarNewsList(news: News): Promise<News[]> {
+    const similarMap: Map<News, number> = await this.calculateSimilarMap(news);
+    const similarMapArray = await this.sortSimilarMap(similarMap);
+    // 비슷한 영상 4개 자르기
+    let similarNewsList: News[] = [];
+    for (let i = 0; i < 4; i++) {
+      similarNewsList.push(similarMapArray[i][0]);
+    }
+    return similarNewsList;
+  }
+  
+  async calculateSimilarMap(news: News): Promise<Map<News, number>> {
+    const similarMap = new Map();
+    const tagsOfNews: Tag[] = news.tagsForRecommend;
+    const allNews: News[] = await this.newsRepository.find();
+    for (const newsTarget of allNews) {
+      if (newsTarget.id == news.id) {
+        continue;
+      }
+      const countOfSameTags: number = await this.calculateCountOfSameTags(tagsOfNews, newsTarget);
+      similarMap.set(newsTarget, countOfSameTags);
+    }
+    console.log(similarMap);
+    return similarMap;
+  }
+
+  async calculateCountOfSameTags(tagsOfNews: Tag[], news: News): Promise<number> {
+    let countOfSameTags: number = 0;
+    let tagsOfTargetNews: Tag[] = news.tagsForRecommend;
+    for (const tag of tagsOfNews) {
+      for (const tagTarget of tagsOfTargetNews) {
+        if (tag.id == tagTarget.id) {
+          countOfSameTags += 1;
+        }
+      }
+    }
+    return countOfSameTags;
+  }
+  
+  async sortSimilarMap(similarMap: Map<News, number>): Promise<Object[]> {
+    let mapArray: Object[] = [...similarMap.entries()].sort((prev, next) => {
+      const prevCount: number = prev[1];
+      const nextCount: number = next[1];
+      const prevNews: News = prev[0];
+      const nextNews: News = next[0];
+      if (prevCount == nextCount) {
+        return this.compareOrderOfTwoNews(prevNews, nextNews);
+      }
+      return nextCount - prevCount;
+    });
+    return mapArray;
+  }
+
+  compareOrderOfTwoNews(prevNews: News, nextNews: News): number {
+    if (+new Date(prevNews.reportDate) == +new Date(nextNews.reportDate)) {
+      const condition = '[]{}*!@_.()#^&%-=+01234567989abcdefghijklmnopqrstuvwxyz';
+      let prev_condition = condition.indexOf(prevNews.title[0]);
+      let next_condition = condition.indexOf(nextNews.title[0]);
+      if (prev_condition === next_condition) {
+        return prevNews.title < nextNews.title ? -1 : prevNews.title > nextNews.title ? 1 : 0;
+      }
+      return next_condition - prev_condition;
+    }
+    return +new Date(nextNews.reportDate) - +new Date(prevNews.reportDate);
+  }
+
 }
-
-
-
