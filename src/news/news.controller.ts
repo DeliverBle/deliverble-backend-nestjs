@@ -304,7 +304,7 @@ export class NewsController {
     }
   }
 
-  @Post('similar/:newsId')
+  @Get('similar/:newsId')
   async saveSimilarNews(
     @Req() req,
     @Res() res,
