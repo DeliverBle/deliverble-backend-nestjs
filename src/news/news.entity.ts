@@ -117,4 +117,7 @@ export class News extends BaseEntity {
 
     @OneToOne(() => ScriptGuide, (scriptGuide) => scriptGuide.news)
     scriptGuide: Promise<ScriptGuide>;
+
+    @Column()
+    similarNews: News[];
 }
