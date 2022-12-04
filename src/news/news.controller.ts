@@ -304,12 +304,16 @@ export class NewsController {
     }
   }
 
-  @Post('similar')
+  @Post('similar/:newsId')
   async saveSimilarNews(
-    @Res() res
+    @Req() req,
+    @Res() res,
+    @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
-      const data: ReturnNewsDto = await this.newsService.saveSimilarNews();
+      const bearerToken: string = req.headers["authorization"];
+      // await this.newsService.saveSimilarNews(bearerToken);
+      const data: ExploreNewsDtoCollection = await this.newsService.getSimilarNews(newsId, bearerToken);
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data))

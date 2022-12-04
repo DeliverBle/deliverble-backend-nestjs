@@ -3,7 +3,7 @@ import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
 import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";
 import { User } from "src/user/user.entity";
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./common/category.enum";
 import { Channel } from "./common/channel.enum";
 import { Gender } from "./common/gender.enum";
@@ -117,7 +117,4 @@ export class News extends BaseEntity {
 
     @OneToOne(() => ScriptGuide, (scriptGuide) => scriptGuide.news)
     scriptGuide: Promise<ScriptGuide>;
-
-    @Column()
-    similarNews: News[];
 }
