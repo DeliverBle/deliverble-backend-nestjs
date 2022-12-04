@@ -303,5 +303,23 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
+
+  @Post('similar')
+  async saveSimilarNews(
+    @Res() res
+  ): Promise<Response> {
+    try {
+      const data: ReturnNewsDto = await this.newsService.saveSimilarNews();
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
 }
 
