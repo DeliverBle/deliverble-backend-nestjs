@@ -65,6 +65,6 @@ export class User extends BaseEntity {
     scriptCounts: ScriptCount[];
 
     @OneToMany(() => History, (history) => history.user)
-    histories: History[];
+    histories: Promise<History[]>;
 
 }

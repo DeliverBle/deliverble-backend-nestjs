@@ -328,5 +328,34 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
-}
 
+  @Post('history')
+  @UseGuards(JwtAuthGuard)
+  async getHistory(
+    @Res() res,
+    @Req() req
+  ): Promise<Response> {
+    try {
+      const user: User = req.user;
+      const body: object = req.body;
+      const paginationCondition: PaginationCondition = convertBodyToPaginationCondition(body);
+      
+      let data: ExploreNewsDtoCollection;
+      let paginationInfo;
+      
+      [data, paginationInfo] = await this.newsService.getHistory(paginationCondition, user)      
+      const paginationInfoObject: object = { paginationInfo: paginationInfo }
+
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.HISTORY_SUCCESS, data, paginationInfoObject))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+}

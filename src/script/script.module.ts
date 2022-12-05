@@ -13,14 +13,16 @@ import { TagRepository } from 'src/tag/tag.repository';
 import { AuthService } from 'src/auth/auth.service';
 import { MemoRepository } from './repository/memo.repository';
 import { ScriptCountRepository } from './repository/script-count.repository';
+import { HistoryService } from 'src/history/history.service';
+import { HistoryRepository } from 'src/history/history.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ScriptRepository, SentenceRepository, MemoRepository, UserRepository, NewsRepository, ScriptDefaultRepository, TagRepository, ScriptCountRepository,
+      ScriptRepository, SentenceRepository, MemoRepository, UserRepository, NewsRepository, ScriptDefaultRepository, TagRepository, ScriptCountRepository, HistoryRepository,
     ]),
   ],
   controllers: [ScriptController],
-  providers: [ScriptService, JwtModule, NewsService, AuthService, JwtService]
+  providers: [ScriptService, JwtModule, NewsService, AuthService, JwtService, HistoryService]
 })
 export class ScriptModule {}

@@ -24,4 +24,8 @@ export class HistoryRepository extends Repository<History> {
       .getOne();
     return history;
   }
+
+  async getHistoryById(historyId: number): Promise<History> {
+    return await this.findOne(historyId);
+  }
 }

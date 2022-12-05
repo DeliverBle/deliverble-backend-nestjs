@@ -23,4 +23,9 @@ export class HistoryService {
       await this.historyRepository.createHistory(user, news);
     }
   }
+
+  async getNewsByHistoryId(historyId: number) {
+    const history: History = await this.historyRepository.getHistoryById(historyId);
+    return history.news;
+  }
 }

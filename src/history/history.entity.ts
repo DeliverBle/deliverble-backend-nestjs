@@ -18,10 +18,14 @@ export class History extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.histories)
+  @ManyToOne(() => User, (user) => user.histories, {
+    eager: true,
+  })
   user: User;
 
-  @ManyToOne(() => News, (news) => news.histories)
+  @ManyToOne(() => News, (news) => news.histories, {
+    eager: true,
+  })
   news: News;
 
   @Column()
