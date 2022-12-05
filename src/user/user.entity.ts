@@ -5,6 +5,7 @@ import { Social } from "../auth/common/Social";
 import { News } from "src/news/news.entity";
 import { Script } from "src/script/entity/script.entity";
 import { ScriptCount } from "src/script/entity/script-count.entity";
+import { History } from "src/history/history.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -62,5 +63,8 @@ export class User extends BaseEntity {
 
     @OneToMany(() => ScriptCount, (scriptCount) => scriptCount.user)
     scriptCounts: ScriptCount[];
+
+    @OneToMany(() => History, (history) => history.user)
+    histories: History[];
 
 }
