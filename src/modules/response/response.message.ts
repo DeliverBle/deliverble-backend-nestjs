@@ -33,6 +33,7 @@ export const message = {
   SPEECH_GUIDE_NEWS_SUCCESS: '스피치 가이드 영상 조회 성공',
   SPEECH_GUIDE_NEWS_DETAIL_SUCCESS: '스피치 가이드 상세 정보 조회 성공',
   SAVE_SIMILAR_NEWS: '비슷한 영상 조회 성공',
+  HISTORY_SUCCESS: '내 학습 기록 조회 성공',
 
   // 태그
   CREATE_TAG_SUCCESS: '태그 생성 성공',

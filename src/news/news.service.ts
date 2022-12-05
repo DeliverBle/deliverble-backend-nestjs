@@ -29,6 +29,8 @@ import { Script } from 'src/script/entity/script.entity';
 import { ScriptRepository } from 'src/script/repository/script.repository';
 import { checkUser } from './utils/check-user';
 import { checkNewsDtoInFavoriteList } from './utils/check-news-dto-in-favorite-list';
+import { History } from 'src/history/history.entity';
+import { HistoryService } from 'src/history/history.service';
 
 const logger: Logger = new Logger('news service');
 
@@ -42,6 +44,7 @@ export class NewsService {
     @InjectRepository(ScriptRepository)
     private scriptRepository: ScriptRepository,
     private authService: AuthService,
+    private historyService: HistoryService,
   ) {};
 
   async createNews(createNewsDto: CreateNewsDto) : Promise<ReturnNewsDto> {
@@ -218,6 +221,44 @@ export class NewsService {
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return [exploreNewsDtoCollection, paginationInfo];
     
+  }
+
+  async getHistory(paginationCondition: PaginationCondition, user: User): Promise<[ExploreNewsDtoCollection, PaginationInfo]> {
+    const historyList: History[] = this.sortHistoryListByDate(await user.histories);
+    let historyNewsList: News[] = await this.getNewsListFromHistoryList(historyList);
+    // 페이지네이션 정보 생성
+    const totalCount: number = historyNewsList.length;
+    const lastPage = getLastPage(12, totalCount);
+    const paginationInfo = new PaginationInfo(totalCount, lastPage);
+    // 페이지네이션
+    historyNewsList = await this.paginateWithOffsetAndLimit(historyNewsList ,paginationCondition);
+    // 탐색창(검색 등)에 보여지는 형식으로 수정
+    let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(historyNewsList);
+    // 즐겨찾기 체크
+    exploreNewsDtoList = await this.checkExploreNewsDtoListIsFavorite(exploreNewsDtoList, user);
+    const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
+    return [exploreNewsDtoCollection, paginationInfo];
+  }
+
+  async getNewsListFromHistoryList(historyList: History[]): Promise<News[]> {
+    let newsList: News[] = [];
+    for (const history of historyList) {
+      const news: News = await this.historyService.getNewsByHistoryId(history.id);
+      newsList.push(news);
+    }
+    return newsList;
+  }
+
+  sortHistoryListByDate(historyList: History[]): History[] {
+    historyList.sort((prev, next) => {
+      const prevDate: Date = prev.date;
+      const nextDate: Date = next.date;
+      if (prevDate < nextDate) {
+        return 1;
+      }
+      return -1;
+    })
+    return historyList;
   }
 
   async getRecommendedNews(bearerToken: string): Promise<ExploreNewsDtoCollection> {

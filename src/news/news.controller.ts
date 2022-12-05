@@ -3,6 +3,7 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { ReturnScriptDefaultDto } from 'src/dummy/dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from 'src/dummy/dto/return-script-guide.dto';
 import { DummyService } from 'src/dummy/dummy.service';
+import { HistoryService } from 'src/history/history.service';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
@@ -30,6 +31,7 @@ export class NewsController {
     private newsService: NewsService,
     private scriptService: ScriptService,
     private dummyService: DummyService,
+    private historyService: HistoryService,
   ) {};
 
   @Post('create')
@@ -241,6 +243,7 @@ export class NewsController {
       const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(newsId);
       const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
+      this.historyService.fetchHistory(user, newsId);
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2.returnScriptDtoCollection))
@@ -325,5 +328,34 @@ export class NewsController {
         .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
     }
   }
-}
 
+  @Post('history')
+  @UseGuards(JwtAuthGuard)
+  async getHistory(
+    @Res() res,
+    @Req() req
+  ): Promise<Response> {
+    try {
+      const user: User = req.user;
+      const body: object = req.body;
+      const paginationCondition: PaginationCondition = convertBodyToPaginationCondition(body);
+      
+      let data: ExploreNewsDtoCollection;
+      let paginationInfo;
+      
+      [data, paginationInfo] = await this.newsService.getHistory(paginationCondition, user)      
+      const paginationInfoObject: object = { paginationInfo: paginationInfo }
+
+      return res
+        .status(statusCode.OK)
+        .send(util.success(statusCode.OK, message.HISTORY_SUCCESS, data, paginationInfoObject))
+    
+      } catch (error) {
+      logger.error(error)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+    }
+  }
+
+}

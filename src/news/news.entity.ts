@@ -1,5 +1,6 @@
 import { ScriptDefault } from "src/dummy/entity/script-default.entity";
 import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
+import { History } from "src/history/history.entity";
 import { Script } from "src/script/entity/script.entity";
 import { Tag } from "src/tag/tag.entity";
 import { User } from "src/user/user.entity";
@@ -117,4 +118,7 @@ export class News extends BaseEntity {
 
     @OneToOne(() => ScriptGuide, (scriptGuide) => scriptGuide.news)
     scriptGuide: Promise<ScriptGuide>;
+
+    @OneToMany(() => History, (history) => history.news)
+    histories: History[];
 }

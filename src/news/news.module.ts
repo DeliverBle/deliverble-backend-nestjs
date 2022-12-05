@@ -7,6 +7,8 @@ import { ScriptDefaultRepository } from 'src/dummy/repository/script-default.rep
 import { ScriptGuideRepository } from 'src/dummy/repository/script-guide.repository';
 import { SentenceDefaultRepository } from 'src/dummy/repository/sentence-default.repository';
 import { SentenceGuideRepository } from 'src/dummy/repository/sentence-guide.repository';
+import { HistoryRepository } from 'src/history/history.repository';
+import { HistoryService } from 'src/history/history.service';
 import { MemoRepository } from 'src/script/repository/memo.repository';
 import { ScriptCountRepository } from 'src/script/repository/script-count.repository';
 import { ScriptRepository } from 'src/script/repository/script.repository';
@@ -21,11 +23,11 @@ import { NewsService } from './news.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, ScriptGuideRepository, SentenceGuideRepository, MemoGuideRepository,
+      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, ScriptGuideRepository, SentenceGuideRepository, MemoGuideRepository, HistoryRepository,
     ]),
     AuthModule,
   ],
   controllers: [NewsController],
-  providers: [NewsService, ScriptService, DummyService]
+  providers: [NewsService, ScriptService, DummyService, HistoryService]
 })
 export class NewsModule {}
