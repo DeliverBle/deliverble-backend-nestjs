@@ -1,0 +1,15 @@
+import { News } from "src/news/news.entity";
+import { User } from "src/user/user.entity";
+import { EntityRepository, Repository } from "typeorm";
+import { History } from "./history.entity";
+
+@EntityRepository(History)
+export class HistoryRepository extends Repository<History> {
+
+  async createHistory(user: User, news: News): Promise<History> {
+    const history: History = new History(user, news);
+
+    await this.save(history);
+    return history;
+  }
+}
