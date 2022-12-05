@@ -350,7 +350,7 @@ export class ScriptController {
 
     return this.scriptService.uploadRecordingToS3(
       userId,
-      scriptId,
+      parseInt(scriptId),
       name,
       endtime,
       date,
