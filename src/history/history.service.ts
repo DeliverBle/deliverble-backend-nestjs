@@ -21,7 +21,10 @@ export class HistoryService {
     console.log(history);
     if (!history) {
       await this.historyRepository.createHistory(user, news);
+      return;
     }
+    history.date = new Date();
+    history.save();
   }
 
   async getNewsByHistoryId(historyId: number) {
