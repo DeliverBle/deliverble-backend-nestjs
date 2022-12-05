@@ -230,14 +230,12 @@ export class NewsService {
     const totalCount: number = historyNewsList.length;
     const lastPage = getLastPage(12, totalCount);
     const paginationInfo = new PaginationInfo(totalCount, lastPage);
-    
     // 페이지네이션
     historyNewsList = await this.paginateWithOffsetAndLimit(historyNewsList ,paginationCondition);
-    
     // 탐색창(검색 등)에 보여지는 형식으로 수정
     let exploreNewsDtoList: ExploreNewsDto[] = await this.changeToExploreNewsList(historyNewsList);
-    // 즐겨찾기 여부 true로 수정
-    exploreNewsDtoList.map((news) => news.isFavorite = true);
+    // 즐겨찾기 체크
+    exploreNewsDtoList = await this.checkExploreNewsDtoListIsFavorite(exploreNewsDtoList, user);
     const exploreNewsDtoCollection: ExploreNewsDtoCollection = new ExploreNewsDtoCollection(exploreNewsDtoList)
     return [exploreNewsDtoCollection, paginationInfo];
   }
