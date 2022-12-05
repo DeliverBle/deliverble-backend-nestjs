@@ -12,4 +12,16 @@ export class HistoryRepository extends Repository<History> {
     await this.save(history);
     return history;
   }
+
+  async getHistory(user: User, news: News): Promise<History> {
+    const userId: number = user.id;
+    const newsId: number = news.id;
+    const history: History = await this.createQueryBuilder('history')
+      .leftJoinAndSelect('history.user', 'user')
+      .leftJoinAndSelect('history.news', 'news')
+      .where('user.id = :userId', { userId: userId })
+      .andWhere('news.id = :newsId', { newsId: newsId })
+      .getOne();
+    return history;
+  }
 }

@@ -243,7 +243,7 @@ export class NewsController {
       const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(newsId);
       const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
       const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
-      this.historyService.createHistory(user, newsId);
+      this.historyService.fetchHistory(user, newsId);
       return res
         .status(statusCode.OK)
         .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2.returnScriptDtoCollection))
