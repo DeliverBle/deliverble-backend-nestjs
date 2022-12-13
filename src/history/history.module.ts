@@ -14,10 +14,14 @@ import { HistoryService } from './history.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      HistoryRepository, NewsRepository, TagRepository, ScriptRepository, UserRepository
+      HistoryRepository,
+      NewsRepository,
+      TagRepository,
+      ScriptRepository,
+      UserRepository,
     ]),
   ],
   controllers: [HistoryController],
-  providers: [HistoryService, NewsService, AuthService, JwtService]
+  providers: [HistoryService, NewsService, AuthService, JwtService],
 })
 export class HistoryModule {}

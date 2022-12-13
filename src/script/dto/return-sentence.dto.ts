@@ -1,4 +1,4 @@
-import { Sentence } from "../entity/sentence.entity";
+import { Sentence } from '../entity/sentence.entity';
 
 export class ReturnSentenceDto {
   constructor(sentence: Sentence) {
@@ -7,10 +7,10 @@ export class ReturnSentenceDto {
     this.startTime = sentence.startTime;
     this.endTime = sentence.endTime;
     this.text = sentence.text;
-}   
-    id: number;
-    order: number;
-    startTime: number;
-    endTime: number;
-    text: string;
+  }
+  id: number;
+  order: number;
+  startTime: number;
+  endTime: number;
+  text: string;
 }

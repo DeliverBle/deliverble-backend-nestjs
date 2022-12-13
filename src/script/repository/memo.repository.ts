@@ -1,18 +1,18 @@
-import { EntityRepository, Repository } from "typeorm";
-import { CreateMemoDto } from "../dto/create-memo.dto";
-import { UpdateMemoDto } from "../dto/update-memo.dto";
-import { Memo } from "../entity/memo.entity";
+import { EntityRepository, Repository } from 'typeorm';
+import { CreateMemoDto } from '../dto/create-memo.dto';
+import { UpdateMemoDto } from '../dto/update-memo.dto';
+import { Memo } from '../entity/memo.entity';
 
 @EntityRepository(Memo)
 export class MemoRepository extends Repository<Memo> {
   async createMemo(createMemoDto: CreateMemoDto): Promise<Memo> {
-    const memo: Memo = new Memo()
+    const memo: Memo = new Memo();
     memo.script = createMemoDto.script;
     memo.order = createMemoDto.order;
     memo.startIndex = createMemoDto.startIndex;
     memo.keyword = createMemoDto.keyword;
     memo.content = createMemoDto.content;
-    
+
     await memo.save();
     return memo;
   }
@@ -22,8 +22,8 @@ export class MemoRepository extends Repository<Memo> {
     await this.createQueryBuilder()
       .delete()
       .from(Memo)
-      .where("id = :memoId", { memoId })
-      .execute()
+      .where('id = :memoId', { memoId })
+      .execute();
     return memoDeleted;
   }
 
@@ -33,7 +33,7 @@ export class MemoRepository extends Repository<Memo> {
     const memo: Memo = await this.findOneOrFail(memoId);
     memo.content = content;
     await memo.save();
-    return memo; 
+    return memo;
   }
 
   async getMemoJoinScript(memoId: number): Promise<Memo> {

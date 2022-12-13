@@ -1,6 +1,6 @@
-import { Memo } from "../entity/memo.entity";
-import { Script } from "../entity/script.entity";
-import { Sentence } from "../entity/sentence.entity";
+import { Memo } from '../entity/memo.entity';
+import { Script } from '../entity/script.entity';
+import { Sentence } from '../entity/sentence.entity';
 
 export class ReturnScriptDto {
   constructor(script: Script) {
@@ -10,7 +10,7 @@ export class ReturnScriptDto {
     this.name = script.name;
     this.sentences = script.sentences;
     this.sortMemos(script);
-}   
+  }
   id: number;
   userId: number;
   newsId: number;
@@ -19,7 +19,7 @@ export class ReturnScriptDto {
   memos: Memo[];
 
   sortMemos(script: Script): void {
-    let sortingMemos = script.memos;
+    const sortingMemos = script.memos;
     sortingMemos.sort((prev, next) => {
       if (prev.order == next.order) {
         return prev.startIndex - next.startIndex;

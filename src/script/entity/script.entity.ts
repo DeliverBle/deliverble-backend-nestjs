@@ -1,13 +1,19 @@
-import { News } from "src/news/news.entity";
-import { User } from "src/user/user.entity";
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Memo } from "./memo.entity";
-import { Sentence } from "./sentence.entity";
-import { Recording } from "./recording.entity";
+import { News } from 'src/news/news.entity';
+import { User } from 'src/user/user.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Memo } from './memo.entity';
+import { Sentence } from './sentence.entity';
+import { Recording } from './recording.entity';
 
 @Entity()
 export class Script extends BaseEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -49,7 +55,7 @@ export class Script extends BaseEntity {
     }
     this.recordings.push(recording);
     return this;
-  }
+  };
 
   // public addNewRecording = async (newRecording: Recording) => {
   //   let nowRecordings = await this.recordings;

@@ -1,7 +1,7 @@
-import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
-import { Category } from "../common/category.enum";
-import { Channel } from "../common/channel.enum";
-import { News } from "../news.entity";
+import { ScriptGuide } from 'src/dummy/entity/script-guide.entity';
+import { Category } from '../common/category.enum';
+import { Channel } from '../common/channel.enum';
+import { News } from '../news.entity';
 
 export class ExploreNewsDto {
   constructor(news: News) {
@@ -25,10 +25,9 @@ export class ExploreNewsDto {
   async checkHaveGuide(news: News): Promise<void> {
     const scriptGuide: ScriptGuide = await news.scriptGuide;
     if (!scriptGuide) {
-      this.haveGuide = false
+      this.haveGuide = false;
       return;
     }
     this.haveGuide = true;
   }
-    
 }

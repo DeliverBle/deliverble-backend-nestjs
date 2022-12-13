@@ -1,5 +1,5 @@
-import { Category } from "src/news/common/category.enum";
-import { Tag } from "../tag.entity";
+import { Category } from 'src/news/common/category.enum';
+import { Tag } from '../tag.entity';
 
 export class ReturnTagDto {
   constructor(tag: Tag) {

@@ -1,1 +1,1 @@
-export const SCRIPT_DEFAULT_NAME: string = "스크립트 ";
+export const SCRIPT_DEFAULT_NAME = '스크립트 ';

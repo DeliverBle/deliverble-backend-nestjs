@@ -1,5 +1,5 @@
-import { ScriptDefault } from "../entity/script-default.entity";
-import { SentenceDefault } from "../entity/sentence-default.entity";
+import { ScriptDefault } from '../entity/script-default.entity';
+import { SentenceDefault } from '../entity/sentence-default.entity';
 
 export class ReturnScriptDefaultDto {
   constructor(scriptDefault: ScriptDefault) {
@@ -7,9 +7,9 @@ export class ReturnScriptDefaultDto {
     this.newsId = scriptDefault.news.id;
     this.name = scriptDefault.name;
     this.sentences = scriptDefault.sentenceDefaults;
-}   
-    id: number;
-    newsId: number;
-    name: string;
-    sentences: SentenceDefault[];
+  }
+  id: number;
+  newsId: number;
+  name: string;
+  sentences: SentenceDefault[];
 }

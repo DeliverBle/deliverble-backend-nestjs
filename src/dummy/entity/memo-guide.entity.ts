@@ -1,9 +1,14 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ScriptGuide } from "./script-guide.entity";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ScriptGuide } from './script-guide.entity';
 
 @Entity()
 export class MemoGuide extends BaseEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 

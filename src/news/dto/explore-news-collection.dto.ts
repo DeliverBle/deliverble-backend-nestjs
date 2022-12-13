@@ -1,4 +1,4 @@
-import { ExploreNewsDto } from "./explore-news.dto";
+import { ExploreNewsDto } from './explore-news.dto';
 
 export class ExploreNewsDtoCollection {
   constructor(exploreNewsDtoList: ExploreNewsDto[]) {

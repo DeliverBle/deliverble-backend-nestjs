@@ -1,6 +1,6 @@
-import { Script } from "../entity/script.entity";
+import { Script } from '../entity/script.entity';
 
-export class CreateMemoDto { 
+export class CreateMemoDto {
   userId: number;
   script: Script;
   order: number;

@@ -1,6 +1,6 @@
-import { Script } from "../entity/script.entity";
+import { Script } from '../entity/script.entity';
 
-export class CreateSentenceDto { 
+export class CreateSentenceDto {
   script: Script;
   order: number;
   startTime: number;

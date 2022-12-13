@@ -1,4 +1,4 @@
-import { ReturnScriptDto } from "./return-script.dto";
+import { ReturnScriptDto } from './return-script.dto';
 
 export class ReturnScriptDtoCollection {
   constructor(returnScriptDtoList: ReturnScriptDto[]) {

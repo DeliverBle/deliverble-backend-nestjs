@@ -13,11 +13,14 @@ export class HistoryService {
     private historyRepository: HistoryRepository,
     @InjectRepository(NewsRepository)
     private newsRepository: NewsRepository,
-  ) {};
+  ) {}
 
   async fetchHistory(user: User, newsId: number): Promise<void> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    let history: History = await this.historyRepository.getHistory(user, news);
+    const history: History = await this.historyRepository.getHistory(
+      user,
+      news,
+    );
     console.log(history);
     if (!history) {
       await this.historyRepository.createHistory(user, news);
@@ -28,7 +31,9 @@ export class HistoryService {
   }
 
   async getNewsByHistoryId(historyId: number) {
-    const history: History = await this.historyRepository.getHistoryById(historyId);
+    const history: History = await this.historyRepository.getHistoryById(
+      historyId,
+    );
     return history.news;
   }
 }

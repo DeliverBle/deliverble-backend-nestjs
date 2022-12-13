@@ -1,5 +1,5 @@
-import { Gender } from "src/news/common/gender.enum";
-import { Social } from "../common/Social";
+import { Gender } from 'src/news/common/gender.enum';
+import { Social } from '../common/Social';
 
 export class Payload {
   id: number;

@@ -12,10 +12,15 @@ import { SentenceGuideRepository } from './repository/sentence-guide.repository'
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ScriptDefaultRepository, NewsRepository, SentenceDefaultRepository, ScriptGuideRepository, SentenceGuideRepository, MemoGuideRepository,
+      ScriptDefaultRepository,
+      NewsRepository,
+      SentenceDefaultRepository,
+      ScriptGuideRepository,
+      SentenceGuideRepository,
+      MemoGuideRepository,
     ]),
   ],
   controllers: [DummyController],
-  providers: [DummyService]
+  providers: [DummyService],
 })
 export class DummyModule {}

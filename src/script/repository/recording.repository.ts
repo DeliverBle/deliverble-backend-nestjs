@@ -1,13 +1,11 @@
-import { EntityRepository, Repository } from "typeorm";
-import { Recording } from "../entity/recording.entity";
-import { RecordingDto } from "../dto/recording.dto";
+import { EntityRepository, Repository } from 'typeorm';
+import { Recording } from '../entity/recording.entity';
+import { RecordingDto } from '../dto/recording.dto';
 // import { ReturnRecordingDto } from "../dto/return-recording.dto";
 
 @EntityRepository(Recording)
 export class RecordingRepository extends Repository<Recording> {
-  async createRecording(
-    recordingDto: RecordingDto,
-  ): Promise<Recording> {
+  async createRecording(recordingDto: RecordingDto): Promise<Recording> {
     const recording: Recording = new Recording();
     recording.name = recordingDto.name;
     recording.link = recordingDto.link;
@@ -18,7 +16,10 @@ export class RecordingRepository extends Repository<Recording> {
 
     await recording.save();
 
-    console.log(">>>>>>> LINK >>>>>>>>>>>>> ", await this.getRecordingByLink(recording.link));
+    console.log(
+      '>>>>>>> LINK >>>>>>>>>>>>> ',
+      await this.getRecordingByLink(recording.link),
+    );
     return recording;
   }
 

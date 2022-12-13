@@ -6,12 +6,14 @@ import {
   Logger,
   Param,
   Patch,
-  Post, Query,
+  Post,
+  Query,
   Req,
-  Res, UploadedFile,
+  Res,
+  UploadedFile,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
+  UseInterceptors,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
@@ -28,8 +30,8 @@ import { Memo } from './entity/memo.entity';
 import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
-import { FileInterceptor } from "@nestjs/platform-express";
-import { ReturnUserDto } from "../user/dto/return-user.dto";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ReturnUserDto } from '../user/dto/return-user.dto';
 
 const logger: Logger = new Logger('script controller');
 
@@ -38,62 +40,66 @@ export class ScriptController {
   constructor(
     private scriptService: ScriptService,
     private newsService: NewsService,
-    ) {};
+  ) {}
 
   /*
-  * 개발 테스트 로직
-  */
+   * 개발 테스트 로직
+   */
   @Post('test/create')
   @UseGuards(JwtAuthGuard)
-  async createScriptTest(
-    @Req() req,
-    @Res() res
-  ): Promise<Response> {
+  async createScriptTest(@Req() req, @Res() res): Promise<Response> {
     const userId: number = req.user.id;
     const newsId: number = req.body.newsId;
     const scriptName: string = req.body.name;
-    const data: Script = await this.scriptService.createScript(userId, newsId, scriptName);
+    const data: Script = await this.scriptService.createScript(
+      userId,
+      newsId,
+      scriptName,
+    );
     return res
-    .status(statusCode.OK)
-    .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data))
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data));
   }
 
   @Get('test/get/all')
-  async getAllScript(
-    @Res() res
-  ): Promise<Response> {
+  async getAllScript(@Res() res): Promise<Response> {
     const data: Script[] = await this.scriptService.getAllScript();
     return res
-    .status(statusCode.OK)
-    .send(util.success(statusCode.OK, message.READ_ALL_SCRIPTS_SUCCESS, data))
+      .status(statusCode.OK)
+      .send(
+        util.success(statusCode.OK, message.READ_ALL_SCRIPTS_SUCCESS, data),
+      );
   }
 
   @Post('test/delete/:scriptId')
   async deleteScriptTest(
     @Res() res,
-    @Param('scriptId') scriptId : number
+    @Param('scriptId') scriptId: number,
   ): Promise<Response> {
     const data: Script = await this.scriptService.deleteScriptTest(scriptId);
     return res
-    .status(statusCode.OK)
-    .send(util.success(statusCode.OK, message.DELETE_SCRIPT_SUCCESS, data))
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.DELETE_SCRIPT_SUCCESS, data));
   }
 
   @Post('sentence/test/create')
   @UseGuards(JwtAuthGuard)
-  async createSentence(
-    @Req() req,
-    @Res() res
-  ): Promise<Response> {
+  async createSentence(@Req() req, @Res() res): Promise<Response> {
     const scriptId: number = req.body.scriptId;
     const order: number = req.body.order;
     const startTime: number = req.body.startTime;
     const endTime: number = req.body.endTime;
     const text: string = req.body.text;
-    const data: Sentence = await this.scriptService.createSentenceByScriptId(scriptId, order, startTime, endTime, text);
+    const data: Sentence = await this.scriptService.createSentenceByScriptId(
+      scriptId,
+      order,
+      startTime,
+      endTime,
+      text,
+    );
     return res
-    .status(statusCode.OK)
-    .send(util.success(statusCode.OK, message.CREATE_SENTENCE_SUCCESS, data))
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.CREATE_SENTENCE_SUCCESS, data));
   }
 
   // 스크립트 이름 변경 API
@@ -102,28 +108,51 @@ export class ScriptController {
   async changeScriptName(
     @Req() req,
     @Res() res,
-    @Param('scriptId') scriptId: number
+    @Param('scriptId') scriptId: number,
   ): Promise<Response> {
     try {
       const user: User = req.user;
       const userId: number = user.id;
       const name: string = req.body.name;
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDto = await this.scriptService.changeScriptName(userId, scriptId, name);
+      const returnNewsDto: ReturnNewsDto =
+        await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDto = await this.scriptService.changeScriptName(
+        userId,
+        scriptId,
+        name,
+      );
       return res
-      .status(statusCode.OK)
-      .send(util.success(statusCode.OK, message.UPDATE_SCRIPT_NAME_SUCCESS, data, data2))
+        .status(statusCode.OK)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.UPDATE_SCRIPT_NAME_SUCCESS,
+            data,
+            data2,
+          ),
+        );
     } catch (error) {
-      logger.error(error)
-      if (error.name === "UnauthorizedException") {
+      logger.error(error);
+      if (error.name === 'UnauthorizedException') {
         return res
-        .status(statusCode.UNAUTHORIZED)
-        .send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+          .status(statusCode.UNAUTHORIZED)
+          .send(
+            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+          );
       }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -138,23 +167,42 @@ export class ScriptController {
       const user: User = req.user;
       const userId: number = user.id;
       await this.scriptService.createScriptAfterCountCheck(userId, newsId);
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(newsId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(
+        newsId,
+      );
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDtoCollection =
+        await this.scriptService.getScripts(userId, newsId);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.CREATE_SCRIPT_SUCCESS, data, data2))
-      } catch (error) {
-        logger.error(error)
-        if (error.name === "BadRequestException") {
-          return res
-            .status(statusCode.BAD_REQUEST)
-            .send(util.fail(statusCode.BAD_REQUEST, message.FULL_SCRIPTS_COUNT))
-        }
+        .send(
+          util.success(
+            statusCode.OK,
+            message.CREATE_SCRIPT_SUCCESS,
+            data,
+            data2,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
+      if (error.name === 'BadRequestException') {
         return res
-          .status(statusCode.INTERNAL_SERVER_ERROR)
-          .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.FULL_SCRIPTS_COUNT));
       }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
+    }
   }
 
   @Delete('delete/:scriptId')
@@ -162,30 +210,60 @@ export class ScriptController {
   async deleteScript(
     @Req() req,
     @Res() res,
-    @Param('scriptId') scriptId: number
+    @Param('scriptId') scriptId: number,
   ): Promise<Response> {
     try {
       const user: User = req.user;
       const userId: number = user.id;
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDtoCollection = await this.scriptService.deleteAndGetScripts(userId, scriptId);
+      const returnNewsDto: ReturnNewsDto =
+        await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDtoCollection =
+        await this.scriptService.deleteAndGetScripts(userId, scriptId);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.DELETE_SCRIPT_SUCCESS, data, data2))
-      } catch (error) {
-        logger.error(error)
-        if (error.name === "UnauthorizedException") {
-          return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
-        }
-        if (error.name === "BadRequestException") {
-          return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_REMOVABLE_SCRIPT))
-        }
-        if (error.name === "EntityNotFound") {
-          return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
-        }
-        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.success(
+            statusCode.OK,
+            message.DELETE_SCRIPT_SUCCESS,
+            data,
+            data2,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
+      if (error.name === 'UnauthorizedException') {
+        return res
+          .status(statusCode.UNAUTHORIZED)
+          .send(
+            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+          );
       }
+      if (error.name === 'BadRequestException') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(
+            util.fail(statusCode.BAD_REQUEST, message.NOT_REMOVABLE_SCRIPT),
+          );
+      }
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT));
+      }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
+    }
   }
 
   @Post('sentence/update/:scriptId')
@@ -193,31 +271,63 @@ export class ScriptController {
   async updateSentence(
     @Req() req,
     @Res() res,
-    @Param('scriptId') scriptId: number
+    @Param('scriptId') scriptId: number,
   ): Promise<Response> {
     try {
       const user: User = req.user;
       const userId: number = user.id;
       const order: number = req.body.order;
       const text: string = req.body.text;
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDto = await this.scriptService.updateSentence(userId, scriptId, order, text);
+      const returnNewsDto: ReturnNewsDto =
+        await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDto = await this.scriptService.updateSentence(
+        userId,
+        scriptId,
+        order,
+        text,
+      );
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.UPDATE_SENTENCE_SUCCESS, data, data2))
+        .send(
+          util.success(
+            statusCode.OK,
+            message.UPDATE_SENTENCE_SUCCESS,
+            data,
+            data2,
+          ),
+        );
     } catch (error) {
-      logger.error(error)
-      if (error.name === "UnauthorizedException") {
-        return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      logger.error(error);
+      if (error.name === 'UnauthorizedException') {
+        return res
+          .status(statusCode.UNAUTHORIZED)
+          .send(
+            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+          );
       }
-      if (error.name === "BadRequestException") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER))
+      if (error.name === 'BadRequestException') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER));
       }
-      if (error.name === "EntityNotFound") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT));
       }
-      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -226,37 +336,61 @@ export class ScriptController {
   async createMemo(
     @Req() req,
     @Res() res,
-    @Param('scriptId') scriptId: number
+    @Param('scriptId') scriptId: number,
   ): Promise<Response> {
     try {
       const user: User = req.user;
       const createMemoDto: CreateMemoDto = new CreateMemoDto();
       const script: Script = await this.scriptService.getScriptById(scriptId);
-      
+
       createMemoDto.userId = user.id;
       createMemoDto.script = script;
       createMemoDto.order = req.body.order;
       createMemoDto.startIndex = req.body.startIndex;
       createMemoDto.keyword = req.body.keyword;
       createMemoDto.content = req.body.content;
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDto = await this.scriptService.createMemo(createMemoDto);
+      const returnNewsDto: ReturnNewsDto =
+        await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDto = await this.scriptService.createMemo(
+        createMemoDto,
+      );
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.CREATE_MEMO_SUCCESS, data, data2))
+        .send(
+          util.success(statusCode.OK, message.CREATE_MEMO_SUCCESS, data, data2),
+        );
     } catch (error) {
       logger.error(error);
-      if (error.name === "UnauthorizedException") {
-        return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      if (error.name === 'UnauthorizedException') {
+        return res
+          .status(statusCode.UNAUTHORIZED)
+          .send(
+            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+          );
       }
-      if (error.name === "BadRequestException") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER))
+      if (error.name === 'BadRequestException') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER));
       }
-      if (error.name === "EntityNotFound") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT))
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_SCRIPT));
       }
-      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -265,36 +399,62 @@ export class ScriptController {
   async updateMemo(
     @Req() req,
     @Res() res,
-    @Param('memoId') memoId: number
+    @Param('memoId') memoId: number,
   ): Promise<Response> {
     try {
       const user: User = req.user;
-      const scriptId: number = await this.scriptService.getScriptIdByMemoId(memoId);
-      const updateMemoDto: UpdateMemoDto = new UpdateMemoDto;
+      const scriptId: number = await this.scriptService.getScriptIdByMemoId(
+        memoId,
+      );
+      const updateMemoDto: UpdateMemoDto = new UpdateMemoDto();
 
       updateMemoDto.userId = user.id;
       updateMemoDto.scriptId = scriptId;
       updateMemoDto.memoId = memoId;
       updateMemoDto.content = req.body.content;
-      
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDto = await this.scriptService.updateMemo(updateMemoDto);
+
+      const returnNewsDto: ReturnNewsDto =
+        await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDto = await this.scriptService.updateMemo(
+        updateMemoDto,
+      );
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.UPDATE_MEMO_SUCCESS, data, data2))
+        .send(
+          util.success(statusCode.OK, message.UPDATE_MEMO_SUCCESS, data, data2),
+        );
     } catch (error) {
       logger.error(error);
-      if (error.name === "UnauthorizedException") {
-        return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      if (error.name === 'UnauthorizedException') {
+        return res
+          .status(statusCode.UNAUTHORIZED)
+          .send(
+            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+          );
       }
-      if (error.name === "BadRequestException") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER))
+      if (error.name === 'BadRequestException') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_ORDER));
       }
-      if (error.name === "EntityNotFound") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_MEMO))
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_MEMO));
       }
-      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -303,33 +463,57 @@ export class ScriptController {
   async deleteMemo(
     @Req() req,
     @Res() res,
-    @Param('memoId') memoId: number
+    @Param('memoId') memoId: number,
   ): Promise<Response> {
     try {
       const user: User = req.user;
-      const scriptId: number = await this.scriptService.getScriptIdByMemoId(memoId);
-      const deleteMemoDto: DeleteMemoDto = new DeleteMemoDto;
+      const scriptId: number = await this.scriptService.getScriptIdByMemoId(
+        memoId,
+      );
+      const deleteMemoDto: DeleteMemoDto = new DeleteMemoDto();
 
       deleteMemoDto.userId = user.id;
       deleteMemoDto.scriptId = scriptId;
       deleteMemoDto.memoId = memoId;
-      
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDto = await this.scriptService.deleteMemo(deleteMemoDto);
+
+      const returnNewsDto: ReturnNewsDto =
+        await this.newsService.getNewsByScriptId(scriptId);
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDto = await this.scriptService.deleteMemo(
+        deleteMemoDto,
+      );
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.DELETE_MEMO_SUCCESS, data, data2))
+        .send(
+          util.success(statusCode.OK, message.DELETE_MEMO_SUCCESS, data, data2),
+        );
     } catch (error) {
       console.log();
       logger.error(error);
-      if (error.name === "UnauthorizedException") {
-        return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT))
+      if (error.name === 'UnauthorizedException') {
+        return res
+          .status(statusCode.UNAUTHORIZED)
+          .send(
+            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+          );
       }
-      if (error.name === "Error") {
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_MEMO))
+      if (error.name === 'Error') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_MEMO));
       }
-      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -337,7 +521,11 @@ export class ScriptController {
   @Post('/recording/upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File, @Req() req) {
+  uploadRecording(
+    @Body() body,
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req,
+  ) {
     const scriptId = body.scriptId;
     const name = body.name;
     // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
@@ -347,7 +535,7 @@ export class ScriptController {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
 
-    console.log("UPLOAD WELL ! ")
+    console.log('UPLOAD WELL ! ');
 
     return this.scriptService.uploadRecordingToS3(
       userId,
@@ -367,11 +555,7 @@ export class ScriptController {
     const scriptId = body.scriptId;
     const link = body.link;
 
-    return this.scriptService.deleteRecording(
-      userId,
-      scriptId,
-      link,
-    );
+    return this.scriptService.deleteRecording(userId, scriptId, link);
   }
 
   @Post('/recording/change-name')
@@ -397,9 +581,7 @@ export class ScriptController {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
 
-    return this.scriptService.getUserAllRecording(
-      userId,
-    );
+    return this.scriptService.getUserAllRecording(userId);
   }
 
   @Get('/recording/find')
@@ -410,11 +592,8 @@ export class ScriptController {
     // const scriptId = req.params.scriptId;
     // get from query param
     const scriptId = query.scriptId;
-    console.log("getRecordingByScriptId scriptId :: ", scriptId);
+    console.log('getRecordingByScriptId scriptId :: ', scriptId);
 
-    return this.scriptService.getRecordingByScriptId(
-      userId,
-      scriptId,
-    );
+    return this.scriptService.getRecordingByScriptId(userId, scriptId);
   }
 }

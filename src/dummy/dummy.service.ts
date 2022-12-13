@@ -45,113 +45,174 @@ export class DummyService {
 
   async createScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.createScriptDefault(news);
-    const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
+    const scriptDefault: ScriptDefault =
+      await this.scriptDefaultRepository.createScriptDefault(news);
+    const returnScriptDefaultDto: ReturnScriptDefaultDto =
+      new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
   }
 
   async createScriptGuide(newsId: number): Promise<ReturnScriptGuideDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
-    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.createScriptGuide(news);
-    const returnScriptDefaultDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(scriptGuide);
+    const scriptGuide: ScriptGuide =
+      await this.scriptGuideRepository.createScriptGuide(news);
+    const returnScriptDefaultDto: ReturnScriptGuideDto =
+      new ReturnScriptGuideDto(scriptGuide);
     return returnScriptDefaultDto;
   }
 
   async getScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptDefaultId: number = (await news.scriptDefault).id;
-    const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.findOneOrFail(scriptDefaultId);
-    const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
+    const scriptDefault: ScriptDefault =
+      await this.scriptDefaultRepository.findOneOrFail(scriptDefaultId);
+    const returnScriptDefaultDto: ReturnScriptDefaultDto =
+      new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
   }
 
   async getScriptGuide(newsId: number): Promise<ReturnScriptGuideDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptGuideId: number = (await news.scriptGuide).id;
-    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.findOneOrFail(scriptGuideId);
-    const returnScriptGuideDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(scriptGuide);
+    const scriptGuide: ScriptGuide =
+      await this.scriptGuideRepository.findOneOrFail(scriptGuideId);
+    const returnScriptGuideDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(
+      scriptGuide,
+    );
     return returnScriptGuideDto;
   }
 
   async deleteScriptDefault(newsId: number): Promise<ReturnScriptDefaultDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptDefaultId: number = (await news.scriptGuide).id;
-    const scriptDefault: ScriptDefault = await this.scriptDefaultRepository.deleteScriptDefault(scriptDefaultId);
-    const returnScriptDefaultDto: ReturnScriptDefaultDto = new ReturnScriptDefaultDto(scriptDefault);
+    const scriptDefault: ScriptDefault =
+      await this.scriptDefaultRepository.deleteScriptDefault(scriptDefaultId);
+    const returnScriptDefaultDto: ReturnScriptDefaultDto =
+      new ReturnScriptDefaultDto(scriptDefault);
     return returnScriptDefaultDto;
   }
 
   async deleteScriptGuide(newsId: number): Promise<ReturnScriptGuideDto> {
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptGuideId: number = (await news.scriptGuide).id;
-    const scriptGuide: ScriptGuide = await this.scriptGuideRepository.deleteScriptGuide(scriptGuideId);
-    const returnScriptGuideDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(scriptGuide);
+    const scriptGuide: ScriptGuide =
+      await this.scriptGuideRepository.deleteScriptGuide(scriptGuideId);
+    const returnScriptGuideDto: ReturnScriptGuideDto = new ReturnScriptGuideDto(
+      scriptGuide,
+    );
     return returnScriptGuideDto;
   }
 
-  async createSentenceDefault(createSentenceDefaultDto: CreateSentenceDefaultDto): Promise<ReturnSentenceDefaultDto> {
+  async createSentenceDefault(
+    createSentenceDefaultDto: CreateSentenceDefaultDto,
+  ): Promise<ReturnSentenceDefaultDto> {
     const newsId: number = createSentenceDefaultDto.newsId;
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptDefault: ScriptDefault = await news.scriptDefault;
     if (!scriptDefault) {
       throw NotFoundError;
     }
-    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.createSentenceDefault(scriptDefault, createSentenceDefaultDto); 
-    const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
+    const sentenceDefault: SentenceDefault =
+      await this.sentenceDefaultRepository.createSentenceDefault(
+        scriptDefault,
+        createSentenceDefaultDto,
+      );
+    const returnSentenceDefaultDto: ReturnSentenceDefaultDto =
+      new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
   }
 
-  async createSentenceGuide(createSentenceGuideDto: CreateSentenceGuideDto): Promise<ReturnSentenceGuideDto> {
+  async createSentenceGuide(
+    createSentenceGuideDto: CreateSentenceGuideDto,
+  ): Promise<ReturnSentenceGuideDto> {
     const newsId: number = createSentenceGuideDto.newsId;
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptGuide: ScriptGuide = await news.scriptGuide;
     if (!scriptGuide) {
       throw NotFoundError;
     }
-    const sentenceGuide: SentenceGuide = await this.sentenceGuideRepository.createSentenceGuide(scriptGuide, createSentenceGuideDto); 
-    const returnSentenceGuideDto: ReturnSentenceGuideDto = new ReturnSentenceGuideDto(sentenceGuide);
+    const sentenceGuide: SentenceGuide =
+      await this.sentenceGuideRepository.createSentenceGuide(
+        scriptGuide,
+        createSentenceGuideDto,
+      );
+    const returnSentenceGuideDto: ReturnSentenceGuideDto =
+      new ReturnSentenceGuideDto(sentenceGuide);
     return returnSentenceGuideDto;
   }
 
-  async updateSentenceDefault(updateSentenceDefaultDto: UpdateSentenceDefaultDto): Promise<ReturnSentenceDefaultDto> {
-    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.updateSentenceDefault(updateSentenceDefaultDto);
-    const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
+  async updateSentenceDefault(
+    updateSentenceDefaultDto: UpdateSentenceDefaultDto,
+  ): Promise<ReturnSentenceDefaultDto> {
+    const sentenceDefault: SentenceDefault =
+      await this.sentenceDefaultRepository.updateSentenceDefault(
+        updateSentenceDefaultDto,
+      );
+    const returnSentenceDefaultDto: ReturnSentenceDefaultDto =
+      new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
   }
 
-  async updateSentenceGuide(updateSentenceGuideDto: UpdateSentenceGuideDto): Promise<ReturnSentenceGuideDto> {
-    const sentenceGuide: SentenceGuide = await this.sentenceGuideRepository.updateSentenceGuide(updateSentenceGuideDto);
-    const returnSentenceGuideDto: ReturnSentenceGuideDto = new ReturnSentenceGuideDto(sentenceGuide);
+  async updateSentenceGuide(
+    updateSentenceGuideDto: UpdateSentenceGuideDto,
+  ): Promise<ReturnSentenceGuideDto> {
+    const sentenceGuide: SentenceGuide =
+      await this.sentenceGuideRepository.updateSentenceGuide(
+        updateSentenceGuideDto,
+      );
+    const returnSentenceGuideDto: ReturnSentenceGuideDto =
+      new ReturnSentenceGuideDto(sentenceGuide);
     return returnSentenceGuideDto;
   }
 
-  async deleteSentenceDefault(sentenceDefaultId: number): Promise<ReturnSentenceDefaultDto> {
-    const sentenceDefault: SentenceDefault = await this.sentenceDefaultRepository.deleteSentenceDefault(sentenceDefaultId);
-    const returnSentenceDefaultDto: ReturnSentenceDefaultDto = new ReturnSentenceDefaultDto(sentenceDefault);
+  async deleteSentenceDefault(
+    sentenceDefaultId: number,
+  ): Promise<ReturnSentenceDefaultDto> {
+    const sentenceDefault: SentenceDefault =
+      await this.sentenceDefaultRepository.deleteSentenceDefault(
+        sentenceDefaultId,
+      );
+    const returnSentenceDefaultDto: ReturnSentenceDefaultDto =
+      new ReturnSentenceDefaultDto(sentenceDefault);
     return returnSentenceDefaultDto;
   }
 
-  async deleteSentenceGuide(sentenceGuideId: number): Promise<ReturnSentenceGuideDto> {
-    const sentenceGuide: SentenceGuide = await this.sentenceGuideRepository.deleteSentenceGuide(sentenceGuideId);
-    const returnSentenceGuideDto: ReturnSentenceGuideDto = new ReturnSentenceGuideDto(sentenceGuide);
+  async deleteSentenceGuide(
+    sentenceGuideId: number,
+  ): Promise<ReturnSentenceGuideDto> {
+    const sentenceGuide: SentenceGuide =
+      await this.sentenceGuideRepository.deleteSentenceGuide(sentenceGuideId);
+    const returnSentenceGuideDto: ReturnSentenceGuideDto =
+      new ReturnSentenceGuideDto(sentenceGuide);
     return returnSentenceGuideDto;
   }
 
-  async createMemoGuide(createMemoGuideDto: CreateMemoGuideDto): Promise<ReturnMemoGuideDto> {
+  async createMemoGuide(
+    createMemoGuideDto: CreateMemoGuideDto,
+  ): Promise<ReturnMemoGuideDto> {
     const newsId: number = createMemoGuideDto.newsId;
     const news: News = await this.newsRepository.getNewsById(newsId);
     const scriptGuide: ScriptGuide = await news.scriptGuide;
     if (!scriptGuide) {
       throw NotFoundError;
     }
-    const memoGuide: MemoGuide = await this.memoGuideRepository.createMemoGuide(scriptGuide, createMemoGuideDto); 
-    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(memoGuide);
+    const memoGuide: MemoGuide = await this.memoGuideRepository.createMemoGuide(
+      scriptGuide,
+      createMemoGuideDto,
+    );
+    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(
+      memoGuide,
+    );
     return returnMemoGuideDto;
   }
 
   async deleteMemoGuide(memoGuideId: number): Promise<ReturnMemoGuideDto> {
-    const memoGuide: MemoGuide = await this.memoGuideRepository.deleteMemoGuide(memoGuideId);
-    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(memoGuide);
+    const memoGuide: MemoGuide = await this.memoGuideRepository.deleteMemoGuide(
+      memoGuideId,
+    );
+    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(
+      memoGuide,
+    );
     return returnMemoGuideDto;
   }
 }
