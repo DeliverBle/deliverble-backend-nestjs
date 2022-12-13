@@ -1,3 +1,4 @@
+import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
 import { Category } from "../common/category.enum";
 import { Channel } from "../common/channel.enum";
 import { News } from "../news.entity";
@@ -11,13 +12,23 @@ export class ExploreNewsDto {
     this.thumbnail = news.thumbnail;
     this.reportDate = news.reportDate;
     this.isFavorite = false;
-}
-    id: number;
-    title: string;
-    category: Category;
-    channel: Channel;
-    thumbnail: string;
-    reportDate: Date;
-    isFavorite: boolean;
+  }
+  id: number;
+  title: string;
+  category: Category;
+  channel: Channel;
+  thumbnail: string;
+  reportDate: Date;
+  isFavorite: boolean;
+  haveGuide: boolean;
+
+  async checkHaveGuide(news: News): Promise<void> {
+    const scriptGuide: ScriptGuide = await news.scriptGuide;
+    if (!scriptGuide) {
+      this.haveGuide = false
+      return;
+    }
+    this.haveGuide = true;
+  }
     
 }

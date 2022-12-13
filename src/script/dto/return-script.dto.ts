@@ -9,7 +9,7 @@ export class ReturnScriptDto {
     this.newsId = script.news.id;
     this.name = script.name;
     this.sentences = script.sentences;
-    this.memos = script.memos;
+    this.sortMemos(script);
 }   
   id: number;
   userId: number;
@@ -17,4 +17,15 @@ export class ReturnScriptDto {
   name: string;
   sentences: Sentence[];
   memos: Memo[];
+
+  sortMemos(script: Script): void {
+    let sortingMemos = script.memos;
+    sortingMemos.sort((prev, next) => {
+      if (prev.order == next.order) {
+        return prev.startIndex - next.startIndex;
+      }
+      return prev.order - next.order;
+    });
+    this.memos = sortingMemos;
+  }
 }
