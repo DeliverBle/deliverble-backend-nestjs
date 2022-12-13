@@ -348,8 +348,6 @@ export class ScriptService {
       headers: formData.getHeaders(),
     });
 
-    console.log('THIS RESPONSE ', response);
-
     const user = await this.userRepository.findOneOrFail(userId);
     const scripts = await user.scripts;
 
@@ -367,8 +365,14 @@ export class ScriptService {
       };
     }
 
-    console.log('script.recordingblob', script.recordingblob);
-    const recordingDtoLength = script.recordingblob.split(' @ ').length;
+    console.log('Recording Blob', script.recordingblob.toString());
+
+    const recordingDtoLength = script.recordingblob
+      .toString()
+      .split(' @ ').length;
+
+    console.log('recordingDtoLength', recordingDtoLength);
+
     const recordingDto = new RecordingDto(
       name,
       response.data['url'],
