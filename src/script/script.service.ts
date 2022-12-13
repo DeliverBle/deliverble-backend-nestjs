@@ -367,6 +367,7 @@ export class ScriptService {
       };
     }
 
+    console.log('script.recordingblob', script.recordingblob);
     const recordingDtoLength = script.recordingblob.split(' @ ').length;
     const recordingDto = new RecordingDto(
       name,
