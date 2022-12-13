@@ -237,6 +237,7 @@ export class ScriptController {
       createMemoDto.script = script;
       createMemoDto.order = req.body.order;
       createMemoDto.startIndex = req.body.startIndex;
+      createMemoDto.keyword = req.body.keyword;
       createMemoDto.content = req.body.content;
       const returnNewsDto: ReturnNewsDto = await this.newsService.getNewsByScriptId(scriptId);
       const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);

@@ -4,7 +4,7 @@ import { News } from "../news.entity"
 
 export const changeToExploreNewsList = (newsList: News[]): ExploreNewsDto[] => {
   const exploreNewsDtoList: ExploreNewsDto[] = newsList.map(
-    (news) => new ExploreNewsDto(news)
+    (news) => (new ExploreNewsDto(news))
   )
   return exploreNewsDtoList;
 }
