@@ -14,6 +14,10 @@ export class Script extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
+  // create json type
+  @Column({ type: 'longblob' })
+  recordingblob: string;
+
   @ManyToOne(() => User, (user) => user.scripts, {
     eager: true,
   })
@@ -34,8 +38,16 @@ export class Script extends BaseEntity {
   })
   memos: Memo[];
 
-  @OneToMany(() => Memo, (memo) => memo.script, {
+  @OneToMany(() => Recording, (recording) => recording.script, {
     eager: true,
   })
   recordings: Recording[];
+
+  public addNewRecording = (recording: Recording) => {
+    if (this.recordings == undefined) {
+      this.recordings = [];
+    }
+    this.recordings.push(recording);
+    return this;
+  }
 }

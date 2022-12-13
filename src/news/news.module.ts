@@ -19,11 +19,12 @@ import { UserRepository } from 'src/user/user.repository';
 import { NewsController } from './news.controller';
 import { NewsRepository } from './news.repository';
 import { NewsService } from './news.service';
+import { RecordingRepository } from "../script/repository/recording.repository";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, ScriptGuideRepository, SentenceGuideRepository, MemoGuideRepository, HistoryRepository,
+      NewsRepository, TagRepository, ScriptRepository, SentenceRepository, UserRepository, ScriptDefaultRepository, SentenceDefaultRepository, MemoRepository, ScriptCountRepository, ScriptGuideRepository, SentenceGuideRepository, MemoGuideRepository, RecordingRepository, HistoryRepository,
     ]),
     AuthModule,
   ],

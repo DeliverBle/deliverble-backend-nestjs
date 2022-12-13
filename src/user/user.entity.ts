@@ -64,7 +64,13 @@ export class User extends BaseEntity {
     @OneToMany(() => ScriptCount, (scriptCount) => scriptCount.user)
     scriptCounts: ScriptCount[];
 
+  public updateExistingScript = async (updatedScript: Script) => {
+    const nowScripts = await this.scripts;
+    console.log('updateExistingScript ::: nowScripts ', nowScripts);
+    nowScripts.push(updatedScript);
+    this.scripts = Promise.resolve(nowScripts);
+    return this;
+  };
     @OneToMany(() => History, (history) => history.user)
     histories: Promise<History[]>;
-
 }

@@ -6,7 +6,7 @@ import {
   Logger,
   Param,
   Patch,
-  Post,
+  Post, Query,
   Req,
   Res, UploadedFile,
   UseGuards,
@@ -29,6 +29,7 @@ import { Script } from './entity/script.entity';
 import { Sentence } from './entity/sentence.entity';
 import { ScriptService } from './script.service';
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ReturnUserDto } from "../user/dto/return-user.dto";
 
 const logger: Logger = new Logger('script controller');
 
@@ -334,46 +335,86 @@ export class ScriptController {
 
   // upload recording
   @Post('/recording/upload')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File) {
-    const userId = body.userId;
-    const scriptId = body.scriptid;
+  uploadRecording(@Body() body, @UploadedFile() file: Express.Multer.File, @Req() req) {
+    const scriptId = body.scriptId;
     const name = body.name;
     // seconds로 표기 23s -> 23 1 minute 57 seconds -> 117
     const endtime = body.endtime;
+    const date = body.date;
 
-    console.log(file);
-    console.log("userId: ", userId);
-    console.log("scriptId: ", scriptId);
-    console.log("name: ", name);
-    console.log("endtime: ", endtime);
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+
+    console.log("UPLOAD WELL ! ")
 
     return this.scriptService.uploadRecordingToS3(
       userId,
-      scriptId,
+      parseInt(scriptId),
       name,
       endtime,
-      file,
+      date,
+      file.buffer,
     );
   }
 
   @Post('/recording/delete')
-  deleteRecording(userId: string, scriptId: string, name: string) {
-    return this.scriptService.deleteRecording(userId, scriptId, name);
+  @UseGuards(JwtAuthGuard)
+  deleteRecording(@Body() body, @Req() req) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+    const scriptId = body.scriptId;
+    const link = body.link;
+
+    return this.scriptService.deleteRecording(
+      userId,
+      scriptId,
+      link,
+    );
   }
 
   @Post('/recording/change-name')
-  changeNameOfRecording(
-    userId: string,
-    scriptId: string,
-    oldName: string,
-    newName: string,
-  ) {
+  @UseGuards(JwtAuthGuard)
+  changeNameOfRecording(@Body() body, @Req() req) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+    const scriptId = body.scriptId;
+    const link = body.link;
+    const newName = body.newName;
+
     return this.scriptService.changeNameOfRecording(
       userId,
       scriptId,
-      oldName,
+      link,
       newName,
+    );
+  }
+
+  @Get('/recording/find/all')
+  @UseGuards(JwtAuthGuard)
+  getUserAllRecording(@Body() body, @Req() req) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+
+    return this.scriptService.getUserAllRecording(
+      userId,
+    );
+  }
+
+  @Get('/recording/find')
+  @UseGuards(JwtAuthGuard)
+  getRecordingByScriptId(@Body() body, @Req() req, @Query() query) {
+    const userInfo: ReturnUserDto = req.user;
+    const userId = userInfo.id;
+    // const scriptId = req.params.scriptId;
+    // get from query param
+    const scriptId = query.scriptId;
+    console.log("getRecordingByScriptId scriptId :: ", scriptId);
+
+    return this.scriptService.getRecordingByScriptId(
+      userId,
+      scriptId,
     );
   }
 }
