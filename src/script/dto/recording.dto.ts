@@ -25,7 +25,7 @@ export class RecordingDto {
 
   determineName(nameInput: string, length: number): string {
     if (!nameInput) {
-      return '새로운 녹음 ' + length;
+      return '녹음 ' + length;
     }
     return nameInput;
   }

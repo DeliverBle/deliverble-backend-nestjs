@@ -55,18 +55,5 @@ export class Script extends BaseEntity {
     }
     this.recordings.push(recording);
     return this;
-  };
-
-  // public addNewRecording = async (newRecording: Recording) => {
-  //   let nowRecordings = await this.recordings;
-  //   console.log('now Recordings this recordings : ', nowRecordings);
-  //   if (nowRecordings === undefined) {
-  //     nowRecordings = [];
-  //   }
-  //   nowRecordings.push(newRecording);
-  //   console.log('newRecordings after push , newRecording');
-  //   this.recordings = Promise.resolve(nowRecordings);
-  //
-  //   return this.recordings;
-  // };
+  }
 }
