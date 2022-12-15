@@ -14,44 +14,44 @@ import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
 const mockNews1: News = new News(
-  "test title",
+  'test title',
   Category.SOCIETY,
-  "test script",
+  'test script',
   Gender.WOMEN,
   Channel.KBS,
-  "test link",
-  "test thumbnail",
+  'test link',
+  'test thumbnail',
   3,
   53,
   Suitability.HIGH,
   true,
   new Date(),
-)
+);
 mockNews1.id = 1;
 
 const mockNews2: News = new News(
-  "test title",
+  'test title',
   Category.SOCIETY,
-  "test script",
+  'test script',
   Gender.WOMEN,
   Channel.KBS,
-  "test link",
-  "test thumbnail",
+  'test link',
+  'test thumbnail',
   3,
   53,
   Suitability.HIGH,
   true,
   new Date(),
-)
+);
 mockNews2.id = 2;
 
 const mockUser: User = new User(
-  "222222223",
-  "test",
-  "test@test.test",
+  '222222223',
+  'test',
+  'test@test.test',
   Gender.MEN,
   Social.KAKAO,
-)
+);
 mockUser.id = 1;
 mockUser.favorites = Promise.resolve([mockNews1]);
 
@@ -64,14 +64,14 @@ const MockUserRepository = () => ({
   async deleteFavoriteNews(user: User, news: News) {
     mockUser.favorites = Promise.resolve([]);
     return mockUser;
-  }
-})
+  },
+});
 
 const MockNewsRepository = () => ({
   async findOne() {
     return mockNews1;
-  }
-})
+  },
+});
 
 describe('UserService', () => {
   let userService: UserService;
@@ -87,7 +87,7 @@ describe('UserService', () => {
         {
           provide: getRepositoryToken(NewsRepository),
           useValue: MockNewsRepository(),
-        }
+        },
       ],
     }).compile();
 
@@ -98,33 +98,35 @@ describe('UserService', () => {
     expect(userService).toBeDefined();
   });
 
-  describe("getUserInfo() : 로그인한 유저 정보 조회(내정보 화면 표시용)", () => {
-    it("SUCCESS: 로그인한 유저 정보 조회 성공", async () => {
+  describe('getUserInfo() : 로그인한 유저 정보 조회(내정보 화면 표시용)', () => {
+    it('SUCCESS: 로그인한 유저 정보 조회 성공', async () => {
       const userInfo: ReturnUserDto = mockUser;
-      const resultUser: UserForViewDto = await userService.getUserInfo(userInfo);
+      const resultUser: UserForViewDto = await userService.getUserInfo(
+        userInfo,
+      );
       expect(Object.keys(resultUser).length).toEqual(2);
-    })
-  })
+    });
+  });
 
-  describe("toggleFavoriteNews() : 좋아하는 뉴스 등록 or 취소", () => {
-    it("SUCCESS: 좋아하는 뉴스 등록", async () => {
+  describe('toggleFavoriteNews() : 좋아하는 뉴스 등록 or 취소', () => {
+    it('SUCCESS: 좋아하는 뉴스 등록', async () => {
       const user: User = mockUser;
       const newsId: number = mockNews2.id;
-      
+
       await userService.toggleFavoriteNews(user, newsId);
       const resultFavorites = await mockUser.favorites;
       const compareFavorites = [mockNews1, mockNews2];
       expect(resultFavorites).toStrictEqual(compareFavorites);
     });
 
-    it("SUCCESS: 좋아하는 뉴스 취소", async () => {
+    it('SUCCESS: 좋아하는 뉴스 취소', async () => {
       const user: User = mockUser;
       const newsId: number = mockNews1.id;
-      
+
       await userService.toggleFavoriteNews(user, newsId);
       const resultFavorites = await mockUser.favorites;
       const compareFavorites = [];
       expect(resultFavorites).toStrictEqual(compareFavorites);
     });
-  })
+  });
 });

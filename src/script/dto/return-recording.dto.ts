@@ -1,4 +1,4 @@
-import { Recording } from "../entity/recording.entity";
+import { Recording } from '../entity/recording.entity';
 
 export class ReturnRecordingDto {
   constructor(recording: Recording) {

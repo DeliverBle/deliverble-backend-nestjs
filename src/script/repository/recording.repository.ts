@@ -4,9 +4,7 @@ import { RecordingDto } from "../dto/recording.dto";
 
 @EntityRepository(Recording)
 export class RecordingRepository extends Repository<Recording> {
-  async createRecording(
-    recordingDto: RecordingDto,
-  ): Promise<Recording> {
+  async createRecording(recordingDto: RecordingDto): Promise<Recording> {
     const recording: Recording = new Recording();
     recording.name = recordingDto.name;
     recording.link = recordingDto.link;
@@ -17,7 +15,10 @@ export class RecordingRepository extends Repository<Recording> {
 
     await recording.save();
 
-    console.log(">>>>>>> LINK >>>>>>>>>>>>> ", await this.getRecordingByLink(recording.link));
+    console.log(
+      '>>>>>>> LINK >>>>>>>>>>>>> ',
+      await this.getRecordingByLink(recording.link),
+    );
     return recording;
   }
 

@@ -1,14 +1,17 @@
-import { NotFoundError } from "rxjs";
-import { EntityRepository, Repository } from "typeorm";
-import { CreateSentenceGuideDto } from "../dto/create-sentence-guide.dto";
-import { UpdateSentenceGuideDto } from "../dto/update-sentence-guide.dto";
-import { ScriptGuide } from "../entity/script-guide.entity";
-import { SentenceGuide } from "../entity/sentence-guide.entity";
+import { NotFoundError } from 'rxjs';
+import { EntityRepository, Repository } from 'typeorm';
+import { CreateSentenceGuideDto } from '../dto/create-sentence-guide.dto';
+import { UpdateSentenceGuideDto } from '../dto/update-sentence-guide.dto';
+import { ScriptGuide } from '../entity/script-guide.entity';
+import { SentenceGuide } from '../entity/sentence-guide.entity';
 
 @EntityRepository(SentenceGuide)
 export class SentenceGuideRepository extends Repository<SentenceGuide> {
-  async createSentenceGuide(scriptGuide: ScriptGuide, createSentenceGuideDto: CreateSentenceGuideDto): Promise<SentenceGuide> {
-    const sentenceGuide = new SentenceGuide()
+  async createSentenceGuide(
+    scriptGuide: ScriptGuide,
+    createSentenceGuideDto: CreateSentenceGuideDto,
+  ): Promise<SentenceGuide> {
+    const sentenceGuide = new SentenceGuide();
 
     sentenceGuide.scriptGuide = scriptGuide;
     sentenceGuide.order = createSentenceGuideDto.order;
@@ -20,7 +23,9 @@ export class SentenceGuideRepository extends Repository<SentenceGuide> {
     return sentenceGuide;
   }
 
-  async updateSentenceGuide(updateSentenceGuideDto: UpdateSentenceGuideDto): Promise<SentenceGuide> {
+  async updateSentenceGuide(
+    updateSentenceGuideDto: UpdateSentenceGuideDto,
+  ): Promise<SentenceGuide> {
     const sentenceGuideId: number = updateSentenceGuideDto.sentenceGuideId;
     await this.createQueryBuilder()
       .update()
@@ -30,9 +35,11 @@ export class SentenceGuideRepository extends Repository<SentenceGuide> {
         endTime: updateSentenceGuideDto.endTime,
         text: updateSentenceGuideDto.text,
       })
-      .where("id = :sentenceGuideId", { sentenceGuideId: sentenceGuideId })
-      .execute()
-    const sentenceGuide: SentenceGuide = await this.findOneOrFail(sentenceGuideId);
+      .where('id = :sentenceGuideId', { sentenceGuideId: sentenceGuideId })
+      .execute();
+    const sentenceGuide: SentenceGuide = await this.findOneOrFail(
+      sentenceGuideId,
+    );
     if (!sentenceGuide) {
       throw NotFoundError;
     }
@@ -40,15 +47,17 @@ export class SentenceGuideRepository extends Repository<SentenceGuide> {
   }
 
   async deleteSentenceGuide(sentenceGuideId: number): Promise<SentenceGuide> {
-    const sentenceGuide: SentenceGuide = await this.findOneOrFail(sentenceGuideId);
+    const sentenceGuide: SentenceGuide = await this.findOneOrFail(
+      sentenceGuideId,
+    );
     if (!sentenceGuide) {
       throw NotFoundError;
     }
     await this.createQueryBuilder()
       .delete()
       .from(SentenceGuide)
-      .where("id = :sentenceGuideId", { sentenceGuideId: sentenceGuideId })
-      .execute()
+      .where('id = :sentenceGuideId', { sentenceGuideId: sentenceGuideId })
+      .execute();
     return sentenceGuide;
   }
 }

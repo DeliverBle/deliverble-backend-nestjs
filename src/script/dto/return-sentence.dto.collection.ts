@@ -1,4 +1,4 @@
-import { ReturnSentenceDto } from "./return-sentence.dto";
+import { ReturnSentenceDto } from './return-sentence.dto';
 
 export class ReturnSentenceDtoCollection {
   constructor(returnSentenceDtoList: ReturnSentenceDto[]) {

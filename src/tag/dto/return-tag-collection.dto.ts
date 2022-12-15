@@ -1,4 +1,4 @@
-import { ReturnTagDto } from "./return-tag.dto";
+import { ReturnTagDto } from './return-tag.dto';
 
 export class ReturnTagDtoCollection {
   constructor(returnTagDtoList: ReturnTagDto[]) {

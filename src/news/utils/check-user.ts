@@ -3,4 +3,4 @@ export const checkUser = (user): boolean => {
     return false;
   }
   return true;
-}
+};

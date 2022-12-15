@@ -1,4 +1,4 @@
-import { SentenceDefault } from "../entity/sentence-default.entity";
+import { SentenceDefault } from '../entity/sentence-default.entity';
 
 export class ReturnSentenceDefaultDto {
   constructor(sentenceDefault: SentenceDefault) {
@@ -7,10 +7,10 @@ export class ReturnSentenceDefaultDto {
     this.startTime = sentenceDefault.startTime;
     this.endTime = sentenceDefault.endTime;
     this.text = sentenceDefault.text;
-}   
-    id: number;
-    order: number;
-    startTime: number;
-    endTime: number;
-    text: string;
+  }
+  id: number;
+  order: number;
+  startTime: number;
+  endTime: number;
+  text: string;
 }

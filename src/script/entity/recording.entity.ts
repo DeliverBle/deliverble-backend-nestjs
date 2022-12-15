@@ -1,9 +1,14 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Script } from "./script.entity";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Script } from './script.entity';
 
 @Entity()
 export class Recording extends BaseEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 

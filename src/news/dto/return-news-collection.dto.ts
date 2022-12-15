@@ -1,4 +1,4 @@
-import { ReturnNewsDto } from "./return-news.dto";
+import { ReturnNewsDto } from './return-news.dto';
 
 export class ReturnNewsDtoCollection {
   constructor(returnNewsDtoList: ReturnNewsDto[]) {

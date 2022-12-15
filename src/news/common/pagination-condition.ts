@@ -3,7 +3,7 @@ export class PaginationCondition {
     this.currentPage = _currentPage;
     this.listSize = _listSize;
   }
-  
+
   currentPage: number | 1;
   listSize: number | 12;
 
@@ -14,5 +14,4 @@ export class PaginationCondition {
   getLimit(): number {
     return this.listSize;
   }
-
 }

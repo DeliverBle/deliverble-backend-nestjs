@@ -1,124 +1,133 @@
-import { ScriptDefault } from "src/dummy/entity/script-default.entity";
-import { ScriptGuide } from "src/dummy/entity/script-guide.entity";
-import { History } from "src/history/history.entity";
-import { Script } from "src/script/entity/script.entity";
-import { Tag } from "src/tag/tag.entity";
-import { User } from "src/user/user.entity";
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Category } from "./common/category.enum";
-import { Channel } from "./common/channel.enum";
-import { Gender } from "./common/gender.enum";
-import { Suitability } from "./common/suitability.enum";
-
+import { ScriptDefault } from 'src/dummy/entity/script-default.entity';
+import { ScriptGuide } from 'src/dummy/entity/script-guide.entity';
+import { History } from 'src/history/history.entity';
+import { Script } from 'src/script/entity/script.entity';
+import { Tag } from 'src/tag/tag.entity';
+import { User } from 'src/user/user.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Category } from './common/category.enum';
+import { Channel } from './common/channel.enum';
+import { Gender } from './common/gender.enum';
+import { Suitability } from './common/suitability.enum';
 
 @Entity()
 export class News extends BaseEntity {
-    constructor(
-        _title: string,
-        _category: Category,
-        _announcerGender: Gender,
-        _channel: Channel,
-        _link: string,
-        _thumbnail: string,
-        _startTime: number,
-        _endTime: number,
-        _suitability: Suitability,
-        _isEmbeddable: boolean,
-        _reportDate: Date,
-        ) {
-        super();
-        this.title = _title;
-        this.category = _category;
-        this.announcerGender = _announcerGender;
-        this.channel = _channel;
-        this.link = _link;
-        this.thumbnail = _thumbnail;
-        this.startTime = _startTime;
-        this.endTime = _endTime;
-        this.suitability = _suitability;
-        this.isEmbeddable = _isEmbeddable;
-        this.reportDate = _reportDate;
-        }
-    @PrimaryGeneratedColumn()
-    id: number;
+  constructor(
+    _title: string,
+    _category: Category,
+    _announcerGender: Gender,
+    _channel: Channel,
+    _link: string,
+    _thumbnail: string,
+    _startTime: number,
+    _endTime: number,
+    _suitability: Suitability,
+    _isEmbeddable: boolean,
+    _reportDate: Date,
+  ) {
+    super();
+    this.title = _title;
+    this.category = _category;
+    this.announcerGender = _announcerGender;
+    this.channel = _channel;
+    this.link = _link;
+    this.thumbnail = _thumbnail;
+    this.startTime = _startTime;
+    this.endTime = _endTime;
+    this.suitability = _suitability;
+    this.isEmbeddable = _isEmbeddable;
+    this.reportDate = _reportDate;
+  }
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'varchar', length: 100 })
-    title: string;
+  @Column({ type: 'varchar', length: 100 })
+  title: string;
 
-    @Column({
+  @Column({
     type: 'enum',
     name: 'category',
     enum: Category,
     default: Category.UNSPECIFIED,
-    })
-    category: Category;
+  })
+  category: Category;
 
-    @Column({
+  @Column({
     type: 'enum',
     name: 'announcer_gender',
     enum: Gender,
     default: Gender.UNSPECIFIED,
-    })
-    announcerGender: Gender;
+  })
+  announcerGender: Gender;
 
-    @Column({
+  @Column({
     type: 'enum',
     name: 'channel',
     enum: Channel,
     default: Channel.UNSPECIFIED,
-    })
-    channel: Channel;
+  })
+  channel: Channel;
 
-    @Column({ type: 'varchar', length: 1000 })
-    link: string;
+  @Column({ type: 'varchar', length: 1000 })
+  link: string;
 
-    @Column({ type: 'varchar', length: 1000 })
-    thumbnail: string;
+  @Column({ type: 'varchar', length: 1000 })
+  thumbnail: string;
 
-    @Column('float')
-    startTime: number;
+  @Column('float')
+  startTime: number;
 
-    @Column('float')
-    endTime: number;
+  @Column('float')
+  endTime: number;
 
-    @Column({
+  @Column({
     type: 'enum',
     name: 'suitability',
     enum: Suitability,
     default: Suitability.MEDIUM,
-    })
-    suitability: Suitability;
+  })
+  suitability: Suitability;
 
-    @Column('varchar')
-    isEmbeddable: boolean;
+  @Column('varchar')
+  isEmbeddable: boolean;
 
-    @Column('date')
-    reportDate: Date;
+  @Column('date')
+  reportDate: Date;
 
-    @ManyToMany(() => User, (user) => user.favorites)
-    favorites: User[]
+  @ManyToMany(() => User, (user) => user.favorites)
+  favorites: User[];
 
-    @ManyToMany(() => Tag, (tag) => tag.forView, {
-        eager: true,
-    })
-    @JoinTable()
-    tagsForView: Tag[];
+  @ManyToMany(() => Tag, (tag) => tag.forView, {
+    eager: true,
+  })
+  @JoinTable()
+  tagsForView: Tag[];
 
-    @ManyToMany(() => Tag, (tag) => tag.forRecommend, {
-        eager: true,
-    })
-    @JoinTable()
-    tagsForRecommend: Tag[];
+  @ManyToMany(() => Tag, (tag) => tag.forRecommend, {
+    eager: true,
+  })
+  @JoinTable()
+  tagsForRecommend: Tag[];
 
-    @OneToMany(() => Script, (script) => script.news)
-    scripts: Script[];
+  @OneToMany(() => Script, (script) => script.news)
+  scripts: Script[];
 
-    @OneToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.news)
-    scriptDefault: Promise<ScriptDefault>;
+  @OneToOne(() => ScriptDefault, (scriptDefault) => scriptDefault.news)
+  scriptDefault: Promise<ScriptDefault>;
 
-    @OneToOne(() => ScriptGuide, (scriptGuide) => scriptGuide.news)
-    scriptGuide: Promise<ScriptGuide>;
+  @OneToOne(() => ScriptGuide, (scriptGuide) => scriptGuide.news)
+  scriptGuide: Promise<ScriptGuide>;
 
-    @OneToMany(() => History, (history) => history.news)
-    histories: History[];
+  @OneToMany(() => History, (history) => history.news)
+  histories: History[];
 }

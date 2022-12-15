@@ -1,9 +1,14 @@
-import { User } from "src/user/user.entity";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from 'src/user/user.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class ScriptCount extends BaseEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,5 +22,4 @@ export class ScriptCount extends BaseEntity {
 
   @Column()
   count: number;
-
 }

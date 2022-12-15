@@ -17,27 +17,30 @@ export class UserService {
     private userRepository: UserRepository,
     @InjectRepository(NewsRepository)
     private newsRepository: NewsRepository,
-) {};
+  ) {}
 
   async getUserInfo(userInfo: ReturnUserDto): Promise<UserForViewDto> {
     const userInfoForView = new UserForViewDto(
       userInfo.nickname,
-      userInfo.email
-      );
+      userInfo.email,
+    );
     return userInfoForView;
   }
 
-  async toggleFavoriteNews(user: User, newsId: number): Promise<TOGGLE_FAVORITE> {
+  async toggleFavoriteNews(
+    user: User,
+    newsId: number,
+  ): Promise<TOGGLE_FAVORITE> {
     const news: News = await this.newsRepository.findOne(newsId);
     if (news === undefined) {
-      throw new BadRequestException;
+      throw new BadRequestException();
     }
 
     const favorites = await user.favorites;
-    const favoriteNewsIdList: number[] = []
-    favorites.map((news) => favoriteNewsIdList.push(news.id))
-    
-    if ((favoriteNewsIdList.includes(newsId))) {
+    const favoriteNewsIdList: number[] = [];
+    favorites.map((news) => favoriteNewsIdList.push(news.id));
+
+    if (favoriteNewsIdList.includes(newsId)) {
       return await this.deleteFavoriteNews(user, news);
     }
     return await this.addFavoriteNews(user, news);
@@ -52,5 +55,4 @@ export class UserService {
     await this.userRepository.deleteFavoriteNews(user, news);
     return TOGGLE_FAVORITE.Delete;
   }
-  
 }

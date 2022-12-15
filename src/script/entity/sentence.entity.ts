@@ -1,9 +1,14 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Script } from "./script.entity";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Script } from './script.entity';
 
 @Entity()
 export class Sentence extends BaseEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -15,12 +20,12 @@ export class Sentence extends BaseEntity {
   @Column()
   order: number;
 
-  @Column({ type: "float" })
+  @Column({ type: 'float' })
   startTime: number;
 
-  @Column({ type: "float" })
+  @Column({ type: 'float' })
   endTime: number;
-  
+
   @Column({ type: 'varchar', length: 255 })
   text: string;
 }

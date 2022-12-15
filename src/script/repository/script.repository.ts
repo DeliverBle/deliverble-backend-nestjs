@@ -1,13 +1,17 @@
-import { News } from "src/news/news.entity";
-import { User } from "src/user/user.entity";
-import { EntityRepository, Repository } from "typeorm";
-import { Script } from "../entity/script.entity";
-import { Recording } from "../entity/recording.entity";
+import { News } from 'src/news/news.entity';
+import { User } from 'src/user/user.entity';
+import { EntityRepository, Repository } from 'typeorm';
+import { Script } from '../entity/script.entity';
+import { Recording } from '../entity/recording.entity';
 
 @EntityRepository(Script)
 export class ScriptRepository extends Repository<Script> {
-  async createScript(user: User, news: News, scriptName: string): Promise<Script> {
-    const script: Script = new Script()
+  async createScript(
+    user: User,
+    news: News,
+    scriptName: string,
+  ): Promise<Script> {
+    const script: Script = new Script();
 
     script.name = scriptName;
     script.user = user;
@@ -34,9 +38,9 @@ export class ScriptRepository extends Repository<Script> {
     await this.createQueryBuilder()
       .delete()
       .from(Script)
-      .where("id = :scriptId", { scriptId })
-      .execute()
-    return script
+      .where('id = :scriptId', { scriptId })
+      .execute();
+    return script;
   }
 
   async getScriptById(scriptId: number): Promise<Script> {
@@ -50,7 +54,10 @@ export class ScriptRepository extends Repository<Script> {
     return script;
   }
 
-  async getScriptsOfUserAndNews(userId: number, newsId: number): Promise<Script[]> {
+  async getScriptsOfUserAndNews(
+    userId: number,
+    newsId: number,
+  ): Promise<Script[]> {
     const scripts: Script[] = await this.createQueryBuilder('script')
       .leftJoinAndSelect('script.user', 'user')
       .leftJoinAndSelect('script.news', 'news')
@@ -61,5 +68,4 @@ export class ScriptRepository extends Repository<Script> {
       .getMany();
     return scripts;
   }
-
 }

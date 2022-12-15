@@ -1,4 +1,4 @@
-import { MemoGuide } from "../entity/memo-guide.entity";
+import { MemoGuide } from '../entity/memo-guide.entity';
 
 export class ReturnMemoGuideDto {
   constructor(memoGuide: MemoGuide) {
@@ -6,9 +6,9 @@ export class ReturnMemoGuideDto {
     this.order = memoGuide.order;
     this.startIndex = memoGuide.startIndex;
     this.content = memoGuide.content;
-}   
-    id: number;
-    order: number;
-    startIndex: number;
-    content: string;
+  }
+  id: number;
+  order: number;
+  startIndex: number;
+  content: string;
 }

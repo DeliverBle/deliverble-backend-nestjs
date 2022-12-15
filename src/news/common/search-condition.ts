@@ -6,7 +6,7 @@ export class SearchCondition {
     this.currentPage = _currentPage;
     this.listSize = _listSize;
   }
-  
+
   channel: string[];
   category: string[];
   announcerGender: string[];
@@ -43,7 +43,13 @@ export class SearchCondition {
   }
 
   checkFindAllOrNot(): boolean {
-    if (!(this.checkIfChannelIs() || this.checkIfCategoryIs() || this.checkIfAnnouncerGenderIs())) {
+    if (
+      !(
+        this.checkIfChannelIs() ||
+        this.checkIfCategoryIs() ||
+        this.checkIfAnnouncerGenderIs()
+      )
+    ) {
       return true;
     }
     return false;

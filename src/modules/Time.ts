@@ -13,10 +13,9 @@ export class Time {
   milliseconds!: number;
 
   static toNumber(_time: Time): number {
-    return Number(parseFloat(_time.seconds.toString())
-                  .toFixed(2))
-          + Number(parseFloat((_time.milliseconds / 100)
-                  .toFixed(2))
+    return (
+      Number(parseFloat(_time.seconds.toString()).toFixed(2)) +
+      Number(parseFloat((_time.milliseconds / 100).toFixed(2)))
     );
   }
 }

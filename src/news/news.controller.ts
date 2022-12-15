@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Logger, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { ReturnScriptDefaultDto } from 'src/dummy/dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from 'src/dummy/dto/return-script-guide.dto';
@@ -32,81 +43,97 @@ export class NewsController {
     private scriptService: ScriptService,
     private dummyService: DummyService,
     private historyService: HistoryService,
-  ) {};
+  ) {}
 
   @Post('create')
-	async createNews(
+  async createNews(
     @Body() createNewsDto: CreateNewsDto,
-    @Res() res
-    ): Promise<Response> {            
+    @Res() res,
+  ): Promise<Response> {
     try {
-      const data: ReturnNewsDtoCollection = await this.newsService.createAndGetAllNews(createNewsDto);
+      const data: ReturnNewsDtoCollection =
+        await this.newsService.createAndGetAllNews(createNewsDto);
       return res
         .status(statusCode.CREATED)
-        .send(util.success(statusCode.CREATED, message.CREATE_NEWS_SUCCESS, data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(statusCode.CREATED, message.CREATE_NEWS_SUCCESS, data),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Get('all')
-	async getAllNews(
-    @Res() res
-    ): Promise<Response> {
+  async getAllNews(@Res() res): Promise<Response> {
     try {
       const data: ReturnNewsDtoCollection = await this.newsService.getAllNews();
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.READ_ALL_NEWS_SUCCESS,data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(util.success(statusCode.OK, message.READ_ALL_NEWS_SUCCESS, data));
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Post('update/:id')
-	async updateNews(
+  async updateNews(
     @Body() updateNewsDto: UpdateNewsDto,
-    @Param('id') id : number,
-    @Res() res
-    ): Promise<Response> {
+    @Param('id') id: number,
+    @Res() res,
+  ): Promise<Response> {
     try {
-      const data: ReturnNewsDtoCollection = await this.newsService.updateAndGetAllNews(id, updateNewsDto);
+      const data: ReturnNewsDtoCollection =
+        await this.newsService.updateAndGetAllNews(id, updateNewsDto);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.UPDATE_NEWS_SUCCESS, data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(util.success(statusCode.OK, message.UPDATE_NEWS_SUCCESS, data));
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Delete('delete/:id')
-	async deleteNews(
-    @Param('id') id : number,
-    @Res() res
-    ): Promise<Response> {
+  async deleteNews(@Param('id') id: number, @Res() res): Promise<Response> {
     try {
-      const data: ReturnNewsDtoCollection = await this.newsService.deleteAndGetAllNews(id);
+      const data: ReturnNewsDtoCollection =
+        await this.newsService.deleteAndGetAllNews(id);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.DELETE_NEWS_SUCCESS, data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(util.success(statusCode.OK, message.DELETE_NEWS_SUCCESS, data));
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR,message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -114,119 +141,170 @@ export class NewsController {
   async addTagsToNews(
     @Req() req,
     @Res() res,
-    @Param('newsId') newsId : number,
+    @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
       const tagListForView: string[] = req.body.tagListForView;
       const tagListForRecommend: string[] = req.body.tagListForRecommend;
-      const data: ReturnNewsDto = await this.newsService.addTagsToNews(newsId, tagListForView, tagListForRecommend)
+      const data: ReturnNewsDto = await this.newsService.addTagsToNews(
+        newsId,
+        tagListForView,
+        tagListForRecommend,
+      );
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.ADD_TAG_TO_NEWS_SUCCESS, data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(statusCode.OK, message.ADD_TAG_TO_NEWS_SUCCESS, data),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Post('search')
-	async searchNews(
-    @Req() req,
-    @Res() res
-    ): Promise<Response> {
+  async searchNews(@Req() req, @Res() res): Promise<Response> {
     try {
       const body: object = req.body;
-      const searchCondition: SearchCondition = convertBodyToSearchCondition(body)
-      const bearerToken: string = req.headers["authorization"];
+      const searchCondition: SearchCondition =
+        convertBodyToSearchCondition(body);
+      const bearerToken: string = req.headers['authorization'];
 
       let data: ExploreNewsDtoCollection;
       let paginationInfo: PaginationInfo;
-      
+
       // 검색 조건과 토큰 입력 -> 토큰으로 user.favorite 가져오기
-      [data, paginationInfo] = await this.newsService.searchByConditions(searchCondition, bearerToken)
-      const paginationInfoObject: object = { paginationInfo: paginationInfo }
+      [data, paginationInfo] = await this.newsService.searchByConditions(
+        searchCondition,
+        bearerToken,
+      );
+      const paginationInfoObject: object = { paginationInfo: paginationInfo };
 
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.SEARCH_NEWS_SUCCESS, data, paginationInfoObject))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.SEARCH_NEWS_SUCCESS,
+            data,
+            paginationInfoObject,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Post('favorite')
   @UseGuards(JwtAuthGuard)
-  async getFavoriteNews(
-    @Res() res,
-    @Req() req
-  ): Promise<Response> {
+  async getFavoriteNews(@Res() res, @Req() req): Promise<Response> {
     try {
       const user: User = req.user;
       const body: object = req.body;
-      const paginationCondition: PaginationCondition = convertBodyToPaginationCondition(body);
-      
+      const paginationCondition: PaginationCondition =
+        convertBodyToPaginationCondition(body);
+
       let data: ExploreNewsDtoCollection;
       let paginationInfo;
-      
-      [data, paginationInfo] = await this.newsService.getFavoriteNews(paginationCondition, user)      
-      const paginationInfoObject: object = { paginationInfo: paginationInfo }
+
+      [data, paginationInfo] = await this.newsService.getFavoriteNews(
+        paginationCondition,
+        user,
+      );
+      const paginationInfoObject: object = { paginationInfo: paginationInfo };
 
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.FAVORITE_NEWS_SUCCESS, data, paginationInfoObject))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.FAVORITE_NEWS_SUCCESS,
+            data,
+            paginationInfoObject,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Get('recommend')
-  async getRecommendedNews(
-    @Req() req,
-    @Res() res
-  ): Promise<Response> {
+  async getRecommendedNews(@Req() req, @Res() res): Promise<Response> {
     try {
-      const bearerToken: string = req.headers["authorization"];
-      const data : ExploreNewsDtoCollection = await this.newsService.getRecommendedNews(bearerToken) 
+      const bearerToken: string = req.headers['authorization'];
+      const data: ExploreNewsDtoCollection =
+        await this.newsService.getRecommendedNews(bearerToken);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.RECOMMENDED_NEWS_SUCCESS, data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(statusCode.OK, message.RECOMMENDED_NEWS_SUCCESS, data),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Get('detail/not-authentication/:newsId')
   async newsDetailNotAuthenticated(
     @Res() res,
-    @Param('newsId') newsId: number
+    @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
       const data: ReturnNewsDto = await this.newsService.getNews(newsId);
-      const data2: ReturnScriptDefaultDto[] = [await this.dummyService.getScriptDefault(newsId)];
+      const data2: ReturnScriptDefaultDto[] = [
+        await this.dummyService.getScriptDefault(newsId),
+      ];
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.READ_NEWS_DETAIL_SUCCESS,
+            data,
+            data2,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -235,75 +313,112 @@ export class NewsController {
   async newsDetailAuthenticated(
     @Req() req,
     @Res() res,
-    @Param('newsId') newsId: number
+    @Param('newsId') newsId: number,
   ): Promise<Response> {
     const userId: number = req.user.id;
     const user: User = req.user;
     try {
-      const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(newsId);
-      const data: ReturnNewsDto = await this.newsService.checkReturnNewsDtoIsFavorite(returnNewsDto, user);
-      const data2: ReturnScriptDtoCollection = await this.scriptService.getScripts(userId, newsId);
+      const returnNewsDto: ReturnNewsDto = await this.newsService.getNews(
+        newsId,
+      );
+      const data: ReturnNewsDto =
+        await this.newsService.checkReturnNewsDtoIsFavorite(
+          returnNewsDto,
+          user,
+        );
+      const data2: ReturnScriptDtoCollection =
+        await this.scriptService.getScripts(userId, newsId);
       this.historyService.fetchHistory(user, newsId);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data, data2.returnScriptDtoCollection))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.READ_NEWS_DETAIL_SUCCESS,
+            data,
+            data2.returnScriptDtoCollection,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Get('test/get/:newsId')
   async getNewsTest(
     @Res() res,
-    @Param('newsId') newsId: number
+    @Param('newsId') newsId: number,
   ): Promise<Response> {
     const data: News = await this.newsService.getNewsTest(newsId);
     return res
-        .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data))
+      .status(statusCode.OK)
+      .send(
+        util.success(statusCode.OK, message.READ_NEWS_DETAIL_SUCCESS, data),
+      );
   }
 
   @Get('guide')
-  async getSpeechGuideNews(
-    @Req() req,
-    @Res() res
-  ): Promise<Response> {
+  async getSpeechGuideNews(@Req() req, @Res() res): Promise<Response> {
     try {
-      const bearerToken: string = req.headers["authorization"];
-      const data : ExploreNewsDtoCollection = await this.newsService.getSpeechGuideNews(bearerToken) 
+      const bearerToken: string = req.headers['authorization'];
+      const data: ExploreNewsDtoCollection =
+        await this.newsService.getSpeechGuideNews(bearerToken);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.SPEECH_GUIDE_NEWS_SUCCESS, data))
-
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(statusCode.OK, message.SPEECH_GUIDE_NEWS_SUCCESS, data),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Get('guide/detail/:newsId')
   async newsDetailOfSpeechGuide(
     @Res() res,
-    @Param('newsId') newsId: number
+    @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
       const data: ReturnNewsDto = await this.newsService.getNews(newsId);
-      const data2: ReturnScriptGuideDto[] = [await this.dummyService.getScriptGuide(newsId)];
+      const data2: ReturnScriptGuideDto[] = [
+        await this.dummyService.getScriptGuide(newsId),
+      ];
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.SPEECH_GUIDE_NEWS_DETAIL_SUCCESS, data, data2))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.SPEECH_GUIDE_NEWS_DETAIL_SUCCESS,
+            data,
+            data2,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
@@ -314,48 +429,64 @@ export class NewsController {
     @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
-      const bearerToken: string = req.headers["authorization"];
+      const bearerToken: string = req.headers['authorization'];
       // await this.newsService.saveSimilarNews(bearerToken);
-      const data: ExploreNewsDtoCollection = await this.newsService.getSimilarNews(newsId, bearerToken);
+      const data: ExploreNewsDtoCollection =
+        await this.newsService.getSimilarNews(newsId, bearerToken);
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data));
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
 
   @Post('history')
   @UseGuards(JwtAuthGuard)
-  async getHistory(
-    @Res() res,
-    @Req() req
-  ): Promise<Response> {
+  async getHistory(@Res() res, @Req() req): Promise<Response> {
     try {
       const user: User = req.user;
       const body: object = req.body;
-      const paginationCondition: PaginationCondition = convertBodyToPaginationCondition(body);
-      
+      const paginationCondition: PaginationCondition =
+        convertBodyToPaginationCondition(body);
+
       let data: ExploreNewsDtoCollection;
       let paginationInfo;
-      
-      [data, paginationInfo] = await this.newsService.getHistory(paginationCondition, user)      
-      const paginationInfoObject: object = { paginationInfo: paginationInfo }
+
+      [data, paginationInfo] = await this.newsService.getHistory(
+        paginationCondition,
+        user,
+      );
+      const paginationInfoObject: object = { paginationInfo: paginationInfo };
 
       return res
         .status(statusCode.OK)
-        .send(util.success(statusCode.OK, message.HISTORY_SUCCESS, data, paginationInfoObject))
-    
-      } catch (error) {
-      logger.error(error)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.HISTORY_SUCCESS,
+            data,
+            paginationInfoObject,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
-        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, message.INTERNAL_SERVER_ERROR))
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   }
-
 }
