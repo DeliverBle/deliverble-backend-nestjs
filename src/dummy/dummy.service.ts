@@ -11,6 +11,7 @@ import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ReturnSentenceGuideDto } from './dto/return-sentence-guide.dto';
+import { UpdateKeywordMemoGuideDto } from './dto/update-keyword-memo-guide.dto';
 import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
 import { MemoGuide } from './entity/memo-guide.entity';
@@ -210,6 +211,14 @@ export class DummyService {
     const memoGuide: MemoGuide = await this.memoGuideRepository.deleteMemoGuide(
       memoGuideId,
     );
+    const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(
+      memoGuide,
+    );
+    return returnMemoGuideDto;
+  }
+
+  async updateKeywordOfMemoGuide(updateKeywordMemoGuideDto: UpdateKeywordMemoGuideDto): Promise<ReturnMemoGuideDto> {
+    const memoGuide: MemoGuide = await this.memoGuideRepository.updateKeywordOfMemoGuide(updateKeywordMemoGuideDto);
     const returnMemoGuideDto: ReturnMemoGuideDto = new ReturnMemoGuideDto(
       memoGuide,
     );

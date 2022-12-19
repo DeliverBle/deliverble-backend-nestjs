@@ -4,6 +4,7 @@ import {
   Get,
   Logger,
   Param,
+  Patch,
   Post,
   Put,
   Req,
@@ -21,6 +22,7 @@ import { ReturnScriptDefaultDto } from './dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ReturnSentenceGuideDto } from './dto/return-sentence-guide.dto';
+import { UpdateKeywordMemoGuideDto } from './dto/update-keyword-memo-guide.dto';
 import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
 import { DummyService } from './dummy.service';
@@ -505,6 +507,41 @@ export class DummyController {
           util.success(
             statusCode.OK,
             message.DELETE_MEMO_GUIDE_SUCCESS,
+            returnMemoGuideDto,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
+      if (error.name === 'NotFoundErrorImpl') {
+        return res
+          .status(statusCode.NOT_FOUND)
+          .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND));
+      }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
+    }
+  }
+
+  @Patch('guide/memo/update/keyword')
+  async updateKeywordOfMemoGuide(@Req() req, @Res() res): Promise<Response> {
+    try {
+      const updateKeywordMemoGuideDto: UpdateKeywordMemoGuideDto = new UpdateKeywordMemoGuideDto(
+        req.body.memoGuideId, req.body.keyword
+        );
+      const returnMemoGuideDto: ReturnMemoGuideDto =
+        await this.dummyService.updateKeywordOfMemoGuide(updateKeywordMemoGuideDto);
+      return res
+        .status(statusCode.OK)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.UPDATE_KEYWORD_OF_MEMO_GUIDE_SUCCESS,
             returnMemoGuideDto,
           ),
         );
