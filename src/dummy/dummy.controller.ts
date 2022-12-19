@@ -13,6 +13,7 @@ import {
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
+import { UpdateMemoDto } from 'src/script/dto/update-memo.dto';
 import { DUMMY_SCRIPT_TYPE } from './common/dummy-script-type.enum';
 import { CreateMemoGuideDto } from './dto/create-memo-guide.dto';
 import { CreateSentenceDefaultDto } from './dto/create-sentence-default.dto';
@@ -23,6 +24,7 @@ import { ReturnScriptGuideDto } from './dto/return-script-guide.dto';
 import { ReturnSentenceDefaultDto } from './dto/return-sentence-default.dto';
 import { ReturnSentenceGuideDto } from './dto/return-sentence-guide.dto';
 import { UpdateKeywordMemoGuideDto } from './dto/update-keyword-memo-guide.dto';
+import { UpdateMemoGuideDto } from './dto/update-memo-guide.dto';
 import { UpdateSentenceDefaultDto } from './dto/update-sentence-default.dto';
 import { UpdateSentenceGuideDto } from './dto/update-sentence-guide.dto';
 import { DummyService } from './dummy.service';
@@ -536,6 +538,45 @@ export class DummyController {
         );
       const returnMemoGuideDto: ReturnMemoGuideDto =
         await this.dummyService.updateKeywordOfMemoGuide(updateKeywordMemoGuideDto);
+      return res
+        .status(statusCode.OK)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.UPDATE_KEYWORD_OF_MEMO_GUIDE_SUCCESS,
+            returnMemoGuideDto,
+          ),
+        );
+    } catch (error) {
+      logger.error(error);
+      if (error.name === 'NotFoundErrorImpl') {
+        return res
+          .status(statusCode.NOT_FOUND)
+          .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND));
+      }
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(
+          util.fail(
+            statusCode.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
+    }
+  }
+
+  @Patch('guide/memo/update')
+  async updateMemoGuide(@Req() req, @Res() res): Promise<Response> {
+    try {
+      const updateMemoGuide: UpdateMemoGuideDto = new UpdateMemoGuideDto(
+        req.body.memoGuideId,
+        req.body.order,
+        req.body.startIndex,
+        req.body.keyword,
+        req.body.content
+        );
+      const returnMemoGuideDto: ReturnMemoGuideDto =
+        await this.dummyService.updatefMemoGuide(updateMemoGuide);
       return res
         .status(statusCode.OK)
         .send(
