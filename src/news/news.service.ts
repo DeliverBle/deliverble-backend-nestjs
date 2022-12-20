@@ -394,6 +394,23 @@ export class NewsService {
     return returnNewsDto;
   }
 
+  async getNewsIncludeFavorite(newsId: number, bearerToken: string): Promise<ReturnNewsDto> {
+    const news: News = await this.newsRepository.getNewsById(newsId);
+    let returnNewsDto: ReturnNewsDto = new ReturnNewsDto(news);
+    // 즐겨찾기 체크 (로그인 된 유저라면)
+    if (bearerToken !== undefined) {
+      const user: User = await this.authService.verifyJWTReturnUser(
+        bearerToken,
+      );
+      returnNewsDto = await this.checkReturnNewsDtoIsFavorite(
+        returnNewsDto,
+        user,
+      );
+    }
+    console.log(returnNewsDto);
+    return returnNewsDto;
+  }
+
   async getNewsByScriptId(scriptId: number): Promise<ReturnNewsDto> {
     const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
     const newsId: number = script.news.id;

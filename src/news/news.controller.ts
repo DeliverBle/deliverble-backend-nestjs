@@ -391,11 +391,14 @@ export class NewsController {
 
   @Get('guide/detail/:newsId')
   async newsDetailOfSpeechGuide(
+    @Req() req,
     @Res() res,
     @Param('newsId') newsId: number,
   ): Promise<Response> {
     try {
-      const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const bearerToken: string = req.headers['authorization'];
+      // const data: ReturnNewsDto = await this.newsService.getNews(newsId);
+      const data: ReturnNewsDto = await this.newsService.getNewsIncludeFavorite(newsId, bearerToken);
       const data2: ReturnScriptGuideDto[] = [
         await this.dummyService.getScriptGuide(newsId),
       ];
