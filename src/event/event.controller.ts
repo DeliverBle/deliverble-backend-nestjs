@@ -2,9 +2,9 @@ import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
 import { message } from 'src/modules/response/response.message';
 import { statusCode } from 'src/modules/response/response.status.code';
 import { util } from 'src/modules/response/response.util';
-import { CreateEventUserDto } from './create-event-user.dto';
+import { CreateEventUserDto } from './dto/create-event-user.dto';
 import { EventService } from './event.service';
-import { ReturnEventUserDto } from './return-event-user.dto';
+import { ReturnEventUserDto } from './dto/return-event-user.dto';
 
 const logger: Logger = new Logger('event controller');
 
