@@ -8,6 +8,7 @@ import { TagModule } from './tag/tag.module';
 import { ScriptModule } from './script/script.module';
 import { DummyModule } from './dummy/dummy.module';
 import { HistoryModule } from './history/history.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { HistoryModule } from './history/history.module';
     ScriptModule,
     DummyModule,
     HistoryModule,
+    EventModule,
   ],
 })
 export class AppModule {}
