@@ -83,4 +83,7 @@ export const message = {
   CREATE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 생성 성공',
   DELETE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 삭제 성공',
   UPDATE_KEYWORD_OF_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 키워드 수정 성공',
+
+  // 이벤트
+  CREATE_EVENT_USER_SUCCESS: '이벤트 유저 정보 생성 성공',
 };
