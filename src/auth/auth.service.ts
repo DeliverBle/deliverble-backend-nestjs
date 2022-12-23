@@ -43,7 +43,7 @@ export class AuthService {
       const response = await axios({
         method: 'GET',
         url: url,
-        timeout: 30000,
+        timeout: 18000,
         headers: header,
       });
       return response;
