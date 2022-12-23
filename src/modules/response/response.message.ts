@@ -86,4 +86,5 @@ export const message = {
 
   // 이벤트
   CREATE_EVENT_USER_SUCCESS: '이벤트 유저 정보 생성 성공',
+  TOO_LONG_NICKNAME: '닉네임은 5자 이하여야 합니다.',
 };

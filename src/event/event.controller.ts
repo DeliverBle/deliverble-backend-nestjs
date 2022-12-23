@@ -29,6 +29,11 @@ export class EventController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name === "QueryFailedError") {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.TOO_LONG_NICKNAME));
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
