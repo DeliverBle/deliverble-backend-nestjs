@@ -53,6 +53,7 @@ export const message = {
   NOT_REMOVABLE_SCRIPT: '스크립트가 1개이므로 삭제할 수 없습니다.',
   // 녹음 에러
   NOT_FOUND_SCRIPT: '해당 스크립트가 없습니다.',
+  CREATE_RECORDING_SUCCESS: '녹음 생성 성공',
 
   // 문장
   CREATE_SENTENCE_SUCCESS: '문장 생성 성공',
