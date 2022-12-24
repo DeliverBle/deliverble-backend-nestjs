@@ -623,8 +623,7 @@ export class ScriptService {
     });
 
     // if filteredRecording is empty or nil, return 400
-    console.log("filteredRecording >>>>>>>>>>>>> ", filteredRecording);
-    if (!filteredRecording) {
+    if (!filteredRecording || filteredRecording.length == 0) {
       return {
         message: message.NOT_FOUND_SCRIPT_OR_RECORDING,
       };
