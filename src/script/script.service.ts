@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   Logger,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,8 +36,9 @@ import {
 import axios from 'axios';
 import { RecordingDto } from './dto/recording.dto';
 import { RecordingRepository } from './repository/recording.repository';
-import { statusCode } from "../modules/response/response.status.code";
-import { message } from "../modules/response/response.message";
+import { statusCode } from '../modules/response/response.status.code';
+import { message } from '../modules/response/response.message';
+import { EntityNotFoundError } from 'typeorm';
 
 const FormData = require('form-data');
 
@@ -241,13 +243,14 @@ export class ScriptService {
   }
 
   // 스크립트 조회 - scriptId만 받은 경우
-  async getScriptsByScriptId(
-    userId: number,
-    scriptId: number,
-  ): Promise<ReturnScriptDtoCollection> {
-    const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
-    const newsId: number = script.news.id;
-    return await this.getScripts(userId, newsId);
+  async getScriptByScriptId(userId: number, scriptId: number): Promise<Script> {
+    try {
+      return await this.scriptRepository.findOneOrFail(scriptId);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundException();
+      }
+    }
   }
 
   // 스크립트 삭제 후 조회
@@ -575,6 +578,22 @@ export class ScriptService {
   }
 
   async getRecordingByScriptId(userId: number, scriptId: number) {
+    try {
+      const hasScriptInUser = await this.getScriptByScriptId(userId, scriptId);
+      if (!hasScriptInUser || hasScriptInUser.user.id !== userId) {
+        return {
+          message: message.UNAUTHORIZED_SCRIPT_OF_USER,
+        };
+      }
+    } catch (e) {
+      console.log('exception', e);
+      if (e instanceof NotFoundException) {
+        return {
+          message: message.NOT_FOUND_SCRIPT,
+        };
+      }
+    }
+
     const allRecording = await this.getUserAllRecording(userId);
     // allRecording is like this following
     // [
@@ -625,7 +644,7 @@ export class ScriptService {
     // if filteredRecording is empty or nil, return 400
     if (!filteredRecording || filteredRecording.length == 0) {
       return {
-        message: message.NOT_FOUND_SCRIPT_OR_RECORDING,
+        message: message.NOT_FOUND_RECORDING,
       };
     }
 
