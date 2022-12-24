@@ -545,8 +545,7 @@ export class ScriptService {
     });
     if (!recording) {
       return {
-        status: 400,
-        message: 'There is no recording with this link',
+        message: message.NOT_FOUND_RECORDING,
       };
     }
     console.log('RECORDING >>>>>>>>>>>>> ', recording);

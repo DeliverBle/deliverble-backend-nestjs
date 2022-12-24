@@ -606,7 +606,7 @@ export class ScriptController {
     );
 
     console.log('response ::: ', response);
-    if (!response || response.message === message.NOT_FOUND_SCRIPT) {
+    if (!response || response.message === message.NOT_FOUND_RECORDING) {
       return res
         .status(statusCode.NOT_FOUND)
         .send(
