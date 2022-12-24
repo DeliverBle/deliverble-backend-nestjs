@@ -56,6 +56,7 @@ export const message = {
   // 녹음 에러
   NO_RECORDING_FILE: '정상적인 녹음 파일이 아니거나, 녹음 파일이 없습니다.',
   NOT_FOUND_SCRIPT: '해당 스크립트가 없습니다.',
+  NOT_FOUND_SCRIPT_OF_USER: '사용자에 해당하는 스크립트 아이디가 아닙니다.',
   NOT_FOUND_RECORDING: '해당 녹음이 없습니다.',
   NOT_FOUND_RECORDING_ALL: '사용자가 가지고 있는 녹음이 없습니다.',
   NOT_FOUND_SCRIPT_OR_RECORDING:
