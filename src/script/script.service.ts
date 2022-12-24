@@ -642,12 +642,10 @@ export class ScriptService {
 
     // find script by id
     const scripts = await user.scripts;
-    console.log('delete :: SELECTED SCRIPT >>>>>>>>>>>>> ', scripts);
 
     if (!scripts) {
       return {
-        status: 400,
-        message: 'delete :: There is no script in this user',
+        message: message.NOT_FOUND_SCRIPT,
       };
     }
 

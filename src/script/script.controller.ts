@@ -633,11 +633,20 @@ export class ScriptController {
 
   @Get('/recording/find/all')
   @UseGuards(JwtAuthGuard)
-  getUserAllRecording(@Body() body, @Req() req) {
+  async getUserAllRecording(@Body() body, @Req() req, @Res() res) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
 
-    return this.scriptService.getUserAllRecording(userId);
+    const response = await this.scriptService.getUserAllRecording(userId);
+
+    if (!response) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING_ALL));
+    }
+    return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.FOUND_RECORDING_ALL, response));
   }
 
   @Get('/recording/find')
@@ -645,8 +654,6 @@ export class ScriptController {
   getRecordingByScriptId(@Body() body, @Req() req, @Query() query) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
-    // const scriptId = req.params.scriptId;
-    // get from query param
     const scriptId = query.scriptId;
     console.log('getRecordingByScriptId scriptId :: ', scriptId);
 
