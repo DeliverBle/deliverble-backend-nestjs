@@ -54,6 +54,7 @@ export const message = {
   NOT_REMOVABLE_SCRIPT: '스크립트가 1개이므로 삭제할 수 없습니다.',
 
   // 녹음 에러
+  NO_RECORDING_FILE: '정상적인 녹음 파일이 아니거나, 녹음 파일이 없습니다.',
   NOT_FOUND_SCRIPT: '해당 스크립트가 없습니다.',
   NOT_FOUND_RECORDING: '해당 녹음이 없습니다.',
   NOT_FOUND_RECORDING_ALL: '사용자가 가지고 있는 녹음이 없습니다.',
