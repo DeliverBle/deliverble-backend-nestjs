@@ -56,6 +56,8 @@ export const message = {
   NOT_FOUND_RECORDING: '해당 녹음이 없습니다.',
   CREATE_RECORDING_SUCCESS: '녹음 생성 성공',
   DELETE_RECORDING_SUCCESS: '녹음 삭제 성공',
+  CHANGE_NAME_OF_RECORDING_SUCCESS: '녹음 이름 변경 성공',
+  CHANGE_NAME_OF_RECORDING_FAIL: '녹음 이름 변경 실패',
 
   // 문장
   CREATE_SENTENCE_SUCCESS: '문장 생성 성공',
@@ -87,4 +89,5 @@ export const message = {
 
   CREATE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 생성 성공',
   DELETE_MEMO_GUIDE_SUCCESS: '스피치 가이드 메모 삭제 성공',
+
 };
