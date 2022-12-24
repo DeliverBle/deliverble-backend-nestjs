@@ -561,13 +561,27 @@ export class ScriptController {
 
   @Post('/recording/delete')
   @UseGuards(JwtAuthGuard)
-  deleteRecording(@Body() body, @Req() req) {
+  async deleteRecording(@Body() body, @Req() req, @Res() res) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = body.scriptId;
     const link = body.link;
 
-    return this.scriptService.deleteRecording(userId, scriptId, link);
+    const response = await this.scriptService.deleteRecording(
+      userId,
+      scriptId,
+      link,
+    );
+
+    if (response.deleted) {
+      return res
+        .status(statusCode.OK)
+        .send(statusCode.OK, message.DELETE_RECORDING_SUCCESS, response);
+    } else {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING));
+    }
   }
 
   @Post('/recording/change-name')
