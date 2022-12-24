@@ -57,6 +57,8 @@ export const message = {
   NOT_FOUND_SCRIPT: '해당 스크립트가 없습니다.',
   NOT_FOUND_RECORDING: '해당 녹음이 없습니다.',
   NOT_FOUND_RECORDING_ALL: '사용자가 가지고 있는 녹음이 없습니다.',
+  NOT_FOUND_SCRIPT_OR_RECORDING:
+    '사용자에 해당 스크립트가 없거나 스크립트에 녹음이 없습니다.',
 
   // 녹음
   FOUND_RECORDING_ALL: '사용자 전체 녹음 조회 성공',

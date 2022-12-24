@@ -612,7 +612,7 @@ export class ScriptService {
     // make sure allRecording is not empty or undefined or null, if then, return 400
     if (!allRecording) {
       return {
-        message: message.NOT_FOUND_RECORDING
+        message: message.NOT_FOUND_RECORDING,
       };
     }
 
@@ -625,8 +625,7 @@ export class ScriptService {
     // if filteredRecording is empty or nil, return 400
     if (!filteredRecording) {
       return {
-        status: 400,
-        message: 'There is no recording with this scriptId',
+        message: message.NOT_FOUND_SCRIPT_OR_RECORDING,
       };
     }
 
