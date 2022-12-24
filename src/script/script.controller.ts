@@ -592,19 +592,39 @@ export class ScriptController {
 
   @Post('/recording/change-name')
   @UseGuards(JwtAuthGuard)
-  changeNameOfRecording(@Body() body, @Req() req) {
+  async changeNameOfRecording(@Body() body, @Req() req, @Res() res) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = body.scriptId;
     const link = body.link;
     const newName = body.newName;
 
-    return this.scriptService.changeNameOfRecording(
+    const response = await this.scriptService.changeNameOfRecording(
       userId,
       scriptId,
       link,
       newName,
     );
+
+    if (!response) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(
+          util.fail(
+            statusCode.NOT_FOUND,
+            message.CHANGE_NAME_OF_RECORDING_FAIL,
+          ),
+        );
+    }
+    return res
+      .status(statusCode.OK)
+      .send(
+        util.success(
+          statusCode.OK,
+          message.CHANGE_NAME_OF_RECORDING_SUCCESS,
+          response,
+        ),
+      );
   }
 
   @Get('/recording/find/all')
