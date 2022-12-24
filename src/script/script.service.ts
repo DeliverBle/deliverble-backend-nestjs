@@ -35,6 +35,8 @@ import {
 import axios from 'axios';
 import { RecordingDto } from './dto/recording.dto';
 import { RecordingRepository } from './repository/recording.repository';
+import { statusCode } from "../modules/response/response.status.code";
+import { message } from "../modules/response/response.message";
 
 const FormData = require('form-data');
 
@@ -360,7 +362,7 @@ export class ScriptService {
 
     if (!script) {
       return {
-        status: 400,
+        status: statusCode.NOT_FOUND,
         message: 'There is no script with this id',
       };
     }
@@ -382,13 +384,6 @@ export class ScriptService {
       recordingDtoLength,
     );
 
-    // recordingDto.name = name;
-    // recordingDto.link = response.data['url'];
-    // recordingDto.endTime = endtime;
-    // recordingDto.isDeleted = false;
-    // recordingDto.date = date;
-    // recordingDto.script = script;
-
     // change recordingDto to JSON
     const recordingDtoJson = JSON.stringify(recordingDto);
     console.log('recordingDtoJson >>>>>>>>>>>>> ', recordingDtoJson);
@@ -399,7 +394,7 @@ export class ScriptService {
 
     return {
       link: response.data['url'],
-      name: name,
+      name: recordingDto.name,
       scriptId: scriptId,
       date: date,
     };
@@ -509,29 +504,21 @@ export class ScriptService {
     newName: string,
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
-    console.log('scriptId On Recording >>>>>>>>>>>>> ', scriptId);
 
     // find script by id
     const scripts = await user.scripts;
-    console.log('USER SCRIPTS >>>>>>>>>>>>> ', scripts);
 
     let script;
     for (let i = 0; i < scripts.length; i++) {
-      console.log('SCRIPTS[i] >>>>>>>>>>>>> ', scripts[i]);
-      console.log('SCRIPTS[i].id >>>>>>>>>>>>> ', scripts[i].id);
-      console.log('scriptId >>>>>>>>>>>>> ', scriptId);
-
       if (scripts[i].id == scriptId) {
-        console.log('MATCHED SCRIPT >>>>>>>>>>>>> ', scripts[i]);
         script = scripts[i];
       }
     }
-    console.log('SELECTED SCRIPT >>>>>>>>>>>>> ', script);
 
     if (!script) {
       return {
-        status: 400,
-        message: 'There is no script with this id',
+        status: statusCode.NOT_FOUND,
+        message: message.NOT_FOUND_SCRIPT,
       };
     }
 
@@ -558,8 +545,7 @@ export class ScriptService {
     });
     if (!recording) {
       return {
-        status: 400,
-        message: 'There is no recording with this link',
+        message: message.NOT_FOUND_RECORDING,
       };
     }
     console.log('RECORDING >>>>>>>>>>>>> ', recording);
@@ -626,21 +612,20 @@ export class ScriptService {
     // make sure allRecording is not empty or undefined or null, if then, return 400
     if (!allRecording) {
       return {
-        status: 400,
-        message: 'There is no script on your user',
+        message: message.NOT_FOUND_RECORDING,
       };
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const filteredRecording = allRecording?.filter((recording) => {
       return recording[0].scriptId == scriptId;
     });
 
     // if filteredRecording is empty or nil, return 400
-    if (!filteredRecording) {
+    if (!filteredRecording || filteredRecording.length == 0) {
       return {
-        status: 400,
-        message: 'There is no recording with this scriptId',
+        message: message.NOT_FOUND_SCRIPT_OR_RECORDING,
       };
     }
 
@@ -656,12 +641,10 @@ export class ScriptService {
 
     // find script by id
     const scripts = await user.scripts;
-    console.log('delete :: SELECTED SCRIPT >>>>>>>>>>>>> ', scripts);
 
     if (!scripts) {
       return {
-        status: 400,
-        message: 'delete :: There is no script in this user',
+        message: message.NOT_FOUND_SCRIPT,
       };
     }
 

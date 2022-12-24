@@ -521,10 +521,11 @@ export class ScriptController {
   @Post('/recording/upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(
+  async uploadRecording(
     @Body() body,
     @UploadedFile() file: Express.Multer.File,
     @Req() req,
+    @Res() res,
   ) {
     const scriptId = body.scriptId;
     const name = body.name;
@@ -537,7 +538,7 @@ export class ScriptController {
 
     console.log('FILE ::: ', file);
 
-    return this.scriptService.uploadRecordingToS3(
+    const response = await this.scriptService.uploadRecordingToS3(
       userId,
       parseInt(scriptId),
       name,
@@ -545,55 +546,142 @@ export class ScriptController {
       date,
       file.buffer,
     );
+
+    if (response.status === statusCode.NOT_FOUND) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_SCRIPT));
+    }
+    return res
+      .status(statusCode.OK)
+      .send(
+        util.success(statusCode.OK, message.CREATE_RECORDING_SUCCESS, response),
+      );
   }
 
   @Post('/recording/delete')
   @UseGuards(JwtAuthGuard)
-  deleteRecording(@Body() body, @Req() req) {
+  async deleteRecording(@Body() body, @Req() req, @Res() res) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = body.scriptId;
     const link = body.link;
 
-    return this.scriptService.deleteRecording(userId, scriptId, link);
+    const response = await this.scriptService.deleteRecording(
+      userId,
+      scriptId,
+      link,
+    );
+
+    if (response.deleted) {
+      return res
+        .status(statusCode.OK)
+        .send(
+          util.success(
+            statusCode.OK,
+            message.DELETE_RECORDING_SUCCESS,
+            response,
+          ),
+        );
+    }
+    return res
+      .status(statusCode.NOT_FOUND)
+      .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING));
   }
 
   @Post('/recording/change-name')
   @UseGuards(JwtAuthGuard)
-  changeNameOfRecording(@Body() body, @Req() req) {
+  async changeNameOfRecording(@Body() body, @Req() req, @Res() res) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = body.scriptId;
     const link = body.link;
     const newName = body.newName;
 
-    return this.scriptService.changeNameOfRecording(
+    const response = await this.scriptService.changeNameOfRecording(
       userId,
       scriptId,
       link,
       newName,
     );
+
+    console.log('response ::: ', response);
+    if (
+      !response ||
+      response.message === message.NOT_FOUND_RECORDING ||
+      response.message === message.NOT_FOUND_SCRIPT
+    ) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(
+          util.fail(
+            statusCode.NOT_FOUND,
+            message.CHANGE_NAME_OF_RECORDING_FAIL,
+          ),
+        );
+    }
+    return res
+      .status(statusCode.OK)
+      .send(
+        util.success(
+          statusCode.OK,
+          message.CHANGE_NAME_OF_RECORDING_SUCCESS,
+          response,
+        ),
+      );
   }
 
   @Get('/recording/find/all')
   @UseGuards(JwtAuthGuard)
-  getUserAllRecording(@Body() body, @Req() req) {
+  async getUserAllRecording(@Body() body, @Req() req, @Res() res) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
 
-    return this.scriptService.getUserAllRecording(userId);
+    const response = await this.scriptService.getUserAllRecording(userId);
+
+    if (!response) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING_ALL));
+    }
+    return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.FOUND_RECORDING_ALL, response));
   }
 
   @Get('/recording/find')
   @UseGuards(JwtAuthGuard)
-  getRecordingByScriptId(@Body() body, @Req() req, @Query() query) {
+  async getRecordingByScriptId(
+    @Body() body,
+    @Req() req,
+    @Res() res,
+    @Query() query,
+  ) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
-    // const scriptId = req.params.scriptId;
-    // get from query param
     const scriptId = query.scriptId;
     console.log('getRecordingByScriptId scriptId :: ', scriptId);
 
-    return this.scriptService.getRecordingByScriptId(userId, scriptId);
+    const response = await this.scriptService.getRecordingByScriptId(
+      userId,
+      scriptId,
+    );
+
+    if (
+      !response ||
+      response.message === message.NOT_FOUND_SCRIPT_OR_RECORDING
+    ) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(
+          util.fail(
+            statusCode.NOT_FOUND,
+            message.NOT_FOUND_SCRIPT_OR_RECORDING,
+          ),
+        );
+    }
+    return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.FOUND_RECORDING, response));
   }
 }
