@@ -576,7 +576,13 @@ export class ScriptController {
     if (response.deleted) {
       return res
         .status(statusCode.OK)
-        .send(statusCode.OK, message.DELETE_RECORDING_SUCCESS, response);
+        .send(
+          util.success(
+            statusCode.OK,
+            message.DELETE_RECORDING_SUCCESS,
+            response,
+          ),
+        );
     } else {
       return res
         .status(statusCode.NOT_FOUND)
