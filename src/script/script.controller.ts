@@ -678,7 +678,10 @@ export class ScriptController {
       return res
         .status(statusCode.UNAUTHORIZED)
         .send(
-          util.fail(statusCode.UNAUTHORIZED, message.UNAUTHORIZED_SCRIPT_OF_USER),
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.UNAUTHORIZED_SCRIPT_OF_USER,
+          ),
         );
     }
 
