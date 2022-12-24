@@ -503,28 +503,20 @@ export class ScriptService {
     newName: string,
   ) {
     const user = await this.userRepository.findOneOrFail(userId);
-    console.log('scriptId On Recording >>>>>>>>>>>>> ', scriptId);
 
     // find script by id
     const scripts = await user.scripts;
-    console.log('USER SCRIPTS >>>>>>>>>>>>> ', scripts);
 
     let script;
     for (let i = 0; i < scripts.length; i++) {
-      console.log('SCRIPTS[i] >>>>>>>>>>>>> ', scripts[i]);
-      console.log('SCRIPTS[i].id >>>>>>>>>>>>> ', scripts[i].id);
-      console.log('scriptId >>>>>>>>>>>>> ', scriptId);
-
       if (scripts[i].id == scriptId) {
-        console.log('MATCHED SCRIPT >>>>>>>>>>>>> ', scripts[i]);
         script = scripts[i];
       }
     }
-    console.log('SELECTED SCRIPT >>>>>>>>>>>>> ', script);
 
     if (!script) {
       return {
-        status: 400,
+        status: statusCode.NOT_FOUND,
         message: 'There is no script with this id',
       };
     }

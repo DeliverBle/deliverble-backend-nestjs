@@ -583,11 +583,10 @@ export class ScriptController {
             response,
           ),
         );
-    } else {
-      return res
-        .status(statusCode.NOT_FOUND)
-        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING));
     }
+    return res
+      .status(statusCode.NOT_FOUND)
+      .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING));
   }
 
   @Post('/recording/change-name')
@@ -606,7 +605,7 @@ export class ScriptController {
       newName,
     );
 
-    if (!response) {
+    if (!response || response.status === statusCode.NOT_FOUND) {
       return res
         .status(statusCode.NOT_FOUND)
         .send(
