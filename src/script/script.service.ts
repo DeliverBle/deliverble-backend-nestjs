@@ -577,6 +577,7 @@ export class ScriptService {
 
   async getRecordingByScriptId(userId: number, scriptId: number) {
     const hasScriptInUser = await this.getScriptByScriptId(userId, scriptId);
+    console.log('hasScriptInUser', hasScriptInUser);
     if (!hasScriptInUser) {
       return {
         message: message.NOT_FOUND_SCRIPT,
