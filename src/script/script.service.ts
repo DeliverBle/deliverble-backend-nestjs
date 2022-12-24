@@ -391,11 +391,9 @@ export class ScriptService {
     // save script
     await script.save();
 
-    console.log("NAME", name);
-
     return {
       link: response.data['url'],
-      name: name,
+      name: recordingDto.name,
       scriptId: scriptId,
       date: date,
     };
