@@ -521,10 +521,11 @@ export class ScriptController {
   @Post('/recording/upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  uploadRecording(
+  async uploadRecording(
     @Body() body,
     @UploadedFile() file: Express.Multer.File,
     @Req() req,
+    @Res() res,
   ) {
     const scriptId = body.scriptId;
     const name = body.name;
@@ -537,7 +538,7 @@ export class ScriptController {
 
     console.log('FILE ::: ', file);
 
-    return this.scriptService.uploadRecordingToS3(
+    const response = await this.scriptService.uploadRecordingToS3(
       userId,
       parseInt(scriptId),
       name,
@@ -545,6 +546,13 @@ export class ScriptController {
       date,
       file.buffer,
     );
+
+    if (response.status === statusCode.NOT_FOUND) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.success(statusCode.NOT_FOUND, message.NOT_FOUND_SCRIPT));
+    }
+    return res.status(statusCode.CREATED).send(response);
   }
 
   @Post('/recording/delete')
