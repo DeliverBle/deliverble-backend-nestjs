@@ -552,7 +552,7 @@ export class ScriptController {
         .status(statusCode.NOT_FOUND)
         .send(statusCode.NOT_FOUND, message.NOT_FOUND_SCRIPT);
     }
-    return res.status(statusCode.CREATED).send(statusCode.CREATED, response);
+    return res.status(statusCode.OK).send(statusCode.OK, response);
   }
 
   @Post('/recording/delete')
