@@ -674,19 +674,18 @@ export class ScriptController {
       scriptId,
     );
 
-    if (
-      !response ||
-      response.message === message.NOT_FOUND_SCRIPT_OR_RECORDING
-    ) {
+    if (!response || response.message === message.NOT_FOUND_SCRIPT) {
       return res
         .status(statusCode.NOT_FOUND)
-        .send(
-          util.fail(
-            statusCode.NOT_FOUND,
-            message.NOT_FOUND_SCRIPT_OR_RECORDING,
-          ),
-        );
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_SCRIPT));
     }
+
+    if (response.message === message.NOT_FOUND_RECORDING) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING));
+    }
+
     return res
       .status(statusCode.OK)
       .send(util.success(statusCode.OK, message.FOUND_RECORDING, response));

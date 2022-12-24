@@ -241,13 +241,14 @@ export class ScriptService {
   }
 
   // 스크립트 조회 - scriptId만 받은 경우
-  async getScriptsByScriptId(
+  async getScriptByScriptId(
     userId: number,
     scriptId: number,
-  ): Promise<ReturnScriptDtoCollection> {
+  ): Promise<Script> {
     const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
-    const newsId: number = script.news.id;
-    return await this.getScripts(userId, newsId);
+    // const newsId: number = script.news.id;
+    // return await this.getScripts(userId, newsId);
+    return script;
   }
 
   // 스크립트 삭제 후 조회
@@ -575,6 +576,13 @@ export class ScriptService {
   }
 
   async getRecordingByScriptId(userId: number, scriptId: number) {
+    const hasScriptInUser = await this.getScriptByScriptId(userId, scriptId);
+    if (!hasScriptInUser) {
+      return {
+        message: message.NOT_FOUND_SCRIPT,
+      };
+    }
+
     const allRecording = await this.getUserAllRecording(userId);
     // allRecording is like this following
     // [
@@ -625,7 +633,7 @@ export class ScriptService {
     // if filteredRecording is empty or nil, return 400
     if (!filteredRecording || filteredRecording.length == 0) {
       return {
-        message: message.NOT_FOUND_SCRIPT_OR_RECORDING,
+        message: message.NOT_FOUND_RECORDING,
       };
     }
 
