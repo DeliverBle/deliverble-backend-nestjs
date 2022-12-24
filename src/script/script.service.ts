@@ -35,6 +35,7 @@ import {
 import axios from 'axios';
 import { RecordingDto } from './dto/recording.dto';
 import { RecordingRepository } from './repository/recording.repository';
+import { statusCode } from "../modules/response/response.status.code";
 
 const FormData = require('form-data');
 
@@ -360,7 +361,7 @@ export class ScriptService {
 
     if (!script) {
       return {
-        status: 400,
+        status: statusCode.NOT_FOUND,
         message: 'There is no script with this id',
       };
     }
@@ -382,13 +383,6 @@ export class ScriptService {
       recordingDtoLength,
     );
 
-    // recordingDto.name = name;
-    // recordingDto.link = response.data['url'];
-    // recordingDto.endTime = endtime;
-    // recordingDto.isDeleted = false;
-    // recordingDto.date = date;
-    // recordingDto.script = script;
-
     // change recordingDto to JSON
     const recordingDtoJson = JSON.stringify(recordingDto);
     console.log('recordingDtoJson >>>>>>>>>>>>> ', recordingDtoJson);
@@ -396,6 +390,8 @@ export class ScriptService {
 
     // save script
     await script.save();
+
+    console.log("NAME", name);
 
     return {
       link: response.data['url'],
