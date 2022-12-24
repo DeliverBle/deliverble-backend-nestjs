@@ -651,12 +651,29 @@ export class ScriptController {
 
   @Get('/recording/find')
   @UseGuards(JwtAuthGuard)
-  getRecordingByScriptId(@Body() body, @Req() req, @Query() query) {
+  async getRecordingByScriptId(
+    @Body() body,
+    @Req() req,
+    @Res() res,
+    @Query() query,
+  ) {
     const userInfo: ReturnUserDto = req.user;
     const userId = userInfo.id;
     const scriptId = query.scriptId;
     console.log('getRecordingByScriptId scriptId :: ', scriptId);
 
-    return this.scriptService.getRecordingByScriptId(userId, scriptId);
+    const response = await this.scriptService.getRecordingByScriptId(
+      userId,
+      scriptId,
+    );
+
+    if (!response || response.message === message.NOT_FOUND_RECORDING) {
+      return res
+        .status(statusCode.NOT_FOUND)
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_RECORDING));
+    }
+    return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, message.FOUND_RECORDING, response));
   }
 }

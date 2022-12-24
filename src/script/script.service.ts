@@ -612,11 +612,11 @@ export class ScriptService {
     // make sure allRecording is not empty or undefined or null, if then, return 400
     if (!allRecording) {
       return {
-        status: 400,
-        message: 'There is no script on your user',
+        message: message.NOT_FOUND_RECORDING
       };
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const filteredRecording = allRecording?.filter((recording) => {
       return recording[0].scriptId == scriptId;
