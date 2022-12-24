@@ -36,6 +36,7 @@ import axios from 'axios';
 import { RecordingDto } from './dto/recording.dto';
 import { RecordingRepository } from './repository/recording.repository';
 import { statusCode } from "../modules/response/response.status.code";
+import { message } from "../modules/response/response.message";
 
 const FormData = require('form-data');
 
@@ -517,7 +518,7 @@ export class ScriptService {
     if (!script) {
       return {
         status: statusCode.NOT_FOUND,
-        message: 'There is no script with this id',
+        message: message.NOT_FOUND_SCRIPT,
       };
     }
 
