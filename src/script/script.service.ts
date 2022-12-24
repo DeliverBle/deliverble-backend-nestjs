@@ -580,18 +580,16 @@ export class ScriptService {
   async getRecordingByScriptId(userId: number, scriptId: number) {
     try {
       const hasScriptInUser = await this.getScriptByScriptId(userId, scriptId);
-      console.log('hasScriptInUser', hasScriptInUser);
-      console.log('MATCHED', hasScriptInUser.user.id !== userId);
       if (!hasScriptInUser || hasScriptInUser.user.id !== userId) {
         return {
-          message: message.NOT_FOUND_SCRIPT_OF_USER,
+          message: message.UNAUTHORIZED_SCRIPT_OF_USER,
         };
       }
     } catch (e) {
       console.log('exception', e);
       if (e instanceof NotFoundException) {
         return {
-          message: message.NOT_FOUND_SCRIPT_OF_USER,
+          message: message.NOT_FOUND_SCRIPT,
         };
       }
     }

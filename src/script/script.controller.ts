@@ -674,12 +674,18 @@ export class ScriptController {
       scriptId,
     );
 
-    if (!response || response.message === message.NOT_FOUND_SCRIPT_OF_USER) {
+    if (!response || response.message === message.UNAUTHORIZED_SCRIPT_OF_USER) {
+      return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(statusCode.UNAUTHORIZED, message.UNAUTHORIZED_SCRIPT_OF_USER),
+        );
+    }
+
+    if (response.message === message.NOT_FOUND_SCRIPT) {
       return res
         .status(statusCode.NOT_FOUND)
-        .send(
-          util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_SCRIPT_OF_USER),
-        );
+        .send(util.fail(statusCode.NOT_FOUND, message.NOT_FOUND_SCRIPT));
     }
 
     if (response.message === message.NOT_FOUND_RECORDING) {
