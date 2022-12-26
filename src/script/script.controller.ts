@@ -349,6 +349,7 @@ export class ScriptController {
       createMemoDto.startIndex = req.body.startIndex;
       createMemoDto.keyword = req.body.keyword;
       createMemoDto.content = req.body.content;
+      createMemoDto.highlightId = req.body.highlightId;
       const returnNewsDto: ReturnNewsDto =
         await this.newsService.getNewsByScriptId(scriptId);
       const data: ReturnNewsDto =

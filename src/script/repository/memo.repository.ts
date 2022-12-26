@@ -12,6 +12,7 @@ export class MemoRepository extends Repository<Memo> {
     memo.startIndex = createMemoDto.startIndex;
     memo.keyword = createMemoDto.keyword;
     memo.content = createMemoDto.content;
+    memo.highlightId = createMemoDto.highlightId;
 
     await memo.save();
     return memo;
