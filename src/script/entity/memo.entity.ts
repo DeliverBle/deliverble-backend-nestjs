@@ -28,4 +28,7 @@ export class Memo extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255 })
   content: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  highlightId: string;
 }

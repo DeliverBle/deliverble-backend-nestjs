@@ -7,4 +7,5 @@ export class CreateMemoDto {
   startIndex: number;
   keyword: string;
   content: string;
+  highlightId: string;
 }
