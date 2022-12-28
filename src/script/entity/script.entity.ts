@@ -21,7 +21,10 @@ export class Script extends BaseEntity {
   name: string;
 
   // create json type
-  @Column({ type: 'longblob' })
+  @Column({ 
+    type: 'longblob',
+    nullable: true,
+  })
   recordingblob: string;
 
   @ManyToOne(() => User, (user) => user.scripts, {
