@@ -9,6 +9,7 @@ export class EventUser extends BaseEntity {
     super();
     this.nickname = _nickname;
     this.email = _email;
+    this.date = new Date();
   }
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,4 +19,9 @@ export class EventUser extends BaseEntity {
 
   @Column({ type: 'varchar', length: 200 })
   email: string;
+
+  @Column({
+    nullable: true,
+  })
+  date: Date;
 }
