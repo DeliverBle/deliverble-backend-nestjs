@@ -10,6 +10,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+// import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { ReturnScriptDefaultDto } from 'src/dummy/dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from 'src/dummy/dto/return-script-guide.dto';
