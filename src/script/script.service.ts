@@ -259,7 +259,8 @@ export class ScriptService {
     userId: number,
     scriptId: number,
   ): Promise<ReturnScriptDtoCollection> {
-    const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
+    const script: Script = await this.checkScriptOwner(userId, scriptId);
+    // const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
     const newsId: number = script.news.id;
     const scripts: Script[] =
       await this.scriptRepository.getScriptsOfUserAndNews(userId, newsId);
