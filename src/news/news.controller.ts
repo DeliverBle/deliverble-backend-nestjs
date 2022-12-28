@@ -200,6 +200,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -265,6 +275,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -379,6 +399,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -415,6 +445,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -442,6 +482,16 @@ export class NewsController {
         .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data));
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
