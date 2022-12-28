@@ -5,8 +5,10 @@ export class ReturnEventUserDto {
     this.id = eventUser.id;
     this.nickname = eventUser.nickname;
     this.email = eventUser.email;
+    this.date = eventUser.date;
   }
   id: number;
   nickname: string;
   email: string;
+  date: Date;
 }
