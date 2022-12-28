@@ -18,6 +18,7 @@ import {
   transformKakaoGender,
 } from './utils/transform.kakao.user.info';
 import { UserRepository } from 'src/user/user.repository';
+import { InvalidTokenError } from './utils/invalid.token.error';
 require('dotenv').config();
 
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
@@ -171,7 +172,7 @@ export class AuthService {
         where: { socialId: payload.socialId },
       });
     } catch (e) {
-      throw new UnauthorizedException();
+      throw new InvalidTokenError();
     }
   }
 }
