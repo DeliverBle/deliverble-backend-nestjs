@@ -677,11 +677,11 @@ export class ScriptController {
 
     if (!response || response.message === message.UNAUTHORIZED_SCRIPT_OF_USER) {
       return res
-        .status(statusCode.UNAUTHORIZED)
+        .status(statusCode.FORBIDDEN)
         .send(
           util.fail(
-            statusCode.UNAUTHORIZED,
-            message.UNAUTHORIZED_SCRIPT_OF_USER,
+            statusCode.FORBIDDEN,
+            message.NOT_OWNER_OF_SCRIPT,
           ),
         );
     }
