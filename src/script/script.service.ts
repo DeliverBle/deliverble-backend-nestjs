@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
@@ -212,7 +213,7 @@ export class ScriptService {
   async checkScriptOwner(userId: number, scriptId: number): Promise<Script> {
     const script: Script = await this.scriptRepository.findOneOrFail(scriptId);
     if (script.user.id !== userId) {
-      throw UnauthorizedException;
+      throw ForbiddenException;
     }
     return script;
   }

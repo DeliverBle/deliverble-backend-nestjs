@@ -138,11 +138,11 @@ export class ScriptController {
         );
     } catch (error) {
       logger.error(error);
-      if (error.name === 'UnauthorizedException') {
+      if (error.name === 'ForbiddenException') {
         return res
-          .status(statusCode.UNAUTHORIZED)
+          .status(statusCode.FORBIDDEN)
           .send(
-            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+            util.fail(statusCode.FORBIDDEN, message.NOT_OWNER_OF_SCRIPT),
           );
       }
       return res
@@ -236,11 +236,11 @@ export class ScriptController {
         );
     } catch (error) {
       logger.error(error);
-      if (error.name === 'UnauthorizedException') {
+      if (error.name === 'ForbiddenException') {
         return res
-          .status(statusCode.UNAUTHORIZED)
+          .status(statusCode.FORBIDDEN)
           .send(
-            util.fail(statusCode.UNAUTHORIZED, message.NOT_OWNER_OF_SCRIPT),
+            util.fail(statusCode.FORBIDDEN, message.NOT_OWNER_OF_SCRIPT),
           );
       }
       if (error.name === 'BadRequestException') {
