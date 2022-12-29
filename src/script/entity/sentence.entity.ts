@@ -26,6 +26,6 @@ export class Sentence extends BaseEntity {
   @Column({ type: 'float' })
   endTime: number;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 5000 })
   text: string;
 }
