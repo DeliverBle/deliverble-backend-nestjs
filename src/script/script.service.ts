@@ -373,7 +373,8 @@ export class ScriptService {
     let recordingDtoLength;
 
     if (!script.recordingblob || script.recordingblob == '') {
-      recordingDtoLength = 0;
+      // if there is nothing, make new recording as 녹음 1
+      recordingDtoLength = 1;
       script.recordingblob = '';
     } else {
       recordingDtoLength = script.recordingblob.toString().split(' @ ').length;
