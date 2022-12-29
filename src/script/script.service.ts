@@ -370,11 +370,14 @@ export class ScriptService {
       };
     }
 
-    console.log('Recording Blob', script.recordingblob.toString());
+    let recordingDtoLength;
 
-    const recordingDtoLength = script.recordingblob
-      .toString()
-      .split(' @ ').length;
+    if (!script.recordingblob || script.recordingblob == '') {
+      recordingDtoLength = 0;
+      script.recordingblob = '';
+    } else {
+      recordingDtoLength = script.recordingblob.toString().split(' @ ').length;
+    }
 
     console.log('recordingDtoLength', recordingDtoLength);
 
@@ -390,7 +393,9 @@ export class ScriptService {
     // change recordingDto to JSON
     const recordingDtoJson = JSON.stringify(recordingDto);
     console.log('recordingDtoJson >>>>>>>>>>>>> ', recordingDtoJson);
+
     script.recordingblob = script.recordingblob + ' @ ' + recordingDtoJson;
+    console.log('script.recordingblob >>>>>>>>>>>>> ', script.recordingblob);
 
     // save script
     await script.save();
