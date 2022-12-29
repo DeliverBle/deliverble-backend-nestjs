@@ -1,17 +1,15 @@
 export const util = {
-  success: (status: number, message: string, data?: any, data2?: any) => {
+  success: (statusCode: number, message: string, data?: any, data2?: any) => {
     return {
-      status,
-      success: true,
+      statusCode,
       message,
       data,
       data2,
     };
   },
-  fail: (status: number, message: string, data?: any) => {
+  fail: (statusCode: number, message: string, data?: any) => {
     return {
-      status,
-      success: false,
+      statusCode,
       message,
       data,
     };
