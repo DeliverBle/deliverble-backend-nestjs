@@ -348,7 +348,7 @@ export class ScriptService {
 
     const response = await axios({
       method: 'post',
-      url: 'http://localhost:8000/upload',
+      url: 'http://localhost:8000/upload/v2',
       data: formData,
       headers: formData.getHeaders(),
     });
