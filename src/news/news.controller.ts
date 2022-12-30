@@ -318,6 +318,11 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_NEWS));
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -362,6 +367,11 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_NEWS));
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
