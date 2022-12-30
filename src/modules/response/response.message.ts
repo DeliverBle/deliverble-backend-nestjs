@@ -1,15 +1,15 @@
 export const message = {
   // 기본 에러 메시지
   NULL_VALUE: '필요한 값이 없습니다.',
-  FORBIDDEN: 'Forbidden',
-  DUPLICATED: 'Duplicated',
+  FORBIDDEN: '접근 권한이 없습니다.',
+  DUPLICATED: '중복된 자원입니다.',
   NOT_FOUND: '존재하지 않는 자원',
   BAD_REQUEST: '잘못된 요청',
   INTERNAL_SERVER_ERROR: '서버 내부 오류',
   EXCEED_PAGE_INDEX:
     '요청한 페이지 번호가 존재하는 인덱스 개수를 넘어섰습니다.',
   NULL_VALUE_TOKEN: '토큰이 없습니다.',
-  INVALID_TOKEN: '만료된 토큰입니다.',
+  INVALID_TOKEN: '유효하지 않은 토큰입니다.',
   INVALID_PASSWORD: '비밀번호 오류',
 
   // 인증, 인가 로직
@@ -35,6 +35,7 @@ export const message = {
   SPEECH_GUIDE_NEWS_DETAIL_SUCCESS: '스피치 가이드 상세 정보 조회 성공',
   SAVE_SIMILAR_NEWS: '비슷한 영상 조회 성공',
   HISTORY_SUCCESS: '내 학습 기록 조회 성공',
+  NOT_EXISTING_NEWS: '존재하지 않는 뉴스의 id입니다.',
 
   // 태그
   CREATE_TAG_SUCCESS: '태그 생성 성공',

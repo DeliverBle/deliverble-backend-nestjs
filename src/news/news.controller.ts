@@ -10,6 +10,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+// import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { ReturnScriptDefaultDto } from 'src/dummy/dto/return-script-default.dto';
 import { ReturnScriptGuideDto } from 'src/dummy/dto/return-script-guide.dto';
@@ -199,6 +200,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -264,6 +275,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -297,6 +318,11 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_NEWS));
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -341,6 +367,11 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name === 'EntityNotFound') {
+        return res
+          .status(statusCode.BAD_REQUEST)
+          .send(util.fail(statusCode.BAD_REQUEST, message.NOT_EXISTING_NEWS));
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -378,6 +409,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -414,6 +455,16 @@ export class NewsController {
         );
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
@@ -441,6 +492,16 @@ export class NewsController {
         .send(util.success(statusCode.OK, message.SAVE_SIMILAR_NEWS, data));
     } catch (error) {
       logger.error(error);
+      if (error.name == "InvalidTokenError") {
+        return res
+        .status(statusCode.UNAUTHORIZED)
+        .send(
+          util.fail(
+            statusCode.UNAUTHORIZED,
+            message.INVALID_TOKEN,
+          ),
+        );
+      }
       return res
         .status(statusCode.INTERNAL_SERVER_ERROR)
         .send(
