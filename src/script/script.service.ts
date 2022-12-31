@@ -647,8 +647,8 @@ export class ScriptService {
     }
 
     // sort by time descending
-    return filteredRecording[0].sort((a, b) => {
-      return b.date - a.date;
+    filteredRecording[0].sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
 
@@ -727,7 +727,7 @@ export class ScriptService {
 
     // sort by time descending
     return recordingAllScriptsArray.sort((a, b) => {
-      return b[0].date - a[0].date;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
 }
