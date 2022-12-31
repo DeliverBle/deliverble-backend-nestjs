@@ -647,7 +647,7 @@ export class ScriptService {
     }
 
     // sort by time descending
-    filteredRecording[0].sort((a, b) => {
+    return filteredRecording[0].sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
