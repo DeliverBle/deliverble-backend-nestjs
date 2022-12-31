@@ -726,8 +726,10 @@ export class ScriptService {
     });
 
     // sort by time descending
-    return recordingAllScriptsArray.sort((a, b) => {
-      return new Date(b[0].date).getTime() - new Date(a[0].date).getTime();
+    return recordingAllScriptsArray.map((recording) => {
+      return recording.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
     });
   }
 }
